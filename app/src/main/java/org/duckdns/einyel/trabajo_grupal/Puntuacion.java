@@ -47,7 +47,7 @@ public class Puntuacion extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 EventSevice.getInstance().addPuntuationAndComment(event,mFeedback.getText().toString(),mRatingBar.getRating());
-                Log.d("INFO",event.toString());
+                Log.d("ERROR",EventSevice.getInstance().getEvent(event).toString());
             }
         });
     }
