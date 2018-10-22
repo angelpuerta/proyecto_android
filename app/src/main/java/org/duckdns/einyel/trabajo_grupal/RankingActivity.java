@@ -66,7 +66,7 @@ public class RankingActivity extends AppCompatActivity {
 
     public void clickSubmit(View view){
        // EventSevice.getInstance().addPuntuationAndComment(event,mFeedback.getText().toString(),mRatingBar.getRating());
-        Log.d("ERROR",EventSevice.getInstance().getEvent(event).toString());
+        // Log.d("ERROR",EventSevice.getInstance().getEvent(event).toString());
         this.finish();
     }
 

@@ -37,7 +37,7 @@ public class DescripcionActivity extends AppCompatActivity implements OnMapReady
 
 
         Bundle b = getIntent().getExtras();
-        Evento evento = b.getParcelable(MainActivity.EVENTO);
+        Evento evento = new Evento();
 
         TextView textoTitulo = (TextView) findViewById(R.id.textTitulo);
         TextView textoDescripcion = (TextView) findViewById(R.id.textDescripcion);

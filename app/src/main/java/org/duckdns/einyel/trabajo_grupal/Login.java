@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class Login extends AppCompatActivity {
+
     protected EditText pw;
     protected EditText user;
 
@@ -25,10 +26,10 @@ public class Login extends AppCompatActivity {
 
 
     public void checkUser(View view){
-        String password = pw.getText().toString();
-        String user = user.getText().toString();
-        if(password.equals("12345") && user.equals("Usuario")){
-            Intent mIntent = new Intent(this, Main2Activity.class);
+        String Spassword = pw.getText().toString();
+        String Suser = user.getText().toString();
+        if(Spassword.equals("12345") && Suser.equals("Usuario")){
+            Intent mIntent = new Intent(this, ListActivity.class);
             mIntent.putExtra(NOMBRE_USUARIO, user.getText().toString());
             startActivity(mIntent);
         }

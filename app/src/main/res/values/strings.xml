@@ -12,4 +12,6 @@
     <string name="title_activity_aux">Map</string>
     <string name="title_activity_maps">Map</string>
     <string name="Puntuar">Puntuar</string>
+    <string name="Usuario">Usuario</string>
+    <string name="Password">Contraseña</string>
 </resources>
