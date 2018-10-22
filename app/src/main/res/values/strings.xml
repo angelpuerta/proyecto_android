@@ -8,4 +8,8 @@
     <string name="Buena_puntuacion">Increible</string>
     <string name="Comentario">Comentario sobre el evento</string>
     <string name="Enviar">Enviar</string>
+    <string name="title_activity_description">DescriptionActivity</string>
+    <string name="title_activity_aux">Map</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="Puntuar">Puntuar</string>
 </resources>

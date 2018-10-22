@@ -25,12 +25,14 @@ public class ListActivity extends AppCompatActivity {
     ListView listView;
     public static ArrayList<Evento> lista = new ArrayList<Evento>();
     public static final String EVENTO = "EVENTO";
-    Intent mi = new Intent(ListActivity.this, DescripcionActivity.class);
+    Intent mi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        mi = new Intent(this, DescripcionActivity.class);
 
         Evento evento = new Evento();
         evento.setTitulo("Concierto Melendi");

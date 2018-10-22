@@ -1,7 +1,9 @@
 package org.duckdns.einyel.trabajo_grupal;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -18,6 +20,9 @@ public class DescripcionActivity extends AppCompatActivity implements OnMapReady
     private GoogleMap gmap;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
 
+    Intent intent;
+
+    public static final String EVENT_ID = "EVENT_ID";
 
 
     @Override
@@ -25,8 +30,10 @@ public class DescripcionActivity extends AppCompatActivity implements OnMapReady
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_descripcion);
 
+        intent = new Intent(this, RankingActivity.class);
+
+
         Bundle b = getIntent().getExtras();
-        Evento evento = b.getParcelable(MainActivity.EVENTO);
 
         TextView textoTitulo = (TextView) findViewById(R.id.textTitulo);
         TextView textoDescripcion = (TextView) findViewById(R.id.textDescripcion);
@@ -62,7 +69,13 @@ public class DescripcionActivity extends AppCompatActivity implements OnMapReady
     public void onMapReady(GoogleMap googleMap) {
         gmap = googleMap;
         gmap.setMinZoomPreference(12);
-        LatLng coor = new LatLng(43.3579649,-5.8733862);
+        LatLng coor = new LatLng(43.36029, -5.84476);
         gmap.moveCamera(CameraUpdateFactory.newLatLng(coor));
+    }
+
+    public void nextClick(View view) {
+
+        startActivity(intent);
+        intent.putExtra(EVENT_ID, Long.valueOf(1));
     }
 }
