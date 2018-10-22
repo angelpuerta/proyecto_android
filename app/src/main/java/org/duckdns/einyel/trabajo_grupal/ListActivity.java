@@ -73,7 +73,7 @@ public class ListActivity extends AppCompatActivity {
             textView1.setText(lista.get(position).getTitulo());
 
             ImageView imageView1 = (ImageView)item.findViewById(R.id.icon);
-            imageView1.setImageResource(R.mipmap.ic_launcher_round);
+            //imageView1.setImageResource(R.mipmap.melendi);
 
             return(item);
         }

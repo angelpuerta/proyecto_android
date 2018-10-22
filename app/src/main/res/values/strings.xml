@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Trabajo_grupal</string>
+    <string name="title_activity_puntuacion">Puntuacion</string>
+    <string name="Mala_puntuacion">Muy mal</string>
+    <string name="Media_mala_puntuacion">Mal</string>
+    <string name="Media_puntuacion">Ni fu ni fa</string>
+    <string name="Media_buena_puntuacion">Bien</string>
+    <string name="Buena_puntuacion">Increible</string>
+    <string name="Comentario">Comentario sobre el evento</string>
+    <string name="Enviar">Enviar</string>
 </resources>
