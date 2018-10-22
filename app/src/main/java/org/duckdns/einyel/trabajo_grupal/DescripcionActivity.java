@@ -12,6 +12,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.Map;
 
@@ -25,6 +27,7 @@ public class DescripcionActivity extends AppCompatActivity implements OnMapReady
     public static final String EVENT_ID = "EVENT_ID";
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +37,7 @@ public class DescripcionActivity extends AppCompatActivity implements OnMapReady
 
 
         Bundle b = getIntent().getExtras();
+        Evento evento = b.getParcelable(MainActivity.EVENTO);
 
         TextView textoTitulo = (TextView) findViewById(R.id.textTitulo);
         TextView textoDescripcion = (TextView) findViewById(R.id.textDescripcion);
@@ -60,6 +64,7 @@ public class DescripcionActivity extends AppCompatActivity implements OnMapReady
 
         mapa = findViewById(R.id.mapa);
         mapa.onCreate(mapViewBundle);
+
         mapa.getMapAsync(this);
 
     }
@@ -71,7 +76,11 @@ public class DescripcionActivity extends AppCompatActivity implements OnMapReady
         gmap.setMinZoomPreference(12);
         LatLng coor = new LatLng(43.36029, -5.84476);
         gmap.moveCamera(CameraUpdateFactory.newLatLng(coor));
-    }
+        CameraUpdate cu = CameraUpdateFactory.newLatLng(coor);
+        gmap.animateCamera(cu);
+        gmap.addMarker (new MarkerOptions()
+                .position(coor)
+                .title("El titulo que quieras"));    }
 
     public void nextClick(View view) {
 

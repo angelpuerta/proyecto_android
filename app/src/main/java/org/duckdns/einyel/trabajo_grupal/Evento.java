@@ -13,13 +13,16 @@ public class Evento implements Parcelable {
     Date fechaInicio;
     Date fechaFin;
     String ubicación;
+    int puntuacion;
 
-    public Evento(String titulo, String descripcion, Date fechaInicio, Date fechaFin, String ubicación) {
+    public Evento(String titulo, String descripcion, Date fechaInicio, Date fechaFin,
+                  String ubicación, int puntuacion) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.ubicación = ubicación;
+        this.puntuacion = puntuacion;
     }
 
     public Evento() {
@@ -64,6 +67,10 @@ public class Evento implements Parcelable {
     public void setUbicación(String ubicación) {
         this.ubicación = ubicación;
     }
+
+    public void setPuntuacion(int puntuacion){ this.puntuacion = puntuacion; }
+
+    public int getPuntuacion(){ return puntuacion; }
 
     protected Evento(Parcel in) {
     }
