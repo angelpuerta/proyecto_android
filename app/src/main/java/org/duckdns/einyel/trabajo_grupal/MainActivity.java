@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
                 "congue et id nisl. Nulla ut fringilla diam.");
         evento.setUbicación("Oviedo");
         evento.setFechaInicio(new Date());
+        evento.setPuntuacion(8);
 
         System.out.println(evento.getDescripcion());
 
