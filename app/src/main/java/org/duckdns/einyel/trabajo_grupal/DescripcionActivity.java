@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 public class DescripcionActivity extends AppCompatActivity implements OnMapReadyCallback{
 
-    private GoogleMap gmap;
+    private GoogleMap mapa;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
 
     Intent intent;
@@ -53,34 +54,26 @@ public class DescripcionActivity extends AppCompatActivity implements OnMapReady
                 "congue et id nisl. Nulla ut fringilla diam.");
         textoPuntuacion.setText("8/10");
 
-        MapView mapa = (MapView) findViewById(R.id.mapa);
-
-
-
-        Bundle mapViewBundle = null;
-        if (savedInstanceState != null) {
-            mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY);
-        }
-
-        mapa = findViewById(R.id.mapa);
-        mapa.onCreate(mapViewBundle);
-
-        mapa.getMapAsync(this);
+        MapFragment fragmentoMapa = (MapFragment) getFragmentManager().findFragmentById(R.id.mapa);
+        fragmentoMapa.getMapAsync(this);
 
     }
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        gmap = googleMap;
-        gmap.setMinZoomPreference(12);
-        LatLng coor = new LatLng(43.36029, -5.84476);
-        gmap.moveCamera(CameraUpdateFactory.newLatLng(coor));
-        CameraUpdate cu = CameraUpdateFactory.newLatLng(coor);
-        gmap.animateCamera(cu);
-        gmap.addMarker (new MarkerOptions()
-                .position(coor)
-                .title("El titulo que quieras"));    }
+
+        mapa = googleMap;
+        mapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mapa.getUiSettings().setZoomControlsEnabled(true);
+
+        LatLng ubicacion = new LatLng(43.36029, -5.84476);
+        CameraUpdate camUpd = CameraUpdateFactory.newLatLngZoom(ubicacion,15);
+        mapa.moveCamera(camUpd);
+        mapa.addMarker (new MarkerOptions()
+                .position(ubicacion)
+                .title("Oviedo"));
+    }
 
     public void nextClick(View view) {
 
