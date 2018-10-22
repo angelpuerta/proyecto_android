@@ -10,6 +10,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public class DescripcionActivity extends AppCompatActivity implements OnMapReady
 
     private GoogleMap gmap;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
-
+    
 
 
     @Override
@@ -53,6 +54,7 @@ public class DescripcionActivity extends AppCompatActivity implements OnMapReady
 
         mapa = findViewById(R.id.mapa);
         mapa.onCreate(mapViewBundle);
+
         mapa.getMapAsync(this);
 
     }
@@ -60,9 +62,13 @@ public class DescripcionActivity extends AppCompatActivity implements OnMapReady
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        System.out.println("\nEjecutandose onMapReady \n");
         gmap = googleMap;
-        gmap.setMinZoomPreference(12);
         LatLng coor = new LatLng(43.3579649,-5.8733862);
-        gmap.moveCamera(CameraUpdateFactory.newLatLng(coor));
+        CameraUpdate cu = CameraUpdateFactory.newLatLng(coor);
+        gmap.animateCamera(cu);
+        gmap.addMarker (new MarkerOptions()
+                .position(coor)
+                .title("El titulo que quieras"));
     }
 }

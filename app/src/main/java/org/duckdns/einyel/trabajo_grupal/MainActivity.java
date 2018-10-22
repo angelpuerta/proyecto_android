@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
 
             TextView textView1 = (TextView)item.findViewById(R.id.nombre_fila_lista);
             textView1.setText(lista.get(position).getTitulo());
+            TextView puntuacion = (TextView) findViewById(R.id.puntuacion_fila_lista);
+            puntuacion.setText(lista.get(position).getPuntuacion());
 
             ImageView imageView1 = (ImageView)item.findViewById(R.id.icon);
             //imageView1.setImageResource(R.mipmap.melendi);
