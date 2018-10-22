@@ -28,7 +28,8 @@ public class Login extends AppCompatActivity {
         String password = pw.getText().toString();
         String user = user.getText().toString();
         if(password.equals("12345") && user.equals("Usuario")){
-            Intent mIntent = new Intent(this, Main2Activity.class);
+            Intent mIntent = new Intent(this, ListActivity.class);
+			NOMBRE_USUARIO = user;
             mIntent.putExtra(NOMBRE_USUARIO, user.getText().toString());
             startActivity(mIntent);
         }
