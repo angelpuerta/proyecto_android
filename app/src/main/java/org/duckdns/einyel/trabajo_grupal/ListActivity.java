@@ -1,5 +1,6 @@
 package org.duckdns.einyel.trabajo_grupal;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PersistableBundle;
@@ -23,6 +24,8 @@ public class ListActivity extends AppCompatActivity {
 
     ListView listView;
     public static ArrayList<Evento> lista = new ArrayList<Evento>();
+    public static final String EVENTO = "EVENTO";
+    Intent mi = new Intent(ListActivity.this, DescripcionActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,7 @@ public class ListActivity extends AppCompatActivity {
         evento.setFechaInicio(new Date());
 
 
+        mi.putExtra(EVENTO, evento);
         lista.add(evento);
 
         listView = (ListView) findViewById(R.id.listaEventos);
@@ -50,7 +54,7 @@ public class ListActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                startActivity(mi, ActivityOptions.makeSceneTransitionAnimation(ListActivity.this).toBundle());
             }
         });
 

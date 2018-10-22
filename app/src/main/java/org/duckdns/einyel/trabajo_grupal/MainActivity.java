@@ -1,5 +1,7 @@
 package org.duckdns.einyel.trabajo_grupal;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,13 +20,15 @@ public class MainActivity extends AppCompatActivity {
 
     ListView listView;
     public static ArrayList<Evento> lista = new ArrayList<Evento>();
+    public static final String EVENTO = "EVENTO";
+    Evento evento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        Evento evento = new Evento();
+        evento = new Evento();
         evento.setTitulo("Concierto Melendi");
         evento.setDescripcion("Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
                 "Phasellus dignissim ligula ut dignissim rutrum. " +
@@ -36,16 +40,20 @@ public class MainActivity extends AppCompatActivity {
         evento.setUbicación("Oviedo");
         evento.setFechaInicio(new Date());
 
+        System.out.println(evento.getDescripcion());
 
         lista.add(evento);
 
         listView = (ListView) findViewById(R.id.listaEventos);
-        AdaptadorEventos adapter = new AdaptadorEventos(this);
+        MainActivity.AdaptadorEventos adapter = new MainActivity.AdaptadorEventos(this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                System.out.println("Se ejecuta el onClick");
+                Intent mi = new Intent(getApplicationContext(), DescripcionActivity.class);
+                mi.putExtra(EVENTO, evento);
+                startActivity(mi, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
             }
         });
 
