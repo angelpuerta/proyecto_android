@@ -1,34 +1,38 @@
 package org.duckdns.einyel.trabajo_grupal;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
+import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class ListActivity extends AppCompatActivity {
 
     ListView listView;
     public static ArrayList<Evento> lista = new ArrayList<Evento>();
     public static final String EVENTO = "EVENTO";
-    Evento evento;
+    Intent mi = new Intent(ListActivity.this, DescripcionActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        evento = new Evento();
+        Evento evento = new Evento();
         evento.setTitulo("Concierto Melendi");
         evento.setDescripcion("Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
                 "Phasellus dignissim ligula ut dignissim rutrum. " +
@@ -40,20 +44,17 @@ public class MainActivity extends AppCompatActivity {
         evento.setUbicación("Oviedo");
         evento.setFechaInicio(new Date());
 
-        System.out.println(evento.getDescripcion());
 
+        mi.putExtra(EVENTO, evento);
         lista.add(evento);
 
         listView = (ListView) findViewById(R.id.listaEventos);
-        MainActivity.AdaptadorEventos adapter = new MainActivity.AdaptadorEventos(this);
+        AdaptadorEventos adapter = new AdaptadorEventos(this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("Se ejecuta el onClick");
-                Intent mi = new Intent(getApplicationContext(), DescripcionActivity.class);
-                mi.putExtra(EVENTO, evento);
-                startActivity(mi, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
+                startActivity(mi, ActivityOptions.makeSceneTransitionAnimation(ListActivity.this).toBundle());
             }
         });
 
@@ -81,4 +82,5 @@ public class MainActivity extends AppCompatActivity {
             return(item);
         }
     }
+
 }
