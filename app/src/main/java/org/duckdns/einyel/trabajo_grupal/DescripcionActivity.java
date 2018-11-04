@@ -3,7 +3,9 @@ package org.duckdns.einyel.trabajo_grupal;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -32,7 +34,7 @@ public class DescripcionActivity extends AppCompatActivity implements OnMapReady
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_descripcion);
+        setContentView(R.layout.activity_descripcion3);
 
         intent = new Intent(this, RankingActivity.class);
 
@@ -42,7 +44,9 @@ public class DescripcionActivity extends AppCompatActivity implements OnMapReady
 
         TextView textoTitulo = (TextView) findViewById(R.id.textTitulo);
         TextView textoDescripcion = (TextView) findViewById(R.id.textDescripcion);
+        //textoDescripcion.setMovementMethod(new ScrollingMovementMethod());
         TextView textoPuntuacion = (TextView) findViewById(R.id.textPuntuacion);
+
 
         textoTitulo.setText("Concierto Melendi");
         textoDescripcion.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +

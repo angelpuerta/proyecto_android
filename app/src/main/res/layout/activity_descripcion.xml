@@ -10,39 +10,17 @@
         android:id="@+id/textTitulo"
         android:layout_width="183dp"
         android:layout_height="39dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:text="titulo"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.162"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textDescripcion"
-        android:layout_width="305dp"
-        android:layout_height="96dp"
-        android:layout_marginStart="69dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="72dp"
-        android:text="Descripcion"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.469"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textTitulo" />
-
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/mapa"
-        android:name="com.google.android.gms.maps.MapFragment"
-        android:layout_width="304dp"
-        android:layout_height="229dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDescripcion" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.009" />
 
     <!-- <com.google.android.gms.maps.MapView
         android:id="@+id/mapa"
@@ -69,26 +47,78 @@
         android:layout_marginBottom="8dp"
         android:text="TextView"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/textDescripcion"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.384"
+        app:layout_constraintHorizontal_bias="0.591"
         app:layout_constraintStart_toEndOf="@+id/textTitulo"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.609" />
 
-    <Button
-        android:id="@+id/markButton"
-        android:layout_width="wrap_content"
-        android:layout_height="45dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="319dp"
+        android:layout_height="398dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:onClick="nextClick"
-        android:text="@string/Puntuar"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapa" />
+        app:layout_constraintTop_toBottomOf="@+id/textTitulo">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textDescripcion"
+                android:layout_width="250dp"
+                android:layout_height="127dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="fill_horizontal"
+                android:text="Descripcion"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/markButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.492"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.032" />
+
+            <fragment
+                android:id="@+id/mapa"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="257dp"
+                android:layout_height="170dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/markButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textDescripcion" />
+
+            <Button
+                android:id="@+id/markButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:onClick="nextClick"
+                android:text="@string/Puntuar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>
