@@ -3,22 +3,16 @@ package org.duckdns.einyel.trabajo_grupal;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.view.View;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.Map;
 
 public class DescripcionActivity extends AppCompatActivity implements OnMapReadyCallback{
 
@@ -34,13 +28,13 @@ public class DescripcionActivity extends AppCompatActivity implements OnMapReady
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_descripcion3);
+        setContentView(R.layout.activity_descripcion);
 
         intent = new Intent(this, RankingActivity.class);
 
 
         Bundle b = getIntent().getExtras();
-        Evento evento = new Evento();
+        MockEvent evento = new MockEvent(new Long(1));
 
         TextView textoTitulo = (TextView) findViewById(R.id.textTitulo);
         TextView textoDescripcion = (TextView) findViewById(R.id.textDescripcion);

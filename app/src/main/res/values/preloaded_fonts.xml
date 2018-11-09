@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/baloo</item>
+        <item>@font/catamaran_thin</item>
+        <item>@font/delius</item>
+        <item>@font/laila_light</item>
+        <item>@font/news_cycle</item>
+        <item>@font/news_cycle_bold</item>
+        <item>@font/nixie_one</item>
+    </array>
+</resources>

@@ -8,6 +8,7 @@ public class MockEvent {
     private List<String> comments;
     private Long id;
     private List<Float> marks;
+    public double mark;
     public String description;
     public String tittle;
     public String location;
@@ -26,6 +27,15 @@ public class MockEvent {
 
     public void addMark(Float mark){
         this.marks.add(mark);
+    }
+
+    public void addMark(float mark){
+
+        this.mark = (this.mark + mark)/2;
+    }
+
+    public double getMark(){
+        return this.mark;
     }
 
     public void addMarkAndComment(String comment, Float mark){

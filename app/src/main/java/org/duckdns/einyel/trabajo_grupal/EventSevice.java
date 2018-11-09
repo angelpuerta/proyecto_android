@@ -1,7 +1,5 @@
 package org.duckdns.einyel.trabajo_grupal;
 
-import android.content.res.Resources;
-
 import java.util.ArrayList;
 import java.util.List;
 
