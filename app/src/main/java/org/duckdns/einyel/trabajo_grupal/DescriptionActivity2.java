@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
+
 public class DescriptionActivity2 extends AppCompatActivity {
 
     Intent intent;
@@ -27,7 +29,7 @@ public class DescriptionActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.description_layaout2);
        //Event event = getIntent().getExtras().getParcelable();
-        event = EventSevice.getInstance().getEvent(Long.valueOf(1));
+        //event = EventSevice.getInstance().getEvent(Long.valueOf(1));
 
         intent = new Intent(this, RankingActivity.class);
 

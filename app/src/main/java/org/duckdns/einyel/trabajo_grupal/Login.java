@@ -6,7 +6,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
+
+import org.duckdns.einyel.trabajo_grupal.model.Comment;
+import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
+import org.duckdns.einyel.trabajo_grupal.service.App;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class Login extends AppCompatActivity {
 
@@ -15,23 +27,31 @@ public class Login extends AppCompatActivity {
 
     public static final String NOMBRE_USUARIO = "";
 
+    private final CompositeDisposable mDisposable = new CompositeDisposable();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.descripcion_angela_activity);
+        setContentView(R.layout.login_activity);
 
-        pw = (EditText)findViewById(R.id.editPassword);
-        user = (EditText)findViewById(R.id.editUser);
+        pw = (EditText) findViewById(R.id.editPassword);
+        user = (EditText) findViewById(R.id.editUser);
+
+        List<Comment> comments = new ArrayList<>();
+
+
     }
 
 
-    public void checkUser(View view){
+    public void checkUser(View view) {
+        App.get().getCommentsRepo().addComment(new Comment(1L, "Primer comentario desde aquí desde mi casa veo la casa vacía", 3.0));
         String Spassword = pw.getText().toString();
         String Suser = user.getText().toString();
         //if(Spassword.equals("12345") && Suser.equals("Usuario")){
-            Intent mIntent = new Intent(this, ListActivity.class);
-            mIntent.putExtra(NOMBRE_USUARIO, user.getText().toString());
-            startActivity(mIntent);
+        Intent mIntent = new Intent(this, ListActivity.class);
+        mIntent.putExtra(NOMBRE_USUARIO, user.getText().toString());
+        startActivity(mIntent);
+
         //}
         //else {
         //    Toast.makeText(getApplicationContext(), "Credenciales incorrectas", Toast.LENGTH_SHORT).show();

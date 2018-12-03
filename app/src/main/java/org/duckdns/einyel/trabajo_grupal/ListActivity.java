@@ -1,24 +1,16 @@
 package org.duckdns.einyel.trabajo_grupal;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.duckdns.einyel.trabajo_grupal.adapter.EventoAdapter;
+import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 

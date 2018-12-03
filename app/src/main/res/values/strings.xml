@@ -17,4 +17,8 @@
     <string name="queryHint">Buscar...</string>
     <string name="info">Info.</string>
     <string name="comments">Valoraciones</string>
+    <string name="EXT_DATABASE">92.185.70.47</string>
+    <string name="LOCAL_DATABASE">192.168.1.69</string>
+    <string name="BASE_SERVICE_URL">http://einyel.duckdns.org/android/</string>
+    <string name="EVENTS_SERVICE">http://einyel.duckdns.org/android/events</string>
 </resources>

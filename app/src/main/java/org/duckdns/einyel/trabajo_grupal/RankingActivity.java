@@ -21,9 +21,10 @@ public class RankingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_puntuacion);
 
-         event = getIntent().getLongExtra(DescriptionActivity2.EVENT_ID,1);
+        event = getIntent().getLongExtra(DescriptionActivity2.EVENT_ID,1);
 
         mRatingBar = findViewById(R.id.ratingBar);
         mRatingScale =  findViewById(R.id.ratingTextView);

@@ -7,14 +7,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.duckdns.einyel.trabajo_grupal.MockEvent;
+import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
 import org.duckdns.einyel.trabajo_grupal.R;
 
 import java.util.List;
 
-public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoViewHolder>{
+public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoViewHolder> {
 
-    public static class EventoViewHolder extends RecyclerView.ViewHolder{
+    public static class EventoViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView imagen;
         public TextView nombre;
@@ -32,7 +32,7 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
 
     private List<MockEvent> eventos;
 
-    public EventoAdapter(List<MockEvent> eventos){
+    public EventoAdapter(List<MockEvent> eventos) {
         this.eventos = eventos;
     }
 
@@ -45,24 +45,22 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
 
     @Override
     public void onBindViewHolder(EventoViewHolder holder, int position) {
-        holder.imagen.setImageResource(eventos.get(position).getImgURL());
+        //  holder.imagen.setImageResource(eventos.get(position).getImgURL());
         holder.nombre.setText(eventos.get(position).getTittle());
-        changeMarkBackground(holder,position);
-        holder.puntuacion.setText(eventos.get(position).getMark()+"");
+        changeMarkBackground(holder, position);
+        holder.puntuacion.setText(eventos.get(position).getMark() + "");
         holder.descripcion.setText(eventos.get(position).getDescription());
     }
 
 
-    private void changeMarkBackground(EventoViewHolder holder, int position){
+    private void changeMarkBackground(EventoViewHolder holder, int position) {
 
         double calificacion = eventos.get(position).getMark();
-        if(calificacion >= 0 && calificacion < 4){
+        if (calificacion >= 0 && calificacion < 4) {
             holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_orange);
-        }
-        else if(calificacion >=4 && calificacion <=6.5){
+        } else if (calificacion >= 4 && calificacion <= 6.5) {
             holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_yellow);
-        }
-        else{
+        } else {
             holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_green);
         }
 
