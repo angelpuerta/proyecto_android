@@ -13,6 +13,7 @@ import android.arch.persistence.room.TypeConverters;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
+import java.util.Objects;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
@@ -132,5 +133,21 @@ public class Comment {
                 ", u_id=" + u_id +
                 ", timestamp=" + timestamp +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comment comment = (Comment) o;
+        return Objects.equals(e_id, comment.e_id) &&
+                Objects.equals(u_id, comment.u_id) &&
+                Objects.equals(timestamp, comment.timestamp);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(e_id, u_id, timestamp);
     }
 }

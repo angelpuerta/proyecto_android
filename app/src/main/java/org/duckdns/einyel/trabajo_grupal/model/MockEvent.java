@@ -9,6 +9,7 @@ import android.arch.persistence.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity(tableName = "events")
 public class MockEvent {
@@ -119,5 +120,19 @@ public class MockEvent {
                 ", imgURL=" + imgURL +
                 ", comments=" + comments +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MockEvent mockEvent = (MockEvent) o;
+        return Objects.equals(id, mockEvent.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
     }
 }

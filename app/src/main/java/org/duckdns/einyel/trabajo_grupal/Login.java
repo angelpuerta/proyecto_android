@@ -34,17 +34,14 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
 
-        pw = (EditText) findViewById(R.id.editPassword);
-        user = (EditText) findViewById(R.id.editUser);
-
-        List<Comment> comments = new ArrayList<>();
+        pw =  findViewById(R.id.editPassword);
+        user = findViewById(R.id.editUser);
 
 
     }
 
 
     public void checkUser(View view) {
-        App.get().getCommentsRepo().addComment(new Comment(1L, "Primer comentario desde aquí desde mi casa veo la casa vacía", 3.0));
         String Spassword = pw.getText().toString();
         String Suser = user.getText().toString();
         //if(Spassword.equals("12345") && Suser.equals("Usuario")){

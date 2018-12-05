@@ -11,13 +11,17 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CommentsRepoImpl {
 
-    CommentsLocalRepo localRepo;
+    private CommentsLocalRepo localRepo;
 
-    CommentsRemoteRepo remoteRepo;
+    private CommentsRemoteRepo remoteRepo;
 
     public CommentsRepoImpl(CommentsLocalRepo commentsLocalRepo, CommentsRemoteRepo commentsRemoteRepo) {
         this.localRepo = commentsLocalRepo;
@@ -26,18 +30,34 @@ public class CommentsRepoImpl {
 
     public Flowable<List<Comment>> commentsFromEvent(Long id) {
         return Flowable.merge(remoteRepo.commentsFromEvent(id).subscribeOn(Schedulers.io())
-                        .doOnNext(comments -> {
-                            localRepo.addComments(comments);
-                        }),
+                        .doOnNext(comments ->
+                                localRepo.addComments(comments)
+                        ),
                 localRepo.commentsFromEvent(id).subscribeOn(Schedulers.io()));
     }
 
     public void addComment(Comment comment) {
-        try {
-            remoteRepo.addComment(comment).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        remoteRepo.addComment(comment).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if (response.isSuccessful()) {
+                    new Runnable() {
+
+                        @Override
+                        public void run() {
+                            localRepo.addComment(comment);
+                        }
+                    };
+                    Log.i(getClass().getName(), "Añadido " + comment.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, Throwable t) {
+                Log.e(getClass().getName(), "Error on comment " + comment.toString());
+
+            }
+        });
     }
 
     public CommentsRemoteRepo getRemoteRepo() {
