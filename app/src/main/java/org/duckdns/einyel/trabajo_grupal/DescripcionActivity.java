@@ -58,8 +58,6 @@ public class DescripcionActivity extends AppCompatActivity {
 
     private Bitmap bm = null;
     private MockEvent evento = null;
-    private LocationManager locationManager;
-    private Location currentLocation;
 
 
     @Override
@@ -82,31 +80,13 @@ public class DescripcionActivity extends AppCompatActivity {
         //Coordenadas
         String[] latLng = evento.getLocation().split(",");
 
-        String uri = "http://maps.google.com/maps?saddr=" + "&daddr=" + latLng[0] + "," + latLng[1];
+        String uri = "http://maps.google.com/maps?saddr=&daddr=" + latLng[0] + "," + latLng[1];
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
         startActivity(intent);
 
 
     }
 
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
 
     public MockEvent getEvento(){
         return this.evento;
