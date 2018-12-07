@@ -21,4 +21,7 @@
     <string name="LOCAL_DATABASE">192.168.1.69</string>
     <string name="BASE_SERVICE_URL">http://einyel.duckdns.org/android/</string>
     <string name="EVENTS_SERVICE">http://einyel.duckdns.org/android/events</string>
+    <string name="descripcion">DESCRIPCIÓN</string>
+    <string name="localizacion">LOCALIZACIÓN</string>
+    <string name="localizar">LOCALIZAR</string>
 </resources>

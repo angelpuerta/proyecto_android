@@ -6,4 +6,6 @@
     <color name="mark_orange">#ED7F09</color>
     <color name="mark_yellow">#f9e400</color>
     <color name="mark_green">#86CA08</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>

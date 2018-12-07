@@ -1,14 +1,17 @@
 package org.duckdns.einyel.trabajo_grupal;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ListView;
 
 import org.duckdns.einyel.trabajo_grupal.adapter.EventoAdapter;
 import org.duckdns.einyel.trabajo_grupal.database.AppDatabase;
+import org.duckdns.einyel.trabajo_grupal.listener.RecyclerTouchListener;
 import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
 import org.duckdns.einyel.trabajo_grupal.service.App;
 
@@ -31,15 +34,16 @@ public class ListActivity extends AppCompatActivity {
     private App app = App.get();
     private List<MockEvent> eventosBD;
 
+    public static final String EVENTO= "EVENTO";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.list_activity);
 
         //Obtengo los eventos de la base de datos
         Flowable<List<MockEvent>> eventosFlowables = app.getEventsRepoImp().getAll();
         eventosBD = eventosFlowables.blockingFirst();
-
-        setContentView(R.layout.list_activity);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
 
@@ -48,6 +52,23 @@ public class ListActivity extends AppCompatActivity {
 
         adapter = new EventoAdapter(eventosBD);
         recyclerView.setAdapter(adapter);
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+                        MockEvent evento = eventosBD.get(position);
+                        Intent nextActivity = new Intent(getApplicationContext(), DescripcionActivity.class);
+                        nextActivity.putExtra(EVENTO, evento);
+                        startActivity(nextActivity);
+                    }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                    }
+                })
+        );
 
     }
 

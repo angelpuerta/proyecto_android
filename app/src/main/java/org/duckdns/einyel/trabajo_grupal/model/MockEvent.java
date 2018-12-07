@@ -5,6 +5,8 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -12,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity(tableName = "events")
-public class MockEvent {
+public class MockEvent implements Parcelable {
 
 
     @PrimaryKey(autoGenerate = true)
@@ -44,6 +46,27 @@ public class MockEvent {
         this.location = location;
         this.imgURLReal = imgURL;
     }
+
+    protected MockEvent(Parcel in) {
+        id = in.readLong();
+        tittle = in.readString();
+        description = in.readString();
+        imgURLReal = in.readString();
+        mark = in.readDouble();
+        location = in.readString();
+    }
+
+    public static final Creator<MockEvent> CREATOR = new Creator<MockEvent>() {
+        @Override
+        public MockEvent createFromParcel(Parcel in) {
+            return new MockEvent(in);
+        }
+
+        @Override
+        public MockEvent[] newArray(int size) {
+            return new MockEvent[size];
+        }
+    };
 
     public Long getId() {
         return id;
@@ -132,7 +155,21 @@ public class MockEvent {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.tittle);
+        dest.writeString(this.description);
+        dest.writeString(this.imgURLReal);
+        dest.writeDouble(this.mark);
+        dest.writeString(this.location);
     }
 }
