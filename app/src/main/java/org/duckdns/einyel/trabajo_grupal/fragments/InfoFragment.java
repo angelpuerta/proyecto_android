@@ -81,6 +81,10 @@ public class InfoFragment extends Fragment implements OnMapReadyCallback {
         cargarCalle(lat,lng);
     }
 
+    public void a(View view){
+
+    }
+
     private void cargarCalle(Double lat, Double lng){
         Geocoder geocoder = new Geocoder(descripcionActivity, Locale.getDefault());
 
@@ -100,4 +104,6 @@ public class InfoFragment extends Fragment implements OnMapReadyCallback {
             e.printStackTrace();
         }
     }
+
+
 }

@@ -1,12 +1,21 @@
 package org.duckdns.einyel.trabajo_grupal;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -18,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,7 +47,7 @@ import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DescripcionActivity extends AppCompatActivity{
+public class DescripcionActivity extends AppCompatActivity {
 
     private GoogleMap mapa;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -48,6 +58,8 @@ public class DescripcionActivity extends AppCompatActivity{
 
     private Bitmap bm = null;
     private MockEvent evento = null;
+    private LocationManager locationManager;
+    private Location currentLocation;
 
 
     @Override
@@ -63,32 +75,38 @@ public class DescripcionActivity extends AppCompatActivity{
 
         iniciarTabLayout();
 
-        /*SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);*/
-
     }
 
-    /*@Override
-    public void onMapReady(GoogleMap googleMap) {
-
-        mapa = googleMap;
-        mapa.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mapa.getUiSettings().setZoomControlsEnabled(true);
+    public void abrirMapaGrande(View view) {
 
         //Coordenadas
         String[] latLng = evento.getLocation().split(",");
-        Double lat = Double.parseDouble(latLng[0]);
-        Double lng = Double.parseDouble(latLng[1]);
 
-        //Mover camara
-        LatLng ubicacion = new LatLng(lat, lng);
-        CameraUpdate camUpd = CameraUpdateFactory.newLatLngZoom(ubicacion,15);
-        mapa.moveCamera(camUpd);
-        mapa.addMarker (new MarkerOptions()
-                .position(ubicacion)
-                .title("Oviedo"));
-    }*/
+        String uri = "http://maps.google.com/maps?saddr=" + "&daddr=" + latLng[0] + "," + latLng[1];
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        startActivity(intent);
+
+
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
 
     public MockEvent getEvento(){
         return this.evento;
@@ -225,6 +243,8 @@ public class DescripcionActivity extends AppCompatActivity{
         startActivity(intent);
         intent.putExtra(EVENT_ID, Long.valueOf(1));
     }
+
+
 }
 
 class TabAdapter extends FragmentStatePagerAdapter {

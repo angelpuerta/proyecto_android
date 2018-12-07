@@ -140,6 +140,7 @@
                     android:layout_marginBottom="15dp"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
+                    android:onClick="abrirMapaGrande"
                     android:padding="0dp"
                     android:text="@string/localizar"
                     app:layout_constraintBottom_toBottomOf="parent"
