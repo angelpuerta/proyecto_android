@@ -9,9 +9,12 @@ import android.widget.ListView;
 
 import org.duckdns.einyel.trabajo_grupal.adapter.EventoAdapter;
 import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
+import org.duckdns.einyel.trabajo_grupal.service.App;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Flowable;
 
 
 public class ListActivity extends AppCompatActivity {
@@ -25,10 +28,17 @@ public class ListActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
+    private App app = App.get();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_activity);
+
+        Flowable<List<MockEvent>> eventos = app.getEventsRepoImp().getAll();
+        //List<List<MockEvent>> cosa = eventos.toList().blockingGet();
+        //List<MockEvent> cosa1 = cosa.get(0);
+        List<MockEvent> cosa1 = enve;
 
         /*mi = new Intent(this, DescripcionActivity.class);
 
