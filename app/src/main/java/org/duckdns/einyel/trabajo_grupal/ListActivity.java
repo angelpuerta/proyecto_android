@@ -23,16 +23,13 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ListActivity extends AppCompatActivity {
 
-    ListView listView;
-    public static ArrayList<MockEvent> lista = new ArrayList<MockEvent>();
-    public static final String EVENTO = "EVENTO";
-    Intent mi;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private App app = App.get();
+    private List<MockEvent> eventosBD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +37,7 @@ public class ListActivity extends AppCompatActivity {
 
         //Obtengo los eventos de la base de datos
         Flowable<List<MockEvent>> eventosFlowables = app.getEventsRepoImp().getAll();
-        List<MockEvent> eventosBD = eventosFlowables.blockingFirst();
+        eventosBD = eventosFlowables.blockingFirst();
 
         setContentView(R.layout.list_activity);
 
