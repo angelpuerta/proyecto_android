@@ -63,4 +63,7 @@ dependencies {
     //
     implementation "com.birbit:android-priority-jobqueue:${priorityJobQueueVersion}"
 
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
 }

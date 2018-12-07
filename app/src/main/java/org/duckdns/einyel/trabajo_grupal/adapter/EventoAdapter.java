@@ -1,12 +1,17 @@
 package org.duckdns.einyel.trabajo_grupal.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
+
+import org.duckdns.einyel.trabajo_grupal.ListActivity;
 import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
 import org.duckdns.einyel.trabajo_grupal.R;
 
@@ -31,6 +36,7 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
     }
 
     private List<MockEvent> eventos;
+    private ViewGroup parent;
 
     public EventoAdapter(List<MockEvent> eventos) {
         this.eventos = eventos;
@@ -38,14 +44,17 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
 
     @Override
     public EventoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        this.parent = parent;
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.evento_card, parent, false);
+
         return new EventoViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(EventoViewHolder holder, int position) {
-        //  holder.imagen.setImageResource(eventos.get(position).getImgURL());
+        Picasso.get().setLoggingEnabled(true);
+        Picasso.get().load(eventos.get(position).getImgURLReal()).into(holder.imagen);
         holder.nombre.setText(eventos.get(position).getTittle());
         changeMarkBackground(holder, position);
         holder.puntuacion.setText(eventos.get(position).getMark() + "");
