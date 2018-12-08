@@ -72,27 +72,4 @@ public class ListActivity extends AppCompatActivity {
 
     }
 
-    /*class AdaptadorEventos extends ArrayAdapter<MockEvent>{
-
-        AppCompatActivity appCompatActivity;
-
-        public AdaptadorEventos(AppCompatActivity context) {
-            super(context, R.layout.fila_lista, lista);
-            appCompatActivity = context;
-        }
-
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = appCompatActivity.getLayoutInflater();
-            View item = inflater.inflate(R.layout.fila_lista, null);
-
-            TextView textView1 = (TextView)item.findViewById(R.id.nombre_fila_lista);
-            textView1.setText(lista.get(position).getTitulo());
-
-            ImageView imageView1 = (ImageView)item.findViewById(R.id.icon);
-            //imageView1.setImageResource(R.mipmap.melendi);
-
-            return(item);
-        }
-    }*/
-
 }

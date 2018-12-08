@@ -24,4 +24,5 @@
     <string name="descripcion">DESCRIPCIÓN</string>
     <string name="localizacion">LOCALIZACIÓN</string>
     <string name="localizar">LOCALIZAR</string>
+    <string name="valoracionesVacias">Lo sentimos, aún no hay valoraciones para el evento :(</string>
 </resources>

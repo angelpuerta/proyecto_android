@@ -1,51 +1,48 @@
 package org.duckdns.einyel.trabajo_grupal;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import org.duckdns.einyel.trabajo_grupal.fragments.InfoFragment;
 import org.duckdns.einyel.trabajo_grupal.fragments.ValoracionesFragment;
+import org.duckdns.einyel.trabajo_grupal.model.Comment;
 import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
+import org.duckdns.einyel.trabajo_grupal.service.App;
+
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.function.Function;
+
+
+import io.reactivex.Flowable;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class DescripcionActivity extends AppCompatActivity {
 
@@ -58,6 +55,7 @@ public class DescripcionActivity extends AppCompatActivity {
 
     private Bitmap bm = null;
     private MockEvent evento = null;
+    private App app = App.get();
 
 
     @Override
@@ -87,9 +85,60 @@ public class DescripcionActivity extends AppCompatActivity {
 
     }
 
+    /*public void comentarios(){
+
+        List<Comment> comentarios = getEvento().getComments();
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.listaComentarios);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        ComentarioAdapter adapter = new ComentarioAdapter(comentarios);
+        recyclerView.setAdapter(adapter);
+    }*/
+
 
     public MockEvent getEvento(){
         return this.evento;
+    }
+
+    public List<Comment> getComentarios(){
+
+
+        /*Long id = this.evento.getId();
+        Flowable<List<Comment>> comentariosFlowables = app.getRemoteCommentsRepo().commentsFromEvent(id);
+
+        String com = "";
+        Disposable cosa = comentariosFlowables.
+                subscribeOn(Schedulers.io()).
+                observeOn(AndroidSchedulers.mainThread()).
+                subscribe();*/
+
+        List<Comment> comentarios = new ArrayList<>();
+        if(getEvento().getId() == 1) {
+
+            Comment c = new Comment
+                    (new Long(1), new Long(1), "Wuolaaaaaa1", 3, new Long(1), new Date());
+            Comment c2 = new Comment
+                    (new Long(1), new Long(1), "Wuolaaaaaa2", 3, new Long(1), new Date());
+            Comment c3 = new Comment
+                    (new Long(1), new Long(1), "Wuolaaaaaa3", 3, new Long(1), new Date());
+            Comment c4 = new Comment
+                    (new Long(1), new Long(1), "Wuolaaaaaa4", 3, new Long(1), new Date());
+            Comment c5 = new Comment
+                    (new Long(1), new Long(1), "Wuolaaaaaa5", 3, new Long(1), new Date());
+            Comment c6 = new Comment
+                    (new Long(1), new Long(1), "Wuolaaaaaa6", 3, new Long(1), new Date());
+
+
+            comentarios.add(c);
+            comentarios.add(c2);
+            comentarios.add(c3);
+            comentarios.add(c4);
+            comentarios.add(c5);
+            comentarios.add(c6);
+        }
+
+        return comentarios;
     }
 
     private void iniciarTabLayout(){
