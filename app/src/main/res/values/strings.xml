@@ -25,4 +25,10 @@
     <string name="localizacion">LOCALIZACIÓN</string>
     <string name="localizar">LOCALIZAR</string>
     <string name="valoracionesVacias">Lo sentimos, aún no hay valoraciones para el evento :(</string>
+    <string name="puntuacion_media_label">Puntuación media</string>
+    <string name="error_camara">Error en la camara</string>
+    <string name="escanea_codigo">Escanea el código QR del evento</string>
+    <string name="check_in_correcto">Check in realizado correctamente</string>
+    <string name="check_in_incorrecto">El código no corresponde al del evento</string>
+    <string name="OK">OK</string>
 </resources>

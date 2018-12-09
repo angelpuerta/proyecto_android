@@ -35,14 +35,6 @@ import org.duckdns.einyel.trabajo_grupal.service.App;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Function;
-
-
-import io.reactivex.Flowable;
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class DescripcionActivity extends AppCompatActivity {
 
@@ -51,7 +43,7 @@ public class DescripcionActivity extends AppCompatActivity {
 
     Intent intent;
 
-    public static final String EVENT_ID = "EVENT_ID";
+    public static final String EVENTO = "EVENTO";
 
     private Bitmap bm = null;
     private MockEvent evento = null;
@@ -85,17 +77,6 @@ public class DescripcionActivity extends AppCompatActivity {
 
     }
 
-    /*public void comentarios(){
-
-        List<Comment> comentarios = getEvento().getComments();
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.listaComentarios);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        ComentarioAdapter adapter = new ComentarioAdapter(comentarios);
-        recyclerView.setAdapter(adapter);
-    }*/
-
 
     public MockEvent getEvento(){
         return this.evento;
@@ -117,15 +98,15 @@ public class DescripcionActivity extends AppCompatActivity {
         if(getEvento().getId() == 1) {
 
             Comment c = new Comment
-                    (new Long(1), new Long(1), "Wuolaaaaaa1", 3, new Long(1), new Date());
+                    (new Long(1), new Long(1), "Wuolaaaaaa1", 1, new Long(1), new Date());
             Comment c2 = new Comment
                     (new Long(1), new Long(1), "Wuolaaaaaa2", 3, new Long(1), new Date());
             Comment c3 = new Comment
-                    (new Long(1), new Long(1), "Wuolaaaaaa3", 3, new Long(1), new Date());
+                    (new Long(1), new Long(1), "Wuolaaaaaa3", 4, new Long(1), new Date());
             Comment c4 = new Comment
-                    (new Long(1), new Long(1), "Wuolaaaaaa4", 3, new Long(1), new Date());
+                    (new Long(1), new Long(1), "Wuolaaaaaa4", 5, new Long(1), new Date());
             Comment c5 = new Comment
-                    (new Long(1), new Long(1), "Wuolaaaaaa5", 3, new Long(1), new Date());
+                    (new Long(1), new Long(1), "Wuolaaaaaa5", 5, new Long(1), new Date());
             Comment c6 = new Comment
                     (new Long(1), new Long(1), "Wuolaaaaaa6", 3, new Long(1), new Date());
 
@@ -139,6 +120,19 @@ public class DescripcionActivity extends AppCompatActivity {
         }
 
         return comentarios;
+    }
+
+    public void valorar(View view){
+        Intent nextActivity = new Intent(getApplicationContext(), RankingActivity.class);
+        nextActivity.putExtra(EVENTO, evento);
+        startActivity(nextActivity);
+
+    }
+
+    public void checkIn(View view){
+        Intent nextActivity = new Intent(getApplicationContext(), QRCodeActivity.class);
+        nextActivity.putExtra(EVENTO, evento);
+        startActivity(nextActivity);
     }
 
     private void iniciarTabLayout(){
@@ -267,11 +261,11 @@ public class DescripcionActivity extends AppCompatActivity {
     }
 
 
-    public void nextClick(View view) {
+/*    public void nextClick(View view) {
 
         startActivity(intent);
         intent.putExtra(EVENT_ID, Long.valueOf(1));
-    }
+    }*/
 
 
 }
