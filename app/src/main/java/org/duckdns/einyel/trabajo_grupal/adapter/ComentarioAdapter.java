@@ -4,15 +4,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import org.duckdns.einyel.trabajo_grupal.R;
 import org.duckdns.einyel.trabajo_grupal.model.Comment;
-import org.duckdns.einyel.trabajo_grupal.model.DateConverter;
-import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
 import org.duckdns.einyel.trabajo_grupal.service.App;
 
 import java.util.Calendar;
@@ -74,13 +69,18 @@ public class ComentarioAdapter extends RecyclerView.Adapter<ComentarioAdapter.Co
     private void changeMarkBackground(CommentViewHolder holder, int position) {
 
         double calificacion = comentarios.get(position).getRate();
-        if (calificacion >= 0 && calificacion < 4) {
-            holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_orange);
-        } else if (calificacion >= 4 && calificacion <= 6.5) {
-            holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_yellow);
-        } else {
-            holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_green);
-        }
+
+        if(calificacion>=1 && calificacion < 2)
+            holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_voto1);
+        else if(calificacion>=2 && calificacion < 3)
+            holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_voto2);
+        else if(calificacion>=3 && calificacion < 4)
+            holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_voto3);
+        else if(calificacion >=4 && calificacion <5)
+            holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_voto4);
+        else if(calificacion >=5)
+            holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_voto5);
+
 
     }
 

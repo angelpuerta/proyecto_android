@@ -52,7 +52,7 @@ public class DescripcionActivity extends AppCompatActivity {
 
     Intent intent;
 
-    public static final String EVENT_ID = "EVENT_ID";
+    public static final String EVENTO = "EVENTO";
 
     private Bitmap bm = null;
     private MockEvent evento = null;
@@ -121,7 +121,6 @@ public class DescripcionActivity extends AppCompatActivity {
                 subscribeOn(Schedulers.io()).
                 observeOn(AndroidSchedulers.mainThread()).
                 subscribe();*/
-
     }
 
     private void iniciarTabLayout() {
@@ -174,17 +173,17 @@ public class DescripcionActivity extends AppCompatActivity {
         int green = Color.green(dominantColor);
         int blue = Color.blue(dominantColor);
 
-        int selectedColor = (red + green + blue > 255 * 3 / 2) ?
+        int selectedColor = (red+green+blue>255*3/2) ?
                 R.color.black :
                 R.color.white;
 
-        int shadowColor = (selectedColor == R.color.black) ?
+        int shadowColor = (selectedColor == R.color.black)?
                 R.color.white :
                 R.color.black;
 
         TextView titulo = (TextView) findViewById(R.id.tituloDescripcion);
         titulo.setTextColor(getResources().getColor(selectedColor));
-        titulo.setShadowLayer(2, 3, 3, getResources().getColor(shadowColor));
+        titulo.setShadowLayer(2,3,3, getResources().getColor(shadowColor));
         titulo.setBackgroundColor(dominantColor);
         titulo.getBackground().setAlpha(190);
 
@@ -214,14 +213,14 @@ public class DescripcionActivity extends AppCompatActivity {
     private int getDominantColor(Bitmap bitmap) {
         if (null == bitmap) return Color.TRANSPARENT;
 
-        int redBucket = 0;
-        int greenBucket = 0;
-        int blueBucket = 0;
-        int alphaBucket = 0;
+        int redBucket    = 0;
+        int greenBucket  = 0;
+        int blueBucket   = 0;
+        int alphaBucket  = 0;
 
         boolean hasAlpha = bitmap.hasAlpha();
-        int pixelCount = bitmap.getWidth() * bitmap.getHeight();
-        int[] pixels = new int[pixelCount];
+        int pixelCount   = bitmap.getWidth() * bitmap.getHeight();
+        int[] pixels     = new int[pixelCount];
 
         bitmap.getPixels(
                 pixels,
@@ -233,12 +232,12 @@ public class DescripcionActivity extends AppCompatActivity {
                 bitmap.getHeight()
         );
 
-        for (int y = 0, h = bitmap.getHeight(); y < h; y++) {
-            for (int x = 0, w = bitmap.getWidth(); x < w; x++) {
-                int color = pixels[x + y * w];            // x + y * width
-                redBucket += (color >> 16) & 0xFF;         // Color.red
+        for (int y = 0, h = bitmap.getHeight(); y < h; y++){
+            for (int x = 0, w = bitmap.getWidth(); x < w; x++){
+                int color   =  pixels[x + y * w];            // x + y * width
+                redBucket   += (color >> 16) & 0xFF;         // Color.red
                 greenBucket += (color >> 8) & 0xFF;          // Color.greed
-                blueBucket += (color & 0xFF);               // Color.blue
+                blueBucket  += (color & 0xFF);               // Color.blue
                 if (hasAlpha) alphaBucket += (color >>> 24); // Color.alpha
             }
         }
@@ -252,11 +251,11 @@ public class DescripcionActivity extends AppCompatActivity {
     }
 
 
-    public void nextClick(View view) {
+/*    public void nextClick(View view) {
 
         startActivity(intent);
         intent.putExtra(EVENT_ID, Long.valueOf(1));
-    }
+    }*/
 
 
 }

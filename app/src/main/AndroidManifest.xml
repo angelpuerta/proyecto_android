@@ -9,7 +9,7 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -36,8 +36,8 @@
 
         <activity
             android:name=".RankingActivity"
-            android:label="@string/title_activity_puntuacion"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label=""
+            android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
             android:name=".DescriptionActivity2"
             android:label="@string/title_activity_description"
@@ -45,20 +45,19 @@
         <activity
             android:name=".ListActivity"
             android:label="ListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".DescripcionActivity" />
-
         <activity android:name=".Login">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
+        <activity
+            android:name=".QRCodeActivity"
+            android:label=""
+            android:theme="@style/Theme.AppCompat.Dialog" />
     </application>
 
 </manifest>
