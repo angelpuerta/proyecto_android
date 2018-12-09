@@ -58,7 +58,7 @@ public class ListActivity extends AppCompatActivity implements ReceiveWhenComple
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnComplete(() -> set(eventosBD))
                         .subscribe());
-        
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
 
         layoutManager = new LinearLayoutManager(this);
