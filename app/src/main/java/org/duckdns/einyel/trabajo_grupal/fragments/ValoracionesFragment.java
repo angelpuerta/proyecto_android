@@ -161,8 +161,6 @@ public class ValoracionesFragment extends Fragment implements ReceiveWhenComplet
         recyclerView.setLayoutManager(layoutManager);
         ComentarioAdapter adapter = new ComentarioAdapter(lista);
         recyclerView.setAdapter(adapter);
-        }
-        return v;
     }
 
     @Override
