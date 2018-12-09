@@ -6,6 +6,7 @@ import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.Observable;
 
 public class CommentsLocalRepo {
 
@@ -15,8 +16,8 @@ public class CommentsLocalRepo {
         this.commentDao = commentDao;
     }
 
-    public Flowable<List<Comment>> commentsFromEvent(Long id) {
-        return commentDao.commentsFromEvent(id);
+    public Observable<List<Comment>> commentsFromEvent(Long id) {
+        return Observable.create(x -> commentDao.commentsFromEvent(id));
     }
 
     public void addComment(Comment comment) {

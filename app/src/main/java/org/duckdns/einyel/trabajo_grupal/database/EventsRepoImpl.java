@@ -8,6 +8,7 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 
+import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
 public class EventsRepoImpl {
@@ -21,16 +22,17 @@ public class EventsRepoImpl {
     }
 
 
-    public Flowable<List<MockEvent>> getAll() {
-        return Flowable.mergeDelayError(remoteRepo.getAll().doOnNext(mockEvent -> localRepo.addEvents(mockEvent)).subscribeOn(Schedulers.io()),
+    public Observable<List<MockEvent>> getAll() {
+        return Observable.mergeDelayError(remoteRepo.getAll().doOnNext(mockEvent -> localRepo.addEvents(mockEvent)).subscribeOn(Schedulers.io()),
                 localRepo.getAll().subscribeOn(Schedulers.io()));
     }
-
 
 
     public EventsLocalRepo getLocalRepo() {
         return localRepo;
     }
 
-
+    public EventsRemoteRepo getRemoteRepo() {
+        return remoteRepo;
+    }
 }

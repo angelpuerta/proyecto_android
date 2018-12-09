@@ -25,11 +25,11 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import org.duckdns.einyel.trabajo_grupal.fragments.InfoFragment;
+import org.duckdns.einyel.trabajo_grupal.fragments.ReceiveWhenCompleted;
 import org.duckdns.einyel.trabajo_grupal.fragments.ValoracionesFragment;
 import org.duckdns.einyel.trabajo_grupal.model.Comment;
 import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
 import org.duckdns.einyel.trabajo_grupal.service.App;
-
 
 
 import java.util.ArrayList;
@@ -39,6 +39,7 @@ import java.util.function.Function;
 
 
 import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -68,7 +69,6 @@ public class DescripcionActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         evento = b.getParcelable(ListActivity.EVENTO);
 
-
         iniciarTabLayout();
 
     }
@@ -97,12 +97,21 @@ public class DescripcionActivity extends AppCompatActivity {
     }*/
 
 
-    public MockEvent getEvento(){
+    public MockEvent getEvento() {
         return this.evento;
     }
 
-    public List<Comment> getComentarios(){
+    public void getComentarios(ReceiveWhenCompleted<Comment> receiveWhenCompleted) {
 
+        List<Comment> comments = new ArrayList<>();
+
+        Observable<List<Comment>> commentObservable = app.getCommentsRepo().commentsFromEvent(1L)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(x -> comments.addAll(x))
+                .doOnComplete(() -> receiveWhenCompleted.set(comments));
+
+        App.get().disposable().add(commentObservable.subscribe());
 
         /*Long id = this.evento.getId();
         Flowable<List<Comment>> comentariosFlowables = app.getRemoteCommentsRepo().commentsFromEvent(id);
@@ -113,35 +122,9 @@ public class DescripcionActivity extends AppCompatActivity {
                 observeOn(AndroidSchedulers.mainThread()).
                 subscribe();*/
 
-        List<Comment> comentarios = new ArrayList<>();
-        if(getEvento().getId() == 1) {
-
-            Comment c = new Comment
-                    (new Long(1), new Long(1), "Wuolaaaaaa1", 3, new Long(1), new Date());
-            Comment c2 = new Comment
-                    (new Long(1), new Long(1), "Wuolaaaaaa2", 3, new Long(1), new Date());
-            Comment c3 = new Comment
-                    (new Long(1), new Long(1), "Wuolaaaaaa3", 3, new Long(1), new Date());
-            Comment c4 = new Comment
-                    (new Long(1), new Long(1), "Wuolaaaaaa4", 3, new Long(1), new Date());
-            Comment c5 = new Comment
-                    (new Long(1), new Long(1), "Wuolaaaaaa5", 3, new Long(1), new Date());
-            Comment c6 = new Comment
-                    (new Long(1), new Long(1), "Wuolaaaaaa6", 3, new Long(1), new Date());
-
-
-            comentarios.add(c);
-            comentarios.add(c2);
-            comentarios.add(c3);
-            comentarios.add(c4);
-            comentarios.add(c5);
-            comentarios.add(c6);
-        }
-
-        return comentarios;
     }
 
-    private void iniciarTabLayout(){
+    private void iniciarTabLayout() {
 
         Picasso.get().load(evento.getImgURLReal()).into((ImageView) findViewById(R.id.imageViewDescripcion));
         TextView titulo = findViewById(R.id.tituloDescripcion);
@@ -157,10 +140,10 @@ public class DescripcionActivity extends AppCompatActivity {
         viewPager.setAdapter(ta);
         tl.setupWithViewPager(viewPager);
 
-        changeColorTextDarkLight(tl,getDominantColor(bm));
+        changeColorTextDarkLight(tl, getDominantColor(bm));
     }
 
-    private void cargarBitmap(){
+    private void cargarBitmap() {
         Picasso.get().load(evento.getImgURLReal()).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -173,7 +156,8 @@ public class DescripcionActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {}
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+            }
         });
     }
 
@@ -181,6 +165,7 @@ public class DescripcionActivity extends AppCompatActivity {
     /**
      * Metodo que cambia de color al texto del titulo de los TabItem dependiendo de si el
      * color dominante de la imagen es claro u oscuro
+     *
      * @param tl
      * @param dominantColor
      */
@@ -189,17 +174,17 @@ public class DescripcionActivity extends AppCompatActivity {
         int green = Color.green(dominantColor);
         int blue = Color.blue(dominantColor);
 
-        int selectedColor = (red+green+blue>255*3/2) ?
+        int selectedColor = (red + green + blue > 255 * 3 / 2) ?
                 R.color.black :
                 R.color.white;
 
-        int shadowColor = (selectedColor == R.color.black)?
+        int shadowColor = (selectedColor == R.color.black) ?
                 R.color.white :
                 R.color.black;
 
         TextView titulo = (TextView) findViewById(R.id.tituloDescripcion);
         titulo.setTextColor(getResources().getColor(selectedColor));
-        titulo.setShadowLayer(2,3,3, getResources().getColor(shadowColor));
+        titulo.setShadowLayer(2, 3, 3, getResources().getColor(shadowColor));
         titulo.setBackgroundColor(dominantColor);
         titulo.getBackground().setAlpha(190);
 
@@ -229,14 +214,14 @@ public class DescripcionActivity extends AppCompatActivity {
     private int getDominantColor(Bitmap bitmap) {
         if (null == bitmap) return Color.TRANSPARENT;
 
-        int redBucket    = 0;
-        int greenBucket  = 0;
-        int blueBucket   = 0;
-        int alphaBucket  = 0;
+        int redBucket = 0;
+        int greenBucket = 0;
+        int blueBucket = 0;
+        int alphaBucket = 0;
 
         boolean hasAlpha = bitmap.hasAlpha();
-        int pixelCount   = bitmap.getWidth() * bitmap.getHeight();
-        int[] pixels     = new int[pixelCount];
+        int pixelCount = bitmap.getWidth() * bitmap.getHeight();
+        int[] pixels = new int[pixelCount];
 
         bitmap.getPixels(
                 pixels,
@@ -248,12 +233,12 @@ public class DescripcionActivity extends AppCompatActivity {
                 bitmap.getHeight()
         );
 
-        for (int y = 0, h = bitmap.getHeight(); y < h; y++){
-            for (int x = 0, w = bitmap.getWidth(); x < w; x++){
-                int color   =  pixels[x + y * w];            // x + y * width
-                redBucket   += (color >> 16) & 0xFF;         // Color.red
+        for (int y = 0, h = bitmap.getHeight(); y < h; y++) {
+            for (int x = 0, w = bitmap.getWidth(); x < w; x++) {
+                int color = pixels[x + y * w];            // x + y * width
+                redBucket += (color >> 16) & 0xFF;         // Color.red
                 greenBucket += (color >> 8) & 0xFF;          // Color.greed
-                blueBucket  += (color & 0xFF);               // Color.blue
+                blueBucket += (color & 0xFF);               // Color.blue
                 if (hasAlpha) alphaBucket += (color >>> 24); // Color.alpha
             }
         }

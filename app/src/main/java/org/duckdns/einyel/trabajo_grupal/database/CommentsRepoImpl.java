@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
@@ -28,8 +29,8 @@ public class CommentsRepoImpl {
         this.remoteRepo = commentsRemoteRepo;
     }
 
-    public Flowable<List<Comment>> commentsFromEvent(Long id) {
-        return Flowable.merge(remoteRepo.commentsFromEvent(id).subscribeOn(Schedulers.io())
+    public Observable<List<Comment>> commentsFromEvent(Long id) {
+        return Observable.mergeDelayError(remoteRepo.commentsFromEvent(id).subscribeOn(Schedulers.io())
                         .doOnNext(comments ->
                                 localRepo.addComments(comments)
                         ),

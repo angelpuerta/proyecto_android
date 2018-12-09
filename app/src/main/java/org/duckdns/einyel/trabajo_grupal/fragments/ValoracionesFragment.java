@@ -26,28 +26,26 @@ import org.duckdns.einyel.trabajo_grupal.model.Comment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ValoracionesFragment extends Fragment {
+public class ValoracionesFragment extends Fragment implements ReceiveWhenCompleted<Comment> {
 
     private List<Comment> comentarios;
     private DescripcionActivity descripcionActivity;
     private View v;
     private PieChart mChart;
-    private float[] yData = { 5, 10, 15, 30, 40 };
-    private String[] xData = { "Sony", "Huawei", "LG", "Apple", "Samsung" };
+    private float[] yData = {5, 10, 15, 30, 40};
+    private String[] xData = {"Sony", "Huawei", "LG", "Apple", "Samsung"};
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         descripcionActivity = (DescripcionActivity) container.getContext();
-        comentarios = descripcionActivity.getComentarios();
+        descripcionActivity.getComentarios(this);
 
-        if(comentarios.size() == 0){
+        if (comentarios.size() == 0) {
             v = LayoutInflater.from(container.getContext())
                     .inflate(R.layout.fragmentvaloraciones_vacia, container, false);
-        }
-
-        else{
+        } else {
             v = LayoutInflater.from(container.getContext())
                     .inflate(R.layout.fragmentvaloraciones_lista, container, false);
 
@@ -82,13 +80,19 @@ public class ValoracionesFragment extends Fragment {
             pieChart.setData(data);
 
 
-            RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.listaComentarios);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(descripcionActivity);
-            recyclerView.setLayoutManager(layoutManager);
-            ComentarioAdapter adapter = new ComentarioAdapter(comentarios);
-            recyclerView.setAdapter(adapter);
         }
         return v;
+    }
+
+    @Override
+    public void set(List list) {
+        comentarios = list;
+
+        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.listaComentarios);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(descripcionActivity);
+        recyclerView.setLayoutManager(layoutManager);
+        ComentarioAdapter adapter = new ComentarioAdapter(comentarios);
+        recyclerView.setAdapter(adapter);
     }
 
 /*    private void addData() {

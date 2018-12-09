@@ -34,7 +34,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
 
-        pw =  findViewById(R.id.editPassword);
+        pw = findViewById(R.id.editPassword);
         user = findViewById(R.id.editUser);
 
 

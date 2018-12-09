@@ -11,6 +11,7 @@ import org.duckdns.einyel.trabajo_grupal.model.Comment;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.Observable;
 
 
 @Dao

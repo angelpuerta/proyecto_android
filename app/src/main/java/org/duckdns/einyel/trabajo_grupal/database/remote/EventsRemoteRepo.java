@@ -11,7 +11,7 @@ import java.util.List;
 
 public class EventsRemoteRepo extends BaseRemote {
 
-    public Flowable<List<MockEvent>> getAll() {
+    public Observable<List<MockEvent>> getAll() {
         return create(RemoteEvents.class, "http://einyel.duckdns.org/android/").getEvents();
     }
 

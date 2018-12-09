@@ -11,6 +11,8 @@ import org.duckdns.einyel.trabajo_grupal.database.local.EventsLocalRepo;
 import org.duckdns.einyel.trabajo_grupal.database.remote.CommentsRemoteRepo;
 import org.duckdns.einyel.trabajo_grupal.database.remote.EventsRemoteRepo;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 public class App extends Application {
 
     public static App INSTANCE;
@@ -18,7 +20,7 @@ public class App extends Application {
     private static final String PREFERENCES = "RoomDemo.preferences";
     private static final String KEY_FORCE_UPDATE = "force_update";
 
-
+    private CompositeDisposable disposable;
     private AppDatabase database;
 
     private EventsRepoImpl eventsRepoImp;
@@ -39,9 +41,11 @@ public class App extends Application {
 
         eventsRepoImp = new EventsRepoImpl(new EventsRemoteRepo(), new EventsLocalRepo(database.EventDao()));
         commentsRepo = new CommentsRepoImpl(new CommentsLocalRepo(database.CommentDao()), new CommentsRemoteRepo());
+        disposable = new CompositeDisposable();
 
         INSTANCE = this;
     }
+
 
     public AppDatabase getDB() {
         return database;
@@ -51,15 +55,12 @@ public class App extends Application {
         return eventsRepoImp;
     }
 
-    public EventsLocalRepo getLocalEventsRepoImp() {
-        return eventsRepoImp.getLocalRepo();
-    }
-
-    public CommentsRemoteRepo getRemoteCommentsRepo() {
-        return commentsRepo.getRemoteRepo();
-    }
 
     public CommentsRepoImpl getCommentsRepo() {
         return commentsRepo;
+    }
+
+    public CompositeDisposable disposable() {
+        return disposable;
     }
 }

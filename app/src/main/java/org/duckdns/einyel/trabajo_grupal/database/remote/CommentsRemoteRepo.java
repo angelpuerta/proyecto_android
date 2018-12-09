@@ -8,11 +8,12 @@ import org.duckdns.einyel.trabajo_grupal.model.Comment;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import retrofit2.Call;
 
 public class CommentsRemoteRepo extends BaseRemote {
 
-    public Flowable<List<Comment>> commentsFromEvent(Long event) {
+    public Observable<List<Comment>> commentsFromEvent(Long event) {
         return create(RemoteComments.class, "http://einyel.duckdns.org/android/").commentsFromEvent(event);
     }
 

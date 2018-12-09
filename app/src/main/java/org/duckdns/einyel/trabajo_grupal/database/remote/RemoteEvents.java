@@ -12,6 +12,6 @@ import retrofit2.http.GET;
 public interface RemoteEvents {
 
     @GET("events")
-    Flowable<List<MockEvent>> getEvents();
+    Observable<List<MockEvent>> getEvents();
 
 }
