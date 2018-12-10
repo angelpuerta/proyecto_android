@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "946030545809",
+    "firebase_url": "https://proyecto-moviles-86dc4.firebaseio.com",
+    "project_id": "proyecto-moviles-86dc4",
+    "storage_bucket": "proyecto-moviles-86dc4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:946030545809:android:112c054bcfe1a949",
+        "android_client_info": {
+          "package_name": "org.duckdns.einyel.trabajo_grupal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "946030545809-ec0pjjnq3q3ogisu7ruba3720tettd9l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAibEsVSInRmDYzu-n9c3LvTN2Z9Opcz5o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

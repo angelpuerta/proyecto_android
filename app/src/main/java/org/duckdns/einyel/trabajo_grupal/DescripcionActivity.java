@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -21,34 +22,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import org.duckdns.einyel.trabajo_grupal.fragments.InfoFragment;
-import org.duckdns.einyel.trabajo_grupal.fragments.ReceiveWhenCompleted;
 import org.duckdns.einyel.trabajo_grupal.fragments.ValoracionesFragment;
 import org.duckdns.einyel.trabajo_grupal.model.Comment;
 import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
 import org.duckdns.einyel.trabajo_grupal.service.App;
 
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Function;
-
-
-import io.reactivex.Flowable;
-import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class DescripcionActivity extends AppCompatActivity {
-
-    private GoogleMap mapa;
-    private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
 
     Intent intent;
 
@@ -57,6 +52,8 @@ public class DescripcionActivity extends AppCompatActivity {
     private Bitmap bm = null;
     private MockEvent evento = null;
     private App app = App.get();
+    private static List<Comment> comentariosBD = new ArrayList<>();
+
 
 
     @Override
@@ -69,8 +66,21 @@ public class DescripcionActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         evento = b.getParcelable(ListActivity.EVENTO);
 
+        //getComentariosDB();
+
+        filtrarPorEvento();
+
         iniciarTabLayout();
 
+    }
+
+    private void filtrarPorEvento(){
+        List<Comment> commentsFiltrados = new ArrayList<>();
+        for(Comment c : comentariosBD)
+            if(c.getE_id().equals(evento.getId()))
+                commentsFiltrados.add(c);
+
+        comentariosBD = commentsFiltrados;
     }
 
     public void abrirMapaGrande(View view) {
@@ -85,45 +95,102 @@ public class DescripcionActivity extends AppCompatActivity {
 
     }
 
-    /*public void comentarios(){
+    public static void getComentariosDB(){
 
-        List<Comment> comentarios = getEvento().getComments();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference comentarios = database.getReference("comments");
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.listaComentarios);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        ComentarioAdapter adapter = new ComentarioAdapter(comentarios);
-        recyclerView.setAdapter(adapter);
-    }*/
+        comentarios.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Iterable<DataSnapshot> comentarios = snapshot.getChildren();
+                for(DataSnapshot comentario : comentarios){
+                    Iterable<DataSnapshot> campos = comentario.getChildren();
+                    Long eId = null;
+                    String texto = "";
+                    String fecha = "";
+                    Long uId = null;
+                    Double mark = 0.0;
+                    Long id = null;
+                    for(DataSnapshot campo : campos ){
+                        String nombreCampo = campo.getKey();
+                        if(nombreCampo.equals("e_id"))
+                            eId = (Long) campo.getValue();
+                        else if(nombreCampo.equals("comment"))
+                            texto = (String) campo.getValue();
+                        else if(nombreCampo.equals("date"))
+                            fecha = (String) campo.getValue();
+                        else if(nombreCampo.equals("u_id"))
+                            uId = (Long) campo.getValue();
+                        else if(nombreCampo.equals("rate"))
+                            mark = Double.parseDouble(campo.getValue()+"");
+                        else if(nombreCampo.equals("id"))
+                            id = (Long) campo.getValue();
+                    }
+                    comentariosBD.add(new Comment(id,eId,texto,mark,uId, new Date()));
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        comentarios.orderByChild("1");
+
+    }
 
 
-    public MockEvent getEvento() {
+    public MockEvent getEvento(){
         return this.evento;
     }
 
-    public void getComentarios(ReceiveWhenCompleted<Comment> receiveWhenCompleted) {
+    public List<Comment> getComentarios(){
 
-        List<Comment> comments = new ArrayList<>();
+        return comentariosBD;
 
-        Observable<List<Comment>> commentObservable = app.getCommentsRepo().commentsFromEvent(1L)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(x -> comments.addAll(x))
-                .doOnComplete(() -> receiveWhenCompleted.set(comments));
+        /*List<Comment> comentarios = new ArrayList<>();
+        if(getEvento().getId() == 1) {
 
-        App.get().disposable().add(commentObservable.subscribe());
+            Comment c = new Comment
+                    (new Long(1), new Long(1), "Wuolaaaaaa1", 1, new Long(1), new Date());
+            Comment c2 = new Comment
+                    (new Long(1), new Long(1), "Wuolaaaaaa2", 3, new Long(1), new Date());
+            Comment c3 = new Comment
+                    (new Long(1), new Long(1), "Wuolaaaaaa3", 4, new Long(1), new Date());
+            Comment c4 = new Comment
+                    (new Long(1), new Long(1), "Wuolaaaaaa4", 5, new Long(1), new Date());
+            Comment c5 = new Comment
+                    (new Long(1), new Long(1), "Wuolaaaaaa5", 5, new Long(1), new Date());
+            Comment c6 = new Comment
+                    (new Long(1), new Long(1), "Wuolaaaaaa6", 3, new Long(1), new Date());
 
-        /*Long id = this.evento.getId();
-        Flowable<List<Comment>> comentariosFlowables = app.getRemoteCommentsRepo().commentsFromEvent(id);
 
-        String com = "";
-        Disposable cosa = comentariosFlowables.
-                subscribeOn(Schedulers.io()).
-                observeOn(AndroidSchedulers.mainThread()).
-                subscribe();*/
+            comentarios.add(c);
+            comentarios.add(c2);
+            comentarios.add(c3);
+            comentarios.add(c4);
+            comentarios.add(c5);
+            comentarios.add(c6);
+        }*/
+
     }
 
-    private void iniciarTabLayout() {
+    public void valorar(View view){
+        Intent nextActivity = new Intent(getApplicationContext(), RankingActivity.class);
+        nextActivity.putExtra(EVENTO, evento);
+        startActivity(nextActivity);
+
+    }
+
+    public void checkIn(View view){
+        Intent nextActivity = new Intent(getApplicationContext(), QRCodeActivity.class);
+        nextActivity.putExtra(EVENTO, evento);
+        startActivity(nextActivity);
+    }
+
+    private void iniciarTabLayout(){
 
         Picasso.get().load(evento.getImgURLReal()).into((ImageView) findViewById(R.id.imageViewDescripcion));
         TextView titulo = findViewById(R.id.tituloDescripcion);
@@ -139,10 +206,10 @@ public class DescripcionActivity extends AppCompatActivity {
         viewPager.setAdapter(ta);
         tl.setupWithViewPager(viewPager);
 
-        changeColorTextDarkLight(tl, getDominantColor(bm));
+        changeColorTextDarkLight(tl,getDominantColor(bm));
     }
 
-    private void cargarBitmap() {
+    private void cargarBitmap(){
         Picasso.get().load(evento.getImgURLReal()).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -155,8 +222,7 @@ public class DescripcionActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-            }
+            public void onPrepareLoad(Drawable placeHolderDrawable) {}
         });
     }
 
@@ -164,7 +230,6 @@ public class DescripcionActivity extends AppCompatActivity {
     /**
      * Metodo que cambia de color al texto del titulo de los TabItem dependiendo de si el
      * color dominante de la imagen es claro u oscuro
-     *
      * @param tl
      * @param dominantColor
      */
@@ -249,13 +314,6 @@ public class DescripcionActivity extends AppCompatActivity {
                 blueBucket / pixelCount
         );
     }
-
-
-/*    public void nextClick(View view) {
-
-        startActivity(intent);
-        intent.putExtra(EVENT_ID, Long.valueOf(1));
-    }*/
 
 
 }

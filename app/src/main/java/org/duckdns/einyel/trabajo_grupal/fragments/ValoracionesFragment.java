@@ -2,6 +2,8 @@ package org.duckdns.einyel.trabajo_grupal.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +23,12 @@ import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.duckdns.einyel.trabajo_grupal.DescripcionActivity;
 import org.duckdns.einyel.trabajo_grupal.R;
@@ -30,9 +38,10 @@ import org.duckdns.einyel.trabajo_grupal.model.Comment;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class ValoracionesFragment extends Fragment implements ReceiveWhenCompleted<Comment> {
+public class ValoracionesFragment extends Fragment {
 
     private List<Comment> comentarios;
     private DescripcionActivity descripcionActivity;
@@ -49,12 +58,15 @@ public class ValoracionesFragment extends Fragment implements ReceiveWhenComplet
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         descripcionActivity = (DescripcionActivity) container.getContext();
-        descripcionActivity.getComentarios(this);
+        //descripcionActivity.getComentariosDB();
+        comentarios = descripcionActivity.getComentarios();
 
-        if (comentarios.size() == 0) {
+        if(comentarios.size() == 0){
             v = LayoutInflater.from(container.getContext())
                     .inflate(R.layout.fragmentvaloraciones_vacia, container, false);
-        } else {
+        }
+
+        else{
             v = LayoutInflater.from(container.getContext())
                     .inflate(R.layout.fragmentvaloraciones_lista, container, false);
 
@@ -160,17 +172,6 @@ public class ValoracionesFragment extends Fragment implements ReceiveWhenComplet
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(descripcionActivity);
         recyclerView.setLayoutManager(layoutManager);
         ComentarioAdapter adapter = new ComentarioAdapter(lista);
-        recyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    public void set(List list) {
-        comentarios = list;
-
-        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.listaComentarios);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(descripcionActivity);
-        recyclerView.setLayoutManager(layoutManager);
-        ComentarioAdapter adapter = new ComentarioAdapter(comentarios);
         recyclerView.setAdapter(adapter);
     }
 

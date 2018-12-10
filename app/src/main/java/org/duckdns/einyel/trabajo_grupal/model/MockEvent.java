@@ -38,7 +38,7 @@ public class MockEvent implements Parcelable {
         this.id = id;
     }
 
-    MockEvent(Long e_id, double mark, String description, String tittle, String location, String imgURL) {
+    public MockEvent(Long e_id, double mark, String description, String tittle, String location, String imgURL) {
         this.id = e_id;
         this.mark = mark;
         this.description = description;

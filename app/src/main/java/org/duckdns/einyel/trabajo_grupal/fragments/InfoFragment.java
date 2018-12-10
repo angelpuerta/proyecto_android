@@ -5,6 +5,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,19 +31,30 @@ import java.util.Locale;
 
 public class InfoFragment extends Fragment implements OnMapReadyCallback {
 
+    private static View v;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        v = LayoutInflater.from(container.getContext())
-                .inflate(R.layout.fragmentinfo, container, false);
-        this.container = container;
-        fillData();
+
+        if (v != null) {
+            ViewGroup parent = (ViewGroup) v.getParent();
+            if (parent != null)
+                parent.removeView(v);
+        }
+        try {
+            v = LayoutInflater.from(container.getContext())
+                    .inflate(R.layout.fragmentinfo, container, false);
+            this.container = container;
+            fillData();
+        } catch (InflateException e) {
+            e.printStackTrace();
+        }
         return v;
     }
 
     private GoogleMap mapa;
     private MockEvent evento;
     private DescripcionActivity descripcionActivity;
-    private View v;
     private ViewGroup container;
 
     private void fillData(){
