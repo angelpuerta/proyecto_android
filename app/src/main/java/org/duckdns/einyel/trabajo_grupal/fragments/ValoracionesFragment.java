@@ -58,7 +58,6 @@ public class ValoracionesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         descripcionActivity = (DescripcionActivity) container.getContext();
-        //descripcionActivity.getComentariosDB();
         comentarios = descripcionActivity.getComentarios();
 
         if(comentarios.size() == 0){

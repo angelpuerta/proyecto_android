@@ -14,15 +14,11 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,7 +34,6 @@ import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
 import org.duckdns.einyel.trabajo_grupal.service.App;
 
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,6 +47,7 @@ public class DescripcionActivity extends AppCompatActivity {
     private Bitmap bm = null;
     private MockEvent evento = null;
     private App app = App.get();
+    private static List<Comment> todosComentariosBD = new ArrayList<>();
     private static List<Comment> comentariosBD = new ArrayList<>();
 
 
@@ -65,8 +61,6 @@ public class DescripcionActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         evento = b.getParcelable(ListActivity.EVENTO);
-
-        //getComentariosDB();
 
         filtrarPorEvento();
 
@@ -127,8 +121,7 @@ public class DescripcionActivity extends AppCompatActivity {
                         else if(nombreCampo.equals("id"))
                             id = (Long) campo.getValue();
                     }
-                    comentariosBD.add(new Comment(id,eId,texto,mark,uId, new Date()));
-
+                    todosComentariosBD.add(new Comment(id,eId,texto,mark,uId, new Date()));
                 }
             }
 
@@ -139,6 +132,10 @@ public class DescripcionActivity extends AppCompatActivity {
         });
         comentarios.orderByChild("1");
 
+    }
+
+    public static void resetComentarios(){
+        comentariosBD = todosComentariosBD;
     }
 
 

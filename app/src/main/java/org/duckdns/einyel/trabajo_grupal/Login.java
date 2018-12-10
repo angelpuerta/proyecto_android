@@ -47,6 +47,7 @@ public class Login extends AppCompatActivity {
         //if(Spassword.equals("12345") && Suser.equals("Usuario")){
         Intent mIntent = new Intent(this, ListActivity.class);
         mIntent.putExtra(NOMBRE_USUARIO, user.getText().toString());
+
         startActivity(mIntent);
 
         //}

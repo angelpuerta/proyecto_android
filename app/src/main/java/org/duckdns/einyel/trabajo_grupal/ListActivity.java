@@ -101,8 +101,30 @@ public class ListActivity extends AppCompatActivity {
         eventos.orderByChild("1");
 
 
+        iniciarRecycler();
+
+    }
+
+    private void iniciarRecycler(){
         rellenarRecycler();
 
+        recyclerView.addOnItemTouchListener(
+                new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+                        MockEvent evento = eventosBD.get(position);
+                        DescripcionActivity.resetComentarios();
+                        Intent nextActivity = new Intent(getApplicationContext(), DescripcionActivity.class);
+                        nextActivity.putExtra(EVENTO, evento);
+                        startActivity(nextActivity);
+                    }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                    }
+                })
+        );
     }
 
 
@@ -115,23 +137,6 @@ public class ListActivity extends AppCompatActivity {
         adapter = new EventoAdapter(eventosBD);
         recyclerView.setAdapter(adapter);
 
-        recyclerView.addOnItemTouchListener(
-                new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-                    @Override
-                    public void onClick(View view, int position) {
-                        MockEvent evento = eventosBD.get(position);
-                        DescripcionActivity.getComentariosDB();
-                        Intent nextActivity = new Intent(getApplicationContext(), DescripcionActivity.class);
-                        nextActivity.putExtra(EVENTO, evento);
-                        startActivity(nextActivity);
-                    }
-
-                    @Override
-                    public void onLongClick(View view, int position) {
-
-                    }
-                })
-        );
     }
 
 
