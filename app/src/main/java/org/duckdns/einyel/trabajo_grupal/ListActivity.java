@@ -100,7 +100,6 @@ public class ListActivity extends AppCompatActivity {
 
         eventos.orderByChild("1");
 
-
         iniciarRecycler();
 
     }
