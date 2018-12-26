@@ -58,6 +58,7 @@
             android:name=".QRCodeActivity"
             android:label=""
             android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity android:name=".SignUp" />
     </application>
 
 </manifest>

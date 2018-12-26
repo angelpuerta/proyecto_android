@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import io.reactivex.disposables.CompositeDisposable;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,8 +29,6 @@ public class Login extends AppCompatActivity {
 
     public static final String NOMBRE_USUARIO = "";
 
-    private final CompositeDisposable mDisposable = new CompositeDisposable();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +42,6 @@ public class Login extends AppCompatActivity {
 
 
     }
-
 
     public void checkUser(View view) {
         String Spassword = pw.getText().toString();
@@ -98,4 +93,10 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
+    protected void goSignUp(View view){
+        Intent mIntent = new Intent(getApplicationContext(), SignUp.class);
+        startActivity(mIntent);
+    }
+
 }
