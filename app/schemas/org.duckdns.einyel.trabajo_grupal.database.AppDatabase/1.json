@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0248585edbf5837af57a2843935e2591",
+    "identityHash": "ecfdc362ef8f6f68475cd6dccc6b9642",
     "entities": [
       {
         "tableName": "events",
@@ -136,7 +136,7 @@
       },
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `username` TEXT, `password` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `nick` TEXT, `password` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -145,8 +145,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "username",
-            "columnName": "username",
+            "fieldPath": "nick",
+            "columnName": "nick",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -169,7 +169,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0248585edbf5837af57a2843935e2591\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ecfdc362ef8f6f68475cd6dccc6b9642\")"
     ]
   }
 }

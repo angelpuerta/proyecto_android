@@ -14,6 +14,7 @@
     <string name="Puntuar">Puntuar</string>
     <string name="Usuario">Usuario</string>
     <string name="Password">Contraseña</string>
+    <string name="RepeatPassword">Repetir contraseña</string>
     <string name="queryHint">Buscar...</string>
     <string name="info">Info.</string>
     <string name="comments">Valoraciones</string>

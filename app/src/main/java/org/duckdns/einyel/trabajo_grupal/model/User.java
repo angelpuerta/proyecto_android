@@ -9,12 +9,13 @@ public class User {
     @PrimaryKey
     private Long id;
 
-    private String username;
+    private String nick;
+
     private String password;
 
-    public User(Long id, String username, String password) {
+    public User(Long id, String nick, String password) {
         this.id = id;
-        this.username = username;
+        this.nick = nick;
         this.password = password;
     }
 
@@ -26,12 +27,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getNick() {
+        return nick;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNick(String nick) {
+        this.nick = nick;
     }
 
     public String getPassword() {
