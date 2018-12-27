@@ -9,6 +9,11 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.duckdns.einyel.trabajo_grupal.model.Comment;
+
 public class RankingActivity extends AppCompatActivity {
 
     RatingBar mRatingBar;
@@ -24,11 +29,11 @@ public class RankingActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_puntuacion);
 
-        event = getIntent().getLongExtra(DescriptionActivity2.EVENT_ID,1);
+        event = getIntent().getLongExtra(DescripcionActivity.EVENTO, 1);
 
         mRatingBar = findViewById(R.id.ratingBar);
-        mRatingScale =  findViewById(R.id.ratingTextView);
-        mFeedback =  findViewById(R.id.commentBox);
+        mRatingScale = findViewById(R.id.ratingTextView);
+        mFeedback = findViewById(R.id.commentBox);
         mSendFeedback = findViewById(R.id.btnSubmit);
 
         mRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -65,10 +70,16 @@ public class RankingActivity extends AppCompatActivity {
         }
     }
 
-    public void clickSubmit(View view){
-       // EventSevice.getInstance().addPuntuationAndComment(event,mFeedback.getText().toString(),mRatingBar.getRating());
-        // Log.d("ERROR",EventSevice.getInstance().getEvent(event).toString());
+    public void clickSubmit(View view) {
+        addComentario(new Comment(event, mFeedback.getText().toString(), mRatingBar.getRating()), event);
         this.finish();
+    }
+
+    public static void addComentario(Comment comment, Long event) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference comentarios = database.getReference("comments").child(event.toString());
+
+        comentarios.child(comment.getC_id().toString()).setValue(comment);
     }
 
 }

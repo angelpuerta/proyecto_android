@@ -34,74 +34,99 @@ import org.duckdns.einyel.trabajo_grupal.DescripcionActivity;
 import org.duckdns.einyel.trabajo_grupal.R;
 import org.duckdns.einyel.trabajo_grupal.adapter.ComentarioAdapter;
 import org.duckdns.einyel.trabajo_grupal.model.Comment;
+import org.duckdns.einyel.trabajo_grupal.service.App;
 
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class ValoracionesFragment extends Fragment {
+public class ValoracionesFragment extends Fragment implements ComentarioAdapter.AddCommentToWhole {
 
-    private List<Comment> comentarios;
     private DescripcionActivity descripcionActivity;
+    ComentarioAdapter adapter;
     private View v;
     private int votos1 = 0;
     private int votos2 = 0;
     private int votos3 = 0;
     private int votos4 = 0;
     private int votos5 = 0;
+
     private RecyclerView recyclerView;
+
+    private Set<Comment> comments;
+
+    private Long evento_id;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         descripcionActivity = (DescripcionActivity) container.getContext();
-        comentarios = descripcionActivity.getComentarios();
-
-        if(comentarios.size() == 0){
-            v = LayoutInflater.from(container.getContext())
-                    .inflate(R.layout.fragmentvaloraciones_vacia, container, false);
-        }
-
-        else{
-            v = LayoutInflater.from(container.getContext())
-                    .inflate(R.layout.fragmentvaloraciones_lista, container, false);
-
-            for(int i=0; i<comentarios.size(); i++){
-                double rate = comentarios.get(i).getRate();
-                if(rate>=1 && rate < 2)
-                    votos1++;
-                else if(rate>=2 && rate < 3)
-                    votos2++;
-                else if(rate>=3 && rate < 4)
-                    votos3++;
-                else if(rate >=4 && rate <5)
-                    votos4++;
-                else if(rate >=5)
-                    votos5++;
-            }
-
-            recyclerView = (RecyclerView) v.findViewById(R.id.listaComentarios);
-            crearGrafico();
 
 
-            double puntuacionMediaEvento = ((votos1)+(votos2)*2+(votos3)*3+(votos4)*4+(votos5)*5.0)/this.comentarios.size();
-            TextView puntuacionMedia = (TextView) v.findViewById(R.id.puntuacion_media);
-            puntuacionMedia.setText(puntuacionMediaEvento+"");
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(descripcionActivity);
 
-            TextView votosTotales = (TextView) v.findViewById(R.id.totalValoraciones);
-            votosTotales.setText(this.comentarios.size() + " valoraciones");
+        v = LayoutInflater.from(container.getContext())
+                .inflate(R.layout.fragmentvaloraciones_lista, container, false);
+
+        recyclerView = (RecyclerView) v.findViewById(R.id.listaComentarios);
+        recyclerView.setLayoutManager(layoutManager);
 
 
-            changeRecyclerData(comentarios);
-        }
+        this.evento_id = descripcionActivity.getEvento().getId();
+        adapter = new ComentarioAdapter(App.get().commentsOption(evento_id), this);
+
+        recyclerView.setAdapter(adapter);
+
+
+        comments = new HashSet<>();
+
+        chart = (HorizontalBarChart) v.findViewById(R.id.horizontalBarChar);
+
+        crearGrafico();
+
         return v;
     }
 
-    private void crearGrafico(){
-        HorizontalBarChart chart = (HorizontalBarChart) v.findViewById(R.id.horizontalBarChar);
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
+
+    public class MyValueFormatter implements IValueFormatter {
+
+        private DecimalFormat mFormat;
+
+        public MyValueFormatter() {
+            mFormat = new DecimalFormat("###");
+        }
+
+        @Override
+        public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+
+            if (value > 0) {
+                return mFormat.format(value);
+            } else {
+                return "";
+            }
+        }
+    }
+
+    HorizontalBarChart chart;
+
+    private void crearGrafico() {
 
         List<BarEntry> entries = new ArrayList<>();
         entries.add(new BarEntry(1, votos1));
@@ -110,14 +135,16 @@ public class ValoracionesFragment extends Fragment {
         entries.add(new BarEntry(4, votos4));
         entries.add(new BarEntry(5, votos5));
         chart.setViewPortOffsets(0f, 0f, 0f, 0f);
-        chart.setExtraOffsets(0,0,0,0);
+        chart.setExtraOffsets(0, 0, 0, 0);
 
         BarDataSet set = new BarDataSet(entries, "Puntuaciones");
 
-        int  c = Color.rgb(189, 189, 189);
-        int[] colors = {c,c,c,c,c};
+
+        int c = Color.rgb(189, 189, 189);
+        int[] colors = {c, c, c, c, c};
 
         set.setColors(colors);
+
 
         BarData data = new BarData(set);
         data.setValueFormatter(new MyValueFormatter());
@@ -143,54 +170,63 @@ public class ValoracionesFragment extends Fragment {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 chart.resetZoom();
-                List<Comment> filtrados = new ArrayList<>();
                 int numero = (int) e.getX();
 
-                if(e.getY() == 0){
-                    changeRecyclerData(comentarios);
+                if (e.getY() == 0) {
+                    changeRecyclerData();
                     return;
                 }
 
-                for (Comment c : comentarios){
-                    if(c.getRate()>=numero && c.getRate() <numero+1)
-                        filtrados.add(c);
-                }
-
-                changeRecyclerData(filtrados);
+                changeRecyclerData(numero);
 
             }
 
             @Override
             public void onNothingSelected() {
-                changeRecyclerData(comentarios);
+                changeRecyclerData();
             }
         });
     }
 
-    private void changeRecyclerData(List<Comment> lista){
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(descripcionActivity);
-        recyclerView.setLayoutManager(layoutManager);
-        ComentarioAdapter adapter = new ComentarioAdapter(lista);
+    private void changeRecyclerData(double rate) {
+        adapter = new ComentarioAdapter(App.get().commentsOption(evento_id, rate), this);
         recyclerView.setAdapter(adapter);
+        adapter.startListening();
+    }
+
+    private void changeRecyclerData() {
+        adapter = new ComentarioAdapter(App.get().commentsOption(evento_id), this);
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
     }
 
 
-    public class MyValueFormatter implements IValueFormatter {
+    public void addCommentToWhole(Comment comment) {
+        if (comments.add(comment)) {
+            double rate = comment.getRate();
+            if (rate >= 1 && rate < 2)
+                votos1++;
+            else if (rate >= 2 && rate < 3)
+                votos2++;
+            else if (rate >= 3 && rate < 4)
+                votos3++;
+            else if (rate >= 4 && rate < 5)
+                votos4++;
+            else if (rate >= 5)
+                votos5++;
+            double puntuacionMediaEvento = ((votos1) + (votos2) * 2 + (votos3) * 3 + (votos4) * 4 + (votos5) * 5.0) / this.comments.size();
+            TextView puntuacionMedia = (TextView) v.findViewById(R.id.puntuacion_media);
+            puntuacionMedia.clearComposingText();
+            puntuacionMedia.setText(String.format("%.2f", puntuacionMediaEvento));
 
-        private DecimalFormat mFormat;
+            TextView votosTotales = (TextView) v.findViewById(R.id.totalValoraciones);
+            votosTotales.clearComposingText();
+            votosTotales.setText(this.comments.size() + " valoraciones");
 
-        public MyValueFormatter() {
-            mFormat = new DecimalFormat("###");
-        }
+            chart.notifyDataSetChanged();
+            chart.invalidate();
 
-        @Override
-        public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-
-            if(value > 0) {
-                return mFormat.format(value);
-            } else {
-                return "";
-            }
+            crearGrafico();
         }
     }
 

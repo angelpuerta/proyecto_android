@@ -39,10 +39,6 @@
             android:label=""
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
-            android:name=".DescriptionActivity2"
-            android:label="@string/title_activity_description"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".ListActivity"
             android:label="ListActivity"
             android:theme="@style/AppTheme.NoActionBar" />

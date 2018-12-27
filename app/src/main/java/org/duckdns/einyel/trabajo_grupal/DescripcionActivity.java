@@ -45,11 +45,8 @@ public class DescripcionActivity extends AppCompatActivity {
     public static final String EVENTO = "EVENTO";
 
     private Bitmap bm = null;
-    private MockEvent evento = null;
-    private App app = App.get();
-    private static List<Comment> todosComentariosBD = new ArrayList<>();
-    private static List<Comment> comentariosBD = new ArrayList<>();
-
+    MockEvent evento = null;
+    TabAdapter tab;
 
 
     @Override
@@ -57,24 +54,14 @@ public class DescripcionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.descripcion_angela_activity);
 
+
         intent = new Intent(this, RankingActivity.class);
 
         Bundle b = getIntent().getExtras();
         evento = b.getParcelable(ListActivity.EVENTO);
 
-        filtrarPorEvento();
-
         iniciarTabLayout();
 
-    }
-
-    private void filtrarPorEvento(){
-        List<Comment> commentsFiltrados = new ArrayList<>();
-        for(Comment c : comentariosBD)
-            if(c.getE_id().equals(evento.getId()))
-                commentsFiltrados.add(c);
-
-        comentariosBD = commentsFiltrados;
     }
 
     public void abrirMapaGrande(View view) {
@@ -89,107 +76,28 @@ public class DescripcionActivity extends AppCompatActivity {
 
     }
 
-    public static void getComentariosDB(){
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference comentarios = database.getReference("comments");
-
-        comentarios.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Iterable<DataSnapshot> comentarios = snapshot.getChildren();
-                for(DataSnapshot comentario : comentarios){
-                    Iterable<DataSnapshot> campos = comentario.getChildren();
-                    Long eId = null;
-                    String texto = "";
-                    String fecha = "";
-                    Long uId = null;
-                    Double mark = 0.0;
-                    Long id = null;
-                    for(DataSnapshot campo : campos ){
-                        String nombreCampo = campo.getKey();
-                        if(nombreCampo.equals("e_id"))
-                            eId = (Long) campo.getValue();
-                        else if(nombreCampo.equals("comment"))
-                            texto = (String) campo.getValue();
-                        else if(nombreCampo.equals("date"))
-                            fecha = (String) campo.getValue();
-                        else if(nombreCampo.equals("u_id"))
-                            uId = (Long) campo.getValue();
-                        else if(nombreCampo.equals("rate"))
-                            mark = Double.parseDouble(campo.getValue()+"");
-                        else if(nombreCampo.equals("id"))
-                            id = (Long) campo.getValue();
-                    }
-                    todosComentariosBD.add(new Comment(id,eId,texto,mark,uId, new Date()));
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        comentarios.orderByChild("1");
-
-    }
-
-    public static void resetComentarios(){
-        comentariosBD = todosComentariosBD;
-    }
-
-
-    public MockEvent getEvento(){
+    public MockEvent getEvento() {
         return this.evento;
     }
 
-    public List<Comment> getComentarios(){
 
-        return comentariosBD;
-
-        /*List<Comment> comentarios = new ArrayList<>();
-        if(getEvento().getId() == 1) {
-
-            Comment c = new Comment
-                    (new Long(1), new Long(1), "Wuolaaaaaa1", 1, new Long(1), new Date());
-            Comment c2 = new Comment
-                    (new Long(1), new Long(1), "Wuolaaaaaa2", 3, new Long(1), new Date());
-            Comment c3 = new Comment
-                    (new Long(1), new Long(1), "Wuolaaaaaa3", 4, new Long(1), new Date());
-            Comment c4 = new Comment
-                    (new Long(1), new Long(1), "Wuolaaaaaa4", 5, new Long(1), new Date());
-            Comment c5 = new Comment
-                    (new Long(1), new Long(1), "Wuolaaaaaa5", 5, new Long(1), new Date());
-            Comment c6 = new Comment
-                    (new Long(1), new Long(1), "Wuolaaaaaa6", 3, new Long(1), new Date());
-
-
-            comentarios.add(c);
-            comentarios.add(c2);
-            comentarios.add(c3);
-            comentarios.add(c4);
-            comentarios.add(c5);
-            comentarios.add(c6);
-        }*/
-
-    }
-
-    public void valorar(View view){
+    public void valorar(View view) {
         Intent nextActivity = new Intent(getApplicationContext(), RankingActivity.class);
-        nextActivity.putExtra(EVENTO, evento);
+        nextActivity.putExtra(EVENTO, evento.getId());
         startActivity(nextActivity);
 
     }
 
-    public void checkIn(View view){
+    public void checkIn(View view) {
         Intent nextActivity = new Intent(getApplicationContext(), QRCodeActivity.class);
         nextActivity.putExtra(EVENTO, evento);
         startActivity(nextActivity);
     }
 
-    private void iniciarTabLayout(){
+    private void iniciarTabLayout() {
 
-        Picasso.get().load(evento.getImgURLReal()).into((ImageView) findViewById(R.id.imageViewDescripcion));
+        Picasso.get().load(evento.getImgURL()).into((ImageView) findViewById(R.id.imageViewDescripcion));
         TextView titulo = findViewById(R.id.tituloDescripcion);
         titulo.setText(evento.getTittle());
 
@@ -198,16 +106,16 @@ public class DescripcionActivity extends AppCompatActivity {
         TabLayout tl = (TabLayout) findViewById(R.id.tabs);
         tl.setBackgroundColor(getDominantColor(bm));
 
-        TabAdapter ta = new TabAdapter(getSupportFragmentManager());
+        tab = new TabAdapter(getSupportFragmentManager(), evento.getId());
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        viewPager.setAdapter(ta);
+        viewPager.setAdapter(tab);
         tl.setupWithViewPager(viewPager);
 
-        changeColorTextDarkLight(tl,getDominantColor(bm));
+        changeColorTextDarkLight(tl, getDominantColor(bm));
     }
 
-    private void cargarBitmap(){
-        Picasso.get().load(evento.getImgURLReal()).into(new Target() {
+    private void cargarBitmap() {
+        Picasso.get().load(evento.getImgURL()).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 bm = bitmap;
@@ -219,7 +127,8 @@ public class DescripcionActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {}
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+            }
         });
     }
 
@@ -227,6 +136,7 @@ public class DescripcionActivity extends AppCompatActivity {
     /**
      * Metodo que cambia de color al texto del titulo de los TabItem dependiendo de si el
      * color dominante de la imagen es claro u oscuro
+     *
      * @param tl
      * @param dominantColor
      */
@@ -235,17 +145,17 @@ public class DescripcionActivity extends AppCompatActivity {
         int green = Color.green(dominantColor);
         int blue = Color.blue(dominantColor);
 
-        int selectedColor = (red+green+blue>255*3/2) ?
+        int selectedColor = (red + green + blue > 255 * 3 / 2) ?
                 R.color.black :
                 R.color.white;
 
-        int shadowColor = (selectedColor == R.color.black)?
+        int shadowColor = (selectedColor == R.color.black) ?
                 R.color.white :
                 R.color.black;
 
         TextView titulo = (TextView) findViewById(R.id.tituloDescripcion);
         titulo.setTextColor(getResources().getColor(selectedColor));
-        titulo.setShadowLayer(2,3,3, getResources().getColor(shadowColor));
+        titulo.setShadowLayer(2, 3, 3, getResources().getColor(shadowColor));
         titulo.setBackgroundColor(dominantColor);
         titulo.getBackground().setAlpha(190);
 
@@ -275,14 +185,14 @@ public class DescripcionActivity extends AppCompatActivity {
     private int getDominantColor(Bitmap bitmap) {
         if (null == bitmap) return Color.TRANSPARENT;
 
-        int redBucket    = 0;
-        int greenBucket  = 0;
-        int blueBucket   = 0;
-        int alphaBucket  = 0;
+        int redBucket = 0;
+        int greenBucket = 0;
+        int blueBucket = 0;
+        int alphaBucket = 0;
 
         boolean hasAlpha = bitmap.hasAlpha();
-        int pixelCount   = bitmap.getWidth() * bitmap.getHeight();
-        int[] pixels     = new int[pixelCount];
+        int pixelCount = bitmap.getWidth() * bitmap.getHeight();
+        int[] pixels = new int[pixelCount];
 
         bitmap.getPixels(
                 pixels,
@@ -294,12 +204,12 @@ public class DescripcionActivity extends AppCompatActivity {
                 bitmap.getHeight()
         );
 
-        for (int y = 0, h = bitmap.getHeight(); y < h; y++){
-            for (int x = 0, w = bitmap.getWidth(); x < w; x++){
-                int color   =  pixels[x + y * w];            // x + y * width
-                redBucket   += (color >> 16) & 0xFF;         // Color.red
+        for (int y = 0, h = bitmap.getHeight(); y < h; y++) {
+            for (int x = 0, w = bitmap.getWidth(); x < w; x++) {
+                int color = pixels[x + y * w];            // x + y * width
+                redBucket += (color >> 16) & 0xFF;         // Color.red
                 greenBucket += (color >> 8) & 0xFF;          // Color.greed
-                blueBucket  += (color & 0xFF);               // Color.blue
+                blueBucket += (color & 0xFF);               // Color.blue
                 if (hasAlpha) alphaBucket += (color >>> 24); // Color.alpha
             }
         }
@@ -320,12 +230,31 @@ class TabAdapter extends FragmentStatePagerAdapter {
     private final List<Fragment> fragments = new ArrayList<>();
     private final List<String> titulos = new ArrayList<>();
 
+    private ValoracionesFragment valoraciones;
+
+
     TabAdapter(FragmentManager fm) {
         super(fm);
         fragments.add(new InfoFragment());
-        fragments.add(new ValoracionesFragment());
+        valoraciones = new ValoracionesFragment();
+        fragments.add(valoraciones);
         titulos.add("Info");
         titulos.add("Valoraciones");
+    }
+
+    public TabAdapter(FragmentManager supportFragmentManager, Long id) {
+        super(supportFragmentManager);
+        fragments.add(new InfoFragment());
+        valoraciones = new ValoracionesFragment();
+        fragments.add(valoraciones);
+        titulos.add("Info");
+        titulos.add("Valoraciones");
+
+
+    }
+
+    public void actualizeValoration(List<Comment> comments) {
+        // valoraciones.actualizar(comments);
     }
 
 

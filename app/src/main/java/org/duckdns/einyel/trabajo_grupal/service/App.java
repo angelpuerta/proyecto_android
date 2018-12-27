@@ -1,17 +1,23 @@
 package org.duckdns.einyel.trabajo_grupal.service;
 
 import android.app.Application;
-import android.arch.persistence.room.Room;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
-import org.duckdns.einyel.trabajo_grupal.database.AppDatabase;
-import org.duckdns.einyel.trabajo_grupal.database.CommentsRepoImpl;
-import org.duckdns.einyel.trabajo_grupal.database.EventsRepoImpl;
-import org.duckdns.einyel.trabajo_grupal.database.local.CommentsLocalRepo;
-import org.duckdns.einyel.trabajo_grupal.database.local.EventsLocalRepo;
-import org.duckdns.einyel.trabajo_grupal.database.remote.CommentsRemoteRepo;
-import org.duckdns.einyel.trabajo_grupal.database.remote.EventsRemoteRepo;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.database.SnapshotParser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
-import io.reactivex.disposables.CompositeDisposable;
+
+import org.duckdns.einyel.trabajo_grupal.model.Comment;
+import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
+import org.duckdns.einyel.trabajo_grupal.model.User;
+
+import java.util.Date;
+
 
 public class App extends Application {
 
@@ -20,11 +26,6 @@ public class App extends Application {
     private static final String PREFERENCES = "RoomDemo.preferences";
     private static final String KEY_FORCE_UPDATE = "force_update";
 
-    private CompositeDisposable disposable;
-    private AppDatabase database;
-
-    private EventsRepoImpl eventsRepoImp;
-    private CommentsRepoImpl commentsRepo;
 
     public static App get() {
         return INSTANCE;
@@ -34,33 +35,86 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // create database
-        database = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, DATABASE_NAME)
-                .addMigrations(AppDatabase.MIGRATION_1_2)
-                .build();
-
-        eventsRepoImp = new EventsRepoImpl(new EventsRemoteRepo(), new EventsLocalRepo(database.EventDao()));
-        commentsRepo = new CommentsRepoImpl(new CommentsLocalRepo(database.CommentDao()), new CommentsRemoteRepo());
-        disposable = new CompositeDisposable();
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         INSTANCE = this;
     }
 
 
-    public AppDatabase getDB() {
-        return database;
+    public FirebaseRecyclerOptions<Comment> commentsOption(Long evento) {
+        Query query = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("comments")
+                .child(evento.toString())
+                .limitToLast(50);
+        return new FirebaseRecyclerOptions.Builder<Comment>()
+                .setQuery(query, new SnapshotParser<Comment>() {
+                    @NonNull
+                    @Override
+                    public Comment parseSnapshot(@NonNull DataSnapshot snapshot) {
+                        Log.d("AUXILIAR", snapshot.toString());
+                        return snapshot.getValue(Comment.class);
+                    }
+                })
+                .build();
     }
 
-    public EventsRepoImpl getEventsRepoImp() {
-        return eventsRepoImp;
+    public FirebaseRecyclerOptions<MockEvent> eventsOptions() {
+        Query query = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("events")
+                .limitToLast(50);
+        return new FirebaseRecyclerOptions.Builder<MockEvent>()
+                .setQuery(query, new SnapshotParser<MockEvent>() {
+                    @NonNull
+                    @Override
+                    public MockEvent parseSnapshot(@NonNull DataSnapshot snapshot) {
+                        Log.d("AUXILIAR", snapshot.toString());
+                        return snapshot.getValue(MockEvent.class);
+                    }
+                })
+                .build();
     }
 
 
-    public CommentsRepoImpl getCommentsRepo() {
-        return commentsRepo;
+    public FirebaseRecyclerOptions<MockEvent> eventsOptions(String filter) {
+        Query query = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("events")
+                .startAt(filter)
+                .orderByChild("tittle")
+                .limitToLast(50);
+        return new FirebaseRecyclerOptions.Builder<MockEvent>()
+                .setQuery(query, new SnapshotParser<MockEvent>() {
+                    @NonNull
+                    @Override
+                    public MockEvent parseSnapshot(@NonNull DataSnapshot snapshot) {
+                        Log.d("AUXILIAR", snapshot.toString());
+                        return snapshot.getValue(MockEvent.class);
+                    }
+                })
+                .build();
     }
 
-    public CompositeDisposable disposable() {
-        return disposable;
+    public FirebaseRecyclerOptions<Comment> commentsOption(Long evento, double mark) {
+        Query query = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("comments")
+                .child(evento.toString())
+                .orderByChild("rate")
+                .startAt(mark)
+                .endAt(mark)
+                .limitToLast(50);
+        return new FirebaseRecyclerOptions.Builder<Comment>()
+                .setQuery(query, new SnapshotParser<Comment>() {
+                    @NonNull
+                    @Override
+                    public Comment parseSnapshot(@NonNull DataSnapshot snapshot) {
+                        Log.d("AUXILIAR", snapshot.toString());
+                        return snapshot.getValue(Comment.class);
+                    }
+                })
+                .build();
     }
+
 }

@@ -1,12 +1,18 @@
 package org.duckdns.einyel.trabajo_grupal.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+
+import org.duckdns.einyel.trabajo_grupal.DescripcionActivity;
 import org.duckdns.einyel.trabajo_grupal.R;
+import org.duckdns.einyel.trabajo_grupal.fragments.ValoracionesFragment;
 import org.duckdns.einyel.trabajo_grupal.model.Comment;
 import org.duckdns.einyel.trabajo_grupal.service.App;
 
@@ -14,7 +20,21 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class ComentarioAdapter extends RecyclerView.Adapter<ComentarioAdapter.CommentViewHolder> {
+public class ComentarioAdapter extends FirebaseRecyclerAdapter<Comment, ComentarioAdapter.CommentViewHolder> {
+
+    /**
+     * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
+     * {@link FirebaseRecyclerOptions} for configuration options.
+     *
+     * @param options
+     */
+
+    AddCommentToWhole addcomments;
+
+    public ComentarioAdapter(@NonNull FirebaseRecyclerOptions<Comment> options, AddCommentToWhole addcomments) {
+        super(options);
+        this.addcomments = addcomments;
+    }
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
 
@@ -32,13 +52,7 @@ public class ComentarioAdapter extends RecyclerView.Adapter<ComentarioAdapter.Co
         }
     }
 
-    private List<Comment> comentarios;
     private ViewGroup parent;
-    private App app = App.get();
-
-    public ComentarioAdapter(List<Comment> comentarios) {
-        this.comentarios = comentarios;
-    }
 
     @Override
     public CommentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -50,12 +64,15 @@ public class ComentarioAdapter extends RecyclerView.Adapter<ComentarioAdapter.Co
     }
 
     @Override
-    public void onBindViewHolder(CommentViewHolder holder, int position) {
-        holder.nombreUsuario.setText(comentarios.get(position).getU_id()+"");
-        changeMarkBackground(holder, position);
-        holder.puntuacion.setText(comentarios.get(position).getRate() + "");
-        holder.comentario.setText(comentarios.get(position).getComment());
-        Date fecha = comentarios.get(position).getTimestamp();
+    protected void onBindViewHolder(@NonNull CommentViewHolder holder, int position, @NonNull Comment model) {
+
+        addcomments.addCommentToWhole(model);
+
+        holder.nombreUsuario.setText(model.getU_id() + "");
+        changeMarkBackground(holder, model);
+        holder.puntuacion.setText(model.getRate() + "");
+        holder.comentario.setText(model.getComment());
+        Date fecha = model.getTimestamp();
         Calendar cal = Calendar.getInstance();
         cal.setTime(fecha);
         int year = cal.get(Calendar.YEAR);
@@ -63,29 +80,31 @@ public class ComentarioAdapter extends RecyclerView.Adapter<ComentarioAdapter.Co
         int day = cal.get(Calendar.DAY_OF_MONTH);
         holder.fecha.setText(day + "-" + month + "-" + year);
         holder.comentario.setTextColor(parent.getContext().getResources().getColor(R.color.black));
+        changeMarkBackground(holder, model);
     }
 
 
-    private void changeMarkBackground(CommentViewHolder holder, int position) {
+    private void changeMarkBackground(CommentViewHolder holder, Comment comment) {
 
-        double calificacion = comentarios.get(position).getRate();
+        double calificacion = comment.getRate();
 
-        if(calificacion>=1 && calificacion < 2)
+        if (calificacion >= 1 && calificacion < 2)
             holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_voto1);
-        else if(calificacion>=2 && calificacion < 3)
+        else if (calificacion >= 2 && calificacion < 3)
             holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_voto2);
-        else if(calificacion>=3 && calificacion < 4)
+        else if (calificacion >= 3 && calificacion < 4)
             holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_voto3);
-        else if(calificacion >=4 && calificacion <5)
+        else if (calificacion >= 4 && calificacion < 5)
             holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_voto4);
-        else if(calificacion >=5)
+        else if (calificacion >= 5)
             holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_voto5);
 
 
     }
 
-    @Override
-    public int getItemCount() {
-        return comentarios.size();
+    public interface AddCommentToWhole {
+
+        void addCommentToWhole(Comment comment);
+
     }
 }

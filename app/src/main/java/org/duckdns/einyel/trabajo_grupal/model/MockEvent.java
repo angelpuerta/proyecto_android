@@ -26,13 +26,15 @@ public class MockEvent implements Parcelable {
 
     @ColumnInfo(name = "imgURL")
     @SerializedName("imgURL")
-    public String imgURLReal;
+    public String imgURL;
 
-    public transient int imgURL;
 
     @Ignore
     private List<Comment> comments;
 
+
+    public MockEvent() {
+    }
 
     public MockEvent(Long id) {
         this.id = id;
@@ -44,14 +46,14 @@ public class MockEvent implements Parcelable {
         this.description = description;
         this.tittle = tittle;
         this.location = location;
-        this.imgURLReal = imgURL;
+        this.imgURL = imgURL;
     }
 
     protected MockEvent(Parcel in) {
         id = in.readLong();
         tittle = in.readString();
         description = in.readString();
-        imgURLReal = in.readString();
+        imgURL = in.readString();
         mark = in.readDouble();
         location = in.readString();
     }
@@ -108,13 +110,6 @@ public class MockEvent implements Parcelable {
         this.location = location;
     }
 
-    public int getImgURL() {
-        return imgURL;
-    }
-
-    public void setImgURL(int imgURL) {
-        this.imgURL = imgURL;
-    }
 
     public List<Comment> getComments() {
         return comments;
@@ -124,12 +119,12 @@ public class MockEvent implements Parcelable {
         this.comments = comments;
     }
 
-    public String getImgURLReal() {
-        return imgURLReal;
+    public String getImgURL() {
+        return imgURL;
     }
 
-    public void setImgURLReal(String imgURLReal) {
-        this.imgURLReal = imgURLReal;
+    public void setImgURL(String imgURL) {
+        this.imgURL = imgURL;
     }
 
     @Override
@@ -168,7 +163,7 @@ public class MockEvent implements Parcelable {
         dest.writeLong(this.id);
         dest.writeString(this.tittle);
         dest.writeString(this.description);
-        dest.writeString(this.imgURLReal);
+        dest.writeString(this.imgURL);
         dest.writeDouble(this.mark);
         dest.writeString(this.location);
     }

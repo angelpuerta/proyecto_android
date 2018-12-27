@@ -57,6 +57,10 @@ public class Comment {
     @ColumnInfo(name = "timestamp")
     private Date timestamp;
 
+    public Comment() {
+
+    }
+
     @Ignore
     public Comment(Long e_id, String comment, double rate) {
         this.e_id = e_id;
@@ -64,6 +68,7 @@ public class Comment {
         this.rate = rate;
         this.timestamp = new Date();
         this.u_id = 0L;
+        this.c_id = new Long(hashCode());
     }
 
     public Comment(Long c_id, Long e_id, String comment, double rate, Long u_id, Date timestamp) {
