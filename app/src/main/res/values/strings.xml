@@ -32,4 +32,8 @@
     <string name="check_in_correcto">Check in realizado correctamente</string>
     <string name="check_in_incorrecto">El código no corresponde al del evento</string>
     <string name="OK">OK</string>
+    <string name="facebook_app_id">2100042006720618</string>
+    <string name="facebook_login_protocol_scheme">fb2100042006720618</string>
+    <string name="twitter_consumer_key">CyDaJZURKFyuUmtaZAmqQCtLo</string>
+    <string name="twitter_consumer_secret">iRPcqzUVJBNLsoIyNFSMwP1cikIq4fCeij3zhmuXyyWLIRNHgS</string>
 </resources>
