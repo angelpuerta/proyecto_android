@@ -43,6 +43,17 @@ import java.security.NoSuchAlgorithmException;
 import android.util.Base64;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.DefaultLogger;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.twitter.sdk.android.core.TwitterConfig;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import java.util.Arrays;
 import java.util.List;
@@ -57,9 +68,14 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     FirebaseDatabase database;
     DatabaseReference users;
 
+    //Google
     GoogleApiClient googleApi;
     private SignInButton signInButtonGoogle;
 
+    //Twitter
+    TwitterLoginButton loginButtonTwitter;
+
+    //Facebook
     CallbackManager callbackManager;
     ProgressDialog mDialog;
     ImageView imgAvatar;
@@ -76,6 +92,16 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         //}
         // else {
             super.onCreate(savedInstanceState);
+
+            //la inicializacion de twitter (tiene que ir aqui si o si)
+            TwitterConfig config = new TwitterConfig.Builder(this)
+                .logger(new DefaultLogger(Log.DEBUG))
+                .twitterAuthConfig(new TwitterAuthConfig(getResources().getString(R.string.twitter_consumer_key), getResources().getString(R.string.twitter_consumer_secret)))
+                .debug(true)
+                .build();
+
+            Twitter.initialize(config);
+
             setContentView(R.layout.login_activity);
 
             //Inicializaciones de login social
@@ -90,19 +116,42 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
             FacebookSdk.sdkInitialize(getApplicationContext());
 
-
-            //Obtención de info
+            //Obtención de info basica (usuarios normales)
             pw = findViewById(R.id.editPassword);
             user = findViewById(R.id.editUser);
 
             database = FirebaseDatabase.getInstance();
             users = database.getReference("usuarios");
 
+            //establecimiento de los procesos de login de las redes
             googleLoginProccess();
             facebookLoginProccess();
+            twitterLoginProccess();
 
             //printKeyHash();
             //}
+    }
+
+    private void twitterLoginProccess() {
+        loginButtonTwitter = (TwitterLoginButton) findViewById(R.id.twLogin);
+        loginButtonTwitter.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                final TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+                TwitterAuthToken authToken = session.getAuthToken();
+                String token = authToken.token;
+                String secret = authToken.secret;
+
+                Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
+                mIntent.putExtra(NOMBRE_USUARIO, "Kibian");
+                startActivity(mIntent);
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                System.err.println("Hola " + exception);
+            }
+        });
     }
 
     protected void facebookLoginProccess(){
@@ -114,6 +163,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+
                 Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
                 mIntent.putExtra(NOMBRE_USUARIO, "Kibian");
                 startActivity(mIntent);
@@ -144,7 +194,9 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //fb y twitter
         super.onActivityResult(requestCode, resultCode, data);
+        //google
         if(requestCode==GOOGLE_SIGN_IN_CODE){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             System.out.println("StatusCode: " + result.getStatus().getStatusCode());
@@ -158,6 +210,9 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                         Toast.LENGTH_SHORT).show();
             }
         }
+        //twitter
+        loginButtonTwitter.onActivityResult(requestCode, resultCode, data);
+        //fb
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 

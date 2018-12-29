@@ -82,5 +82,8 @@ dependencies {
     //Social Login
     implementation 'com.facebook.android:facebook-android-sdk:4.28.0'
     implementation 'com.google.android.gms:play-services-auth:15.0.1+'
+    implementation 'com.twitter.sdk.android:twitter:3.1.0'
+    implementation 'com.twitter.sdk.android:twitter-core:3.1.0'
+
 }
 
