@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,12 +18,15 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -30,6 +35,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,7 +52,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.DefaultLogger;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Session;
 import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterApiClient;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterAuthToken;
 import com.twitter.sdk.android.core.TwitterConfig;
@@ -54,6 +62,7 @@ import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.core.internal.TwitterApi;
 
 import java.util.Arrays;
 import java.util.List;
@@ -79,18 +88,14 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     CallbackManager callbackManager;
     ProgressDialog mDialog;
     ImageView imgAvatar;
+    private ProfileTracker profileTracker;
+    private AccessTokenTracker accessTokenTracker;
 
     public static final String NOMBRE_USUARIO = "";
     public static final int GOOGLE_SIGN_IN_CODE = 777;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //if(AccessToken.getCurrentAccessToken() != null){
-        //    Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
-        //    mIntent.putExtra(NOMBRE_USUARIO, user.getText().toString());
-        //    startActivity(mIntent);
-        //}
-        // else {
             super.onCreate(savedInstanceState);
 
             //la inicializacion de twitter (tiene que ir aqui si o si)
@@ -129,7 +134,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             twitterLoginProccess();
 
             //printKeyHash();
-            //}
     }
 
     private void twitterLoginProccess() {
@@ -142,14 +146,37 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 String token = authToken.token;
                 String secret = authToken.secret;
 
-                Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
-                mIntent.putExtra(NOMBRE_USUARIO, "Kibian");
-                startActivity(mIntent);
+                String userName = result.data.getUserName();
+
+                final retrofit2.Call<com.twitter.sdk.android.core.models.User> userTw =
+                        TwitterCore.getInstance().getApiClient(session).getAccountService()
+                        .verifyCredentials(true, false, false);
+
+                userTw.enqueue(new Callback<com.twitter.sdk.android.core.models.User>() {
+                    @Override
+                    public void success(Result<com.twitter.sdk.android.core.models.User> result) {
+                        user.setText("");
+                        pw.setText("");
+                        com.twitter.sdk.android.core.models.User userInfo = result.data;
+                        String userUrlImage = userInfo.profileImageUrl.replace("_normal", "");
+                        Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
+                        mIntent.putExtra("username", userName);
+                        mIntent.putExtra("imageUrl", userUrlImage);
+                        mIntent.putExtra("socialLogin", "twitter");
+                        startActivity(mIntent);
+                    }
+
+                    @Override
+                    public void failure(TwitterException exception) {
+
+                    }
+                });
+
             }
 
             @Override
             public void failure(TwitterException exception) {
-                System.err.println("Hola " + exception);
+                System.err.println(exception);
             }
         });
     }
@@ -160,12 +187,32 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         LoginButton loginButton = (LoginButton) findViewById(R.id.fbLogin);
         loginButton.setReadPermissions(Arrays.asList("public_profile"));
 
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+
+            }
+        };
+
+        profileTracker = new ProfileTracker() {
+            @Override
+            protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+
+            }
+        };
+        accessTokenTracker.startTracking();
+        profileTracker.startTracking();
+
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
+                user.setText("");
+                pw.setText("");
+                Profile profile = Profile.getCurrentProfile();
                 Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
-                mIntent.putExtra(NOMBRE_USUARIO, "Kibian");
+                mIntent.putExtra("imageUrl", "https://graph.facebook.com/" + profile.getId() + "/picture?type=large");
+                mIntent.putExtra("username", profile.getName());
+                mIntent.putExtra("socialLogin", "facebook");
                 startActivity(mIntent);
             }
 
@@ -179,6 +226,8 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
             }
         });
+
+
     }
 
     protected void googleLoginProccess() {
@@ -199,10 +248,13 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         //google
         if(requestCode==GOOGLE_SIGN_IN_CODE){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            System.out.println("StatusCode: " + result.getStatus().getStatusCode());
             if (result.isSuccess()) {
+                user.setText("");
+                pw.setText("");
                 Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
-                mIntent.putExtra(NOMBRE_USUARIO, "Kibian");
+                mIntent.putExtra("imageUrl", result.getSignInAccount().getPhotoUrl().toString());
+                mIntent.putExtra("username", result.getSignInAccount().getDisplayName());
+                mIntent.putExtra("socialLogin", "google");
                 startActivity(mIntent);
             }
             else {
@@ -215,13 +267,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         //fb
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
-
-    //  @Override
-  //  protected void onDestroy(){
-  //      System.out.println("destroymyfriend");
-  //      super.onDestroy();
-  //       LoginManager.getInstance().logOut();
-  // }
 
     public void checkUser(View view) {
         String Spassword = pw.getText().toString();
@@ -247,8 +292,11 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                     if(usuario != null){
                         if(usuario.getPassword().equals(password)){
                             Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
-                            mIntent.putExtra(NOMBRE_USUARIO, user.getText().toString());
+                            mIntent.putExtra("socialLogin", "android");
+                            mIntent.putExtra("username", user.getText().toString());
                             startActivity(mIntent);
+                            user.setText("");
+                            pw.setText("");
                         }
                         else {
                             Toast.makeText(Login.this, "Credenciales incorrectas",
@@ -271,6 +319,18 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 //not implemented
             }
         });
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        LoginManager.getInstance().logOut();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        LoginManager.getInstance().logOut();
     }
 
     protected void goSignUp(View view){

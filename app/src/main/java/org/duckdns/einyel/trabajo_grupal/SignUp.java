@@ -21,7 +21,7 @@ import java.util.List;
 
 public class SignUp extends AppCompatActivity {
     protected EditText pw;
-    protected EditText user;
+    protected EditText userF;
     protected EditText pwRepeat;
 
     FirebaseDatabase database;
@@ -35,7 +35,7 @@ public class SignUp extends AppCompatActivity {
         setContentView(R.layout.signup_activity);
 
         pw = findViewById(R.id.editPassword);
-        user = findViewById(R.id.editUser);
+        userF = findViewById(R.id.editUser);
         pwRepeat = findViewById(R.id.editPasswordRepeat);
 
         database = FirebaseDatabase.getInstance();
@@ -45,7 +45,7 @@ public class SignUp extends AppCompatActivity {
 
     public void checkUser(View view) {
         String Spassword = pw.getText().toString();
-        String Suser = user.getText().toString();
+        String Suser = userF.getText().toString();
         String SpasswordRepeat = pwRepeat.getText().toString();
         signUp(Suser, Spassword, SpasswordRepeat);
     }
@@ -71,9 +71,14 @@ public class SignUp extends AppCompatActivity {
                             if (!usernames.contains(username)) {
                                 users.child(newId.toString()).setValue(user);
                                 Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
-                                mIntent.putExtra(NOMBRE_USUARIO, username.toString());
+                                mIntent.putExtra("socialLogin", "android");
+                                mIntent.putExtra("username", username);
 
                                 startActivity(mIntent);
+
+                                pw.setText("");
+                                pwRepeat.setText("");
+                                userF.setText("");
                             } else {
                                 Toast.makeText(SignUp.this, "Ya existe una cuenta con ese " +
                                                 "nombre de usuario",
