@@ -217,7 +217,7 @@ public class ValoracionesFragment extends Fragment implements ComentarioAdapter.
             double puntuacionMediaEvento = ((votos1) + (votos2) * 2 + (votos3) * 3 + (votos4) * 4 + (votos5) * 5.0) / this.comments.size();
             TextView puntuacionMedia = (TextView) v.findViewById(R.id.puntuacion_media);
             puntuacionMedia.clearComposingText();
-            puntuacionMedia.setText(String.format("%.2f", puntuacionMediaEvento));
+            puntuacionMedia.setText(String.format("%.1f", puntuacionMediaEvento));
 
             TextView votosTotales = (TextView) v.findViewById(R.id.totalValoraciones);
             votosTotales.clearComposingText();

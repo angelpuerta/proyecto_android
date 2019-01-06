@@ -6,13 +6,17 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ActionMode;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
@@ -20,6 +24,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
@@ -30,8 +35,16 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import org.duckdns.einyel.trabajo_grupal.fragments.CodeNoOkFragment;
 import org.duckdns.einyel.trabajo_grupal.fragments.CodeOkFragment;
 import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
+import org.duckdns.einyel.trabajo_grupal.service.App;
+import org.duckdns.einyel.trabajo_grupal.service.FirebaseApi;
 
 import java.io.IOException;
+import java.net.URL;
+
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class QRCodeActivity extends AppCompatActivity {
 
@@ -41,6 +54,8 @@ public class QRCodeActivity extends AppCompatActivity {
     private String token = "";
     private String tokenanterior = "";
     private MockEvent evento;
+    private ProgressBar progressBar;
+    public static final String CODE = "CODE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +66,8 @@ public class QRCodeActivity extends AppCompatActivity {
         evento = b.getParcelable(DescripcionActivity.EVENTO);
 
         cameraView = (SurfaceView) findViewById(R.id.camera_view);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(ProgressBar.GONE);
         initQR();
     }
 
@@ -117,29 +134,48 @@ public class QRCodeActivity extends AppCompatActivity {
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
 
+
                 if (barcodes.size() > 0) {
 
                     // obtenemos el token
                     token = barcodes.valueAt(0).displayValue.toString();
 
+
                     // verificamos que el token anterior no se igual al actual
                     // esto es util para evitar multiples llamadas empleando el mismo token
                     if (!token.equals(tokenanterior)) {
+
+
 
                         // guardamos el ultimo token proceado
                         tokenanterior = token;
                         Log.i("token", token);
 
-                        if(token.equals(evento.getTittle())){
-                            FragmentManager fragmentManager = getSupportFragmentManager();
-                            DialogFragment dialogo = new CodeOkFragment();
-                            dialogo.show(fragmentManager, "fragmentoOk");
-                        }
-                        else{
-                            FragmentManager fragmentManager = getSupportFragmentManager();
-                            DialogFragment dialogo = new CodeNoOkFragment();
-                            dialogo.show(fragmentManager, "fragmentoNoOk");
-                        }
+                        App.get().getFirebaseApi().checkCode(evento.getId(), token).enqueue(new Callback() {
+                            @Override
+                            public void onResponse(Call call, Response response) {
+                                if (response.isSuccessful()) {
+                                    evento.setCode(token);
+                                    FragmentManager fragmentManager = getSupportFragmentManager();
+                                    DialogFragment dialogo = new CodeOkFragment();
+                                    dialogo.show(fragmentManager, "fragmentoOk");
+                                    Intent returnIntent = new Intent();
+                                    returnIntent.putExtra(CODE, token);
+                                    setResult(RESULT_OK, returnIntent);
+                                    finish();
+                                } else {
+                                    failureWindow();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call call, Throwable t) {
+                                failureWindow();
+                            }
+                        });
+
+
+
 
 
                         /*if (URLUtil.isValidUrl(token)) {
@@ -176,5 +212,11 @@ public class QRCodeActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void failureWindow() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        DialogFragment dialogo = new CodeNoOkFragment();
+        dialogo.show(fragmentManager, "fragmentoNoOk");
     }
 }

@@ -30,7 +30,8 @@ public class MockEvent implements Parcelable {
 
 
     @Ignore
-    private List<Comment> comments;
+    private String code;
+
 
 
     public MockEvent() {
@@ -111,14 +112,6 @@ public class MockEvent implements Parcelable {
     }
 
 
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
     public String getImgURL() {
         return imgURL;
     }
@@ -136,7 +129,6 @@ public class MockEvent implements Parcelable {
                 ", tittle='" + tittle + '\'' +
                 ", location='" + location + '\'' +
                 ", imgURL=" + imgURL +
-                ", comments=" + comments +
                 '}';
     }
 
@@ -166,5 +158,13 @@ public class MockEvent implements Parcelable {
         dest.writeString(this.imgURL);
         dest.writeDouble(this.mark);
         dest.writeString(this.location);
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

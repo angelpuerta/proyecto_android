@@ -85,6 +85,7 @@ public class DescripcionActivity extends AppCompatActivity {
     public void valorar(View view) {
         Intent nextActivity = new Intent(getApplicationContext(), RankingActivity.class);
         nextActivity.putExtra(EVENTO, evento.getId());
+        nextActivity.putExtra(QRCodeActivity.CODE, code);
         startActivity(nextActivity);
 
     }
@@ -92,7 +93,21 @@ public class DescripcionActivity extends AppCompatActivity {
     public void checkIn(View view) {
         Intent nextActivity = new Intent(getApplicationContext(), QRCodeActivity.class);
         nextActivity.putExtra(EVENTO, evento);
-        startActivity(nextActivity);
+        startActivityForResult(nextActivity, 1);
+    }
+
+    String code;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            code = data.getStringExtra(QRCodeActivity.CODE);
+            if (code != null) {
+
+            }
+
+        }
     }
 
     private void iniciarTabLayout() {
