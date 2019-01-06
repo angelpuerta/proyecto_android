@@ -18,6 +18,9 @@ import org.duckdns.einyel.trabajo_grupal.model.User;
 
 import java.util.Date;
 
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 
 public class App extends Application {
 
@@ -25,6 +28,8 @@ public class App extends Application {
     private static final String DATABASE_NAME = "MyDatabase";
     private static final String PREFERENCES = "RoomDemo.preferences";
     private static final String KEY_FORCE_UPDATE = "force_update";
+    private static final String BASE_URL = "https://us-central1-proyecto-moviles-86dc4.cloudfunctions.net/";
+    private Retrofit retrofit;
 
 
     public static App get() {
@@ -115,6 +120,20 @@ public class App extends Application {
                     }
                 })
                 .build();
+    }
+
+    public Retrofit getRetrofitClient() {
+        if (retrofit == null) {
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL) //This is the only mandatory call on Builder object.
+                    .addConverterFactory(GsonConverterFactory.create()) // Convertor library used to convert response into POJO
+                    .build();
+        }
+        return retrofit;
+    }
+
+    public FirebaseApi getFirebaseApi() {
+        return App.get().getRetrofitClient().create(FirebaseApi.class);
     }
 
 }

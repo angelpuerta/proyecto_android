@@ -1,8 +1,6 @@
 package org.duckdns.einyel.trabajo_grupal.fragments;
 
 
-
-
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -21,7 +19,6 @@ public class CodeOkFragment extends DialogFragment {
         builder.setMessage(R.string.check_in_correcto)
                 .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        getActivity().finish();
                         dialog.dismiss();
                     }
                 });
