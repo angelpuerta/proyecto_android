@@ -270,7 +270,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 mIntent.putExtra("socialLogin", "google");
                 startActivity(mIntent);
             } catch (ApiException e) {
-                System.err.println("Hola");
                 Log.d("Excepcion", "Exception : " + e.getMessage());
             }
         }
