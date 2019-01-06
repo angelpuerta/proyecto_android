@@ -344,7 +344,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         LoginManager.getInstance().logOut();
     }
 
-    protected void goSignUp(View view){
+    public void goSignUp(View view){
         Intent mIntent = new Intent(getApplicationContext(), SignUp.class);
         startActivity(mIntent);
     }
