@@ -42,10 +42,11 @@ public class Perfil extends AppCompatActivity {
             NOMBRE_USUARIO = extras.getString("username");
             URL_PIC = extras.getString("imageUrl");
         }
-
-        if(LOGIN.equals("facebook") || LOGIN.equals("twitter") || LOGIN.equals("google")){
-            new DownloadImageTask((ImageView) findViewById(R.id.profileImage))
-                    .execute(URL_PIC);
+        if(URL_PIC!=null) {
+            if (LOGIN.equals("facebook") || LOGIN.equals("twitter") || LOGIN.equals("google")) {
+                new DownloadImageTask((ImageView) findViewById(R.id.profileImage))
+                        .execute(URL_PIC);
+            }
         }
 
         if(LOGIN.equals("twitter")){

@@ -30,11 +30,15 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -80,6 +84,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     //Google
     GoogleApiClient googleApi;
     private SignInButton signInButtonGoogle;
+    private GoogleSignInClient mGoogleSignInClient;
 
     //Twitter
     TwitterLoginButton loginButtonTwitter;
@@ -113,6 +118,9 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail()
                     .build();
+
+            // Build a GoogleSignInClient with the options specified by gso.
+            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
             googleApi = new GoogleApiClient.Builder(this)
                     .enableAutoManage(this, this)
@@ -235,7 +243,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         signInButtonGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApi);
+                Intent intent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(intent, GOOGLE_SIGN_IN_CODE);
             }
         });
@@ -247,19 +255,22 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         super.onActivityResult(requestCode, resultCode, data);
         //google
         if(requestCode==GOOGLE_SIGN_IN_CODE){
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+
+                // Signed in successfully, show authenticated UI.
                 user.setText("");
                 pw.setText("");
                 Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
-                mIntent.putExtra("imageUrl", result.getSignInAccount().getPhotoUrl().toString());
-                mIntent.putExtra("username", result.getSignInAccount().getDisplayName());
+                if(account.getPhotoUrl()!=null)
+                    mIntent.putExtra("imageUrl", account.getPhotoUrl().toString());
+                mIntent.putExtra("username", account.getDisplayName());
                 mIntent.putExtra("socialLogin", "google");
                 startActivity(mIntent);
-            }
-            else {
-                Toast.makeText(Login.this, "No se ha podido iniciar sesión",
-                        Toast.LENGTH_SHORT).show();
+            } catch (ApiException e) {
+                Log.d("Excepcion", "Exception : " + e.getMessage());
             }
         }
         //twitter
@@ -333,7 +344,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         LoginManager.getInstance().logOut();
     }
 
-    protected void goSignUp(View view){
+    public void goSignUp(View view){
         Intent mIntent = new Intent(getApplicationContext(), SignUp.class);
         startActivity(mIntent);
     }
@@ -348,7 +359,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
         } catch (PackageManager.NameNotFoundException e){
-            e.printStackTrace();;
+            e.printStackTrace();
         } catch (NoSuchAlgorithmException e){
             e.printStackTrace();
         }
