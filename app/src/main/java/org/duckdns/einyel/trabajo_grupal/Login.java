@@ -348,7 +348,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
         } catch (PackageManager.NameNotFoundException e){
-            e.printStackTrace();;
+            e.printStackTrace();
         } catch (NoSuchAlgorithmException e){
             e.printStackTrace();
         }
