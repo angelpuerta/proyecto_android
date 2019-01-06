@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -106,48 +107,52 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
-            //la inicializacion de twitter (tiene que ir aqui si o si)
-            TwitterConfig config = new TwitterConfig.Builder(this)
-                .logger(new DefaultLogger(Log.DEBUG))
-                .twitterAuthConfig(new TwitterAuthConfig(getResources().getString(R.string.twitter_consumer_key), getResources().getString(R.string.twitter_consumer_secret)))
-                .debug(true)
+
+        //la inicializacion de twitter (tiene que ir aqui si o si)
+        TwitterConfig config = new TwitterConfig.Builder(this)
+            .logger(new DefaultLogger(Log.DEBUG))
+            .twitterAuthConfig(new TwitterAuthConfig(getResources().getString(R.string.twitter_consumer_key), getResources().getString(R.string.twitter_consumer_secret)))
+            .debug(true)
+            .build();
+
+        Twitter.initialize(config);
+
+        setContentView(R.layout.login_activity);
+        Button button = (Button) findViewById(R.id.SignUp);
+        button.setPaintFlags(button.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+
+        //Inicializaciones de login social
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
                 .build();
 
-            Twitter.initialize(config);
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-            setContentView(R.layout.login_activity);
+        googleApi = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
 
-            //Inicializaciones de login social
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestEmail()
-                    .build();
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
 
-            // Build a GoogleSignInClient with the options specified by gso.
-            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        //Obtención de info basica (usuarios normales)
+        pw = findViewById(R.id.editPassword);
+        user = findViewById(R.id.editUser);
 
-            googleApi = new GoogleApiClient.Builder(this)
-                    .enableAutoManage(this, this)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build();
+        database = FirebaseDatabase.getInstance();
+        users = database.getReference("usuarios");
 
-            FacebookSdk.sdkInitialize(getApplicationContext());
-            AppEventsLogger.activateApp(this);
+        //establecimiento de los procesos de login de las redes
+        googleLoginProccess();
+        facebookLoginProccess();
+        twitterLoginProccess();
 
-            //Obtención de info basica (usuarios normales)
-            pw = findViewById(R.id.editPassword);
-            user = findViewById(R.id.editUser);
-
-            database = FirebaseDatabase.getInstance();
-            users = database.getReference("usuarios");
-
-            //establecimiento de los procesos de login de las redes
-            googleLoginProccess();
-            facebookLoginProccess();
-            twitterLoginProccess();
-
-            //printKeyHash();
+        //printKeyHash();
     }
 
     private void twitterLoginProccess() {
