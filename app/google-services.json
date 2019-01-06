@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "946030545809-ui9hvhtegqdpaqh9ood55tq21lot2dsb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.duckdns.einyel.trabajo_grupal",
+            "certificate_hash": "42ef432e336cdb9ec1a083515bc93fd76e695b5d"
+          }
+        },
+        {
           "client_id": "946030545809-ec0pjjnq3q3ogisu7ruba3720tettd9l.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "946030545809-ec0pjjnq3q3ogisu7ruba3720tettd9l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

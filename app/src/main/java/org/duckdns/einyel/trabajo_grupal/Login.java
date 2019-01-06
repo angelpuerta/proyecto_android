@@ -119,7 +119,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                     .requestEmail()
                     .build();
 
-        // Build a GoogleSignInClient with the options specified by gso.
+            // Build a GoogleSignInClient with the options specified by gso.
             mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
             googleApi = new GoogleApiClient.Builder(this)
@@ -264,13 +264,13 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 user.setText("");
                 pw.setText("");
                 Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
-                mIntent.putExtra("imageUrl", account.getPhotoUrl().toString());
+                if(account.getPhotoUrl()!=null)
+                    mIntent.putExtra("imageUrl", account.getPhotoUrl().toString());
                 mIntent.putExtra("username", account.getDisplayName());
                 mIntent.putExtra("socialLogin", "google");
                 startActivity(mIntent);
             } catch (ApiException e) {
-                Toast.makeText(Login.this, "No se ha podido iniciar sesión",
-                        Toast.LENGTH_SHORT).show();
+                Log.d("Excepcion", "Exception : " + e.getMessage());
             }
         }
         //twitter
