@@ -221,7 +221,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
                             Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
                             mIntent.putExtra("imageUrl", "https://graph.facebook.com/" + object.getString("id") + "/picture?type=large");
-                            mIntent.putExtra("username", object.getString("email"));
+                            mIntent.putExtra("username", object.getString("name"));
                             mIntent.putExtra("socialLogin", "facebook");
                             startActivity(mIntent);
                         } catch (JSONException e) {
@@ -232,7 +232,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 });
 
                 Bundle bundle = new Bundle();
-                bundle.putString("fields", "email, id");
+                bundle.putString("fields", "name, id");
                 graphRequest.setParameters(bundle);
                 graphRequest.executeAsync();
 
