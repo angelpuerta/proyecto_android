@@ -27,6 +27,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -46,13 +47,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import org.duckdns.einyel.trabajo_grupal.model.User;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import android.util.Base64;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.DefaultLogger;
 import com.twitter.sdk.android.core.Result;
@@ -95,6 +99,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     ImageView imgAvatar;
     private ProfileTracker profileTracker;
     private AccessTokenTracker accessTokenTracker;
+    private LoginButton fbButton;
 
     public static final String NOMBRE_USUARIO = "";
     public static final int GOOGLE_SIGN_IN_CODE = 777;
@@ -128,6 +133,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                     .build();
 
             FacebookSdk.sdkInitialize(getApplicationContext());
+            AppEventsLogger.activateApp(this);
 
             //Obtención de info basica (usuarios normales)
             pw = findViewById(R.id.editPassword);
@@ -193,35 +199,38 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         callbackManager = CallbackManager.Factory.create();
 
         LoginButton loginButton = (LoginButton) findViewById(R.id.fbLogin);
-        loginButton.setReadPermissions(Arrays.asList("public_profile"));
 
-        accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-
-            }
-        };
-
-        profileTracker = new ProfileTracker() {
-            @Override
-            protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-
-            }
-        };
-        accessTokenTracker.startTracking();
-        profileTracker.startTracking();
+        loginButton.setReadPermissions(Arrays.asList("public_profile" , "email"));
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                user.setText("");
-                pw.setText("");
-                Profile profile = Profile.getCurrentProfile();
-                Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
-                mIntent.putExtra("imageUrl", "https://graph.facebook.com/" + profile.getId() + "/picture?type=large");
-                mIntent.putExtra("username", profile.getName());
-                mIntent.putExtra("socialLogin", "facebook");
-                startActivity(mIntent);
+                AccessToken accessToken = loginResult.getAccessToken();
+
+                GraphRequest graphRequest = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                       try {
+                            user.setText("");
+                            pw.setText("");
+
+                            Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
+                            mIntent.putExtra("imageUrl", "https://graph.facebook.com/" + object.getString("id") + "/picture?type=large");
+                            mIntent.putExtra("username", object.getString("email"));
+                            mIntent.putExtra("socialLogin", "facebook");
+                            startActivity(mIntent);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+
+                Bundle bundle = new Bundle();
+                bundle.putString("fields", "email, id");
+                graphRequest.setParameters(bundle);
+                graphRequest.executeAsync();
+
             }
 
             @Override
