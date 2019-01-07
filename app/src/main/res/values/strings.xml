@@ -39,4 +39,6 @@
     <string name="Inicio_sesion">Inicio de sesión</string>
     <string name="iniciar_sesion">Iniciar sesión</string>
     <string name="registrarse">Regístrate</string>
+    <string name="registro">Registro</string>
+    <string name="registrar">Registrar</string>
 </resources>
