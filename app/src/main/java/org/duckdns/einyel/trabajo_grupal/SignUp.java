@@ -57,7 +57,8 @@ public class SignUp extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Long id = 0L;
                 for(DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
-                    id = Long.valueOf(userSnapshot.child("id").getValue().toString());
+                    if(userSnapshot.child("id").getValue()!=null)
+                         id = Long.valueOf(userSnapshot.child("id").getValue().toString());
                 }
                 if(id!=0L) {
                     if(!username.isEmpty()&&!password.isEmpty()&&!passwordRepeat.isEmpty()){
@@ -66,7 +67,8 @@ public class SignUp extends AppCompatActivity {
                             final User user = new User(newId, username, password);
                             List<String> usernames = new ArrayList<>();
                             for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                                usernames.add(userSnapshot.child("nick").getValue().toString());
+                                if(userSnapshot.child("nick").getValue()!=null)
+                                    usernames.add(userSnapshot.child("nick").getValue().toString());
                             }
                             if (!usernames.contains(username)) {
                                 users.child(newId.toString()).setValue(user);
