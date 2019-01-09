@@ -68,7 +68,8 @@ public class ComentarioAdapter extends FirebaseRecyclerAdapter<Comment, Comentar
 
         addcomments.addCommentToWhole(model);
 
-        holder.nombreUsuario.setText(model.getU_id() + "");
+
+        holder.nombreUsuario.setText(model.getUser() == null ? "anonymous" : model.getUser() + "");
         changeMarkBackground(holder, model);
         holder.puntuacion.setText(model.getRate() + "");
         holder.comentario.setText(model.getComment());

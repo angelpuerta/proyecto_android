@@ -73,12 +73,13 @@ public class Comment {
         this.timestamp = new Date();
         this.u_id = 0L;
         this.c_id = new Long(hashCode());
+        this.user = "anonymous";
     }
 
 
-    public Comment(Long e_id, String comment, double rate, String user ) {
+    public Comment(Long e_id, String comment, double rate, String user) {
         this(e_id, comment, rate);
-        this.user = user;
+        this.setUser(user);
     }
 
     public Long getC_id() {
@@ -130,11 +131,15 @@ public class Comment {
     }
 
     public String getUser() {
+
         return user;
     }
 
     public void setUser(String user) {
-        this.user = user;
+        if (user == null || user.equals(""))
+            this.user = "anonymous";
+        else
+            this.user = user;
     }
 
     @Override
