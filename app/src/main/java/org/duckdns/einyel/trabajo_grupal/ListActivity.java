@@ -73,6 +73,8 @@ public class ListActivity extends AppCompatActivity {
                         MockEvent evento = (MockEvent) adapter.getItem(position);
                         Intent nextActivity = new Intent(getApplicationContext(), DescripcionActivity.class);
                         nextActivity.putExtra(EVENTO, evento);
+                        NOMBRE_USUARIO = extras.getString("username");
+                        nextActivity.putExtra("username", NOMBRE_USUARIO);
                         startActivity(nextActivity);
                     }
 

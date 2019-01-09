@@ -13,8 +13,8 @@ import retrofit2.http.Path;
 
 public interface FirebaseApi {
 
-    @GET("qr/checkCode/{id}/{code}")
-    Call<Void> checkCode(@Path("id") Long eventid, @Path("code") String code);
+    @GET("qr/checkCode/{id}/{code}/{user}")
+    Call<Void> checkCode(@Path("id") Long eventid, @Path("code") String code, @Path("user") String user);
 
     @POST("qr/addComment")
     @FormUrlEncoded

@@ -49,6 +49,10 @@ public class Comment {
     @SerializedName("rate")
     private double rate;
 
+    @SerializedName("user")
+    private String user;
+
+    @Ignore
     @SerializedName("u_id")
     @ColumnInfo(name = "u_id")
     private Long u_id;
@@ -71,13 +75,10 @@ public class Comment {
         this.c_id = new Long(hashCode());
     }
 
-    public Comment(Long c_id, Long e_id, String comment, double rate, Long u_id, Date timestamp) {
-        this.c_id = c_id;
-        this.e_id = e_id;
-        this.comment = comment;
-        this.rate = rate;
-        this.u_id = u_id;
-        this.timestamp = timestamp;
+
+    public Comment(Long e_id, String comment, double rate, String user ) {
+        this(e_id, comment, rate);
+        this.user = user;
     }
 
     public Long getC_id() {
@@ -128,9 +129,17 @@ public class Comment {
         this.timestamp = timestamp;
     }
 
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
-        return "Comment{" +
+        return "{" +
                 "c_id=" + c_id +
                 ", e_id=" + e_id +
                 ", comment='" + comment + '\'' +

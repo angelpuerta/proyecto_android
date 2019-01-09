@@ -47,7 +47,7 @@ public class EventoAdapter extends FirebaseRecyclerAdapter<MockEvent, EventoAdap
         Picasso.get().load(evento.getImgURL()).into(holder.imagen);
         holder.nombre.setText(evento.getTittle());
         changeMarkBackground(holder, evento);
-        holder.puntuacion.setText(evento.getMark() + "");
+        holder.puntuacion.setText(String.format("%.1f", evento.getMark()) + "");
         holder.descripcion.setText(evento.getDescription());
     }
 

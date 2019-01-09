@@ -1,15 +1,19 @@
 package org.duckdns.einyel.trabajo_grupal.fragments;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
@@ -60,7 +64,9 @@ public class ValoracionesFragment extends Fragment implements ComentarioAdapter.
     private Set<Comment> comments;
 
     private Long evento_id;
+    private String username;
 
+    private AppCompatImageButton puntuar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,12 +76,17 @@ public class ValoracionesFragment extends Fragment implements ComentarioAdapter.
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(descripcionActivity);
 
+
         v = LayoutInflater.from(container.getContext())
                 .inflate(R.layout.fragmentvaloraciones_lista, container, false);
 
         recyclerView = (RecyclerView) v.findViewById(R.id.listaComentarios);
         recyclerView.setLayoutManager(layoutManager);
 
+
+        puntuar = v.findViewById(R.id.puntuarButton);
+        puntuar.setEnabled(false);
+        puntuar.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
 
         this.evento_id = descripcionActivity.getEvento().getId();
         adapter = new ComentarioAdapter(App.get().commentsOption(evento_id), this);
@@ -90,6 +101,18 @@ public class ValoracionesFragment extends Fragment implements ComentarioAdapter.
         crearGrafico();
 
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        String search = "QR/" + descripcionActivity.getUsername() + "/" + evento_id;
+        String code = descripcionActivity.getSharedPreferences("QRs", Context.MODE_PRIVATE).getString(search, "");
+
+        if (!code.equals("")) {
+            puntuar.findViewById(R.id.puntuarButton).setEnabled(true);
+            puntuar.getBackground().setColorFilter(null);
+        }
     }
 
     @Override

@@ -28,7 +28,7 @@ public class RankingActivity extends AppCompatActivity {
     Button mSendFeedback;
 
     Long event;
-    String code;
+    String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class RankingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_puntuacion);
 
         event = getIntent().getLongExtra(DescripcionActivity.EVENTO, 1);
-        code = getIntent().getStringExtra(QRCodeActivity.CODE);
+        username = getIntent().getStringExtra("username");
 
         mRatingBar = findViewById(R.id.ratingBar);
         mRatingScale = findViewById(R.id.ratingTextView);
@@ -79,7 +79,7 @@ public class RankingActivity extends AppCompatActivity {
     }
 
     public void clickSubmit(View view) {
-        addComentario(new Comment(event, mFeedback.getText().toString(), mRatingBar.getRating()), code);
+        addComentario(new Comment(event, mFeedback.getText().toString(), mRatingBar.getRating(), username));
         this.finish();
 
     }
@@ -87,27 +87,11 @@ public class RankingActivity extends AppCompatActivity {
 
     RankingActivity aux = this;
 
-    public void addComentario(Comment comment, String code) {
-        App.get().getFirebaseApi().addComment(comment, code).enqueue(new Callback<Void>() {
+    public void addComentario(Comment comment) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference comentarios = database.getReference("comments").child(event.toString());
 
-
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(aux, "Añadido",
-                            Toast.LENGTH_SHORT).show();
-                } else
-                    Toast.makeText(aux, "Credenciales incorrectas",
-                            Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(aux, "Credenciales incorrectas",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        comentarios.child(comment.getC_id().toString()).setValue(comment);
     }
 
 }

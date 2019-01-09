@@ -49,6 +49,8 @@ public class DescripcionActivity extends AppCompatActivity {
     TabAdapter tab;
 
 
+    private String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,9 +61,15 @@ public class DescripcionActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         evento = b.getParcelable(ListActivity.EVENTO);
+        username = b.getString("username");
 
         iniciarTabLayout();
 
+
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public void abrirMapaGrande(View view) {
@@ -85,7 +93,7 @@ public class DescripcionActivity extends AppCompatActivity {
     public void valorar(View view) {
         Intent nextActivity = new Intent(getApplicationContext(), RankingActivity.class);
         nextActivity.putExtra(EVENTO, evento.getId());
-        nextActivity.putExtra(QRCodeActivity.CODE, code);
+        nextActivity.putExtra("username", getUsername());
         startActivity(nextActivity);
 
     }
@@ -93,22 +101,10 @@ public class DescripcionActivity extends AppCompatActivity {
     public void checkIn(View view) {
         Intent nextActivity = new Intent(getApplicationContext(), QRCodeActivity.class);
         nextActivity.putExtra(EVENTO, evento);
-        startActivityForResult(nextActivity, 1);
+        nextActivity.putExtra("username", getUsername());
+        startActivity(nextActivity);
     }
 
-    String code;
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            code = data.getStringExtra(QRCodeActivity.CODE);
-            if (code != null) {
-
-            }
-
-        }
-    }
 
     private void iniciarTabLayout() {
 
@@ -266,10 +262,6 @@ class TabAdapter extends FragmentStatePagerAdapter {
         titulos.add("Valoraciones");
 
 
-    }
-
-    public void actualizeValoration(List<Comment> comments) {
-        // valoraciones.actualizar(comments);
     }
 
 

@@ -3,6 +3,7 @@ package org.duckdns.einyel.trabajo_grupal;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -57,6 +58,8 @@ public class QRCodeActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     public static final String CODE = "CODE";
 
+    private String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +67,7 @@ public class QRCodeActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         evento = b.getParcelable(DescripcionActivity.EVENTO);
+        username = b.getString("username");
 
         cameraView = (SurfaceView) findViewById(R.id.camera_view);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -146,12 +150,11 @@ public class QRCodeActivity extends AppCompatActivity {
                     if (!token.equals(tokenanterior)) {
 
 
-
                         // guardamos el ultimo token proceado
                         tokenanterior = token;
                         Log.i("token", token);
 
-                        App.get().getFirebaseApi().checkCode(evento.getId(), token).enqueue(new Callback() {
+                        App.get().getFirebaseApi().checkCode(evento.getId(), token, username).enqueue(new Callback() {
                             @Override
                             public void onResponse(Call call, Response response) {
                                 if (response.isSuccessful()) {
@@ -159,9 +162,7 @@ public class QRCodeActivity extends AppCompatActivity {
                                     FragmentManager fragmentManager = getSupportFragmentManager();
                                     DialogFragment dialogo = new CodeOkFragment();
                                     dialogo.show(fragmentManager, "fragmentoOk");
-                                    Intent returnIntent = new Intent();
-                                    returnIntent.putExtra(CODE, token);
-                                    setResult(RESULT_OK, returnIntent);
+                                    addToSharedPrefference(token);
                                     finish();
                                 } else {
                                     failureWindow();
@@ -218,5 +219,15 @@ public class QRCodeActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         DialogFragment dialogo = new CodeNoOkFragment();
         dialogo.show(fragmentManager, "fragmentoNoOk");
+    }
+
+
+    public void addToSharedPrefference(String code) {
+        String search = "QR/" + username + "/" + evento.getId();
+        this.getSharedPreferences("QRs", Context.MODE_PRIVATE).edit()
+                .putString(search, code)
+                .commit();
+        String code22 = this.getSharedPreferences("QRs", Context.MODE_PRIVATE).getString(search, "");
+
     }
 }

@@ -31,6 +31,8 @@ public class App extends Application {
     private static final String BASE_URL = "https://us-central1-proyecto-moviles-86dc4.cloudfunctions.net/";
     private Retrofit retrofit;
 
+    private String user;
+
 
     public static App get() {
         return INSTANCE;
@@ -134,6 +136,14 @@ public class App extends Application {
 
     public FirebaseApi getFirebaseApi() {
         return App.get().getRetrofitClient().create(FirebaseApi.class);
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
 }
