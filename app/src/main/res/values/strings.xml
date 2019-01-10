@@ -41,7 +41,4 @@
     <string name="registrarse">Regístrate</string>
     <string name="registro">Registro</string>
     <string name="registrar">Registrar</string>
-    <string name="navigation_drawer_open">no se</string>
-    <string name="navigation_drawer_close">no se tampoco</string>
-    <string name="item_lista_evento">Mis eventos</string>
 </resources>

@@ -2,25 +2,16 @@ package org.duckdns.einyel.trabajo_grupal;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.FirebaseApp;
@@ -44,7 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class ListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ListActivity extends AppCompatActivity {
 
 
     private RecyclerView recyclerView;
@@ -57,8 +48,6 @@ public class ListActivity extends AppCompatActivity implements NavigationView.On
     public static String NOMBRE_USUARIO = "";
     public static String LOGIN = "";
     public static String URL_PIC = "";
-    public static Long EVENTOS_ASISTIDOS = null;
-    private ActionBarDrawerToggle toggle;
 
 
     @Override
@@ -67,23 +56,6 @@ public class ListActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.list_activity);
 
         Bundle extras = getIntent().getExtras();
-        URL_PIC = extras.getString("imageUrl");
-        NOMBRE_USUARIO = extras.getString("username");
-        LOGIN = extras.getString("socialLogin");
-        EVENTOS_ASISTIDOS = extras.getLong("LISTA_EVENTOS");
-
-
-        Toolbar toolbar = findViewById(R.id.toolbar_main);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         profileButton = (ImageButton) findViewById(R.id.profileButton);
@@ -91,12 +63,7 @@ public class ListActivity extends AppCompatActivity implements NavigationView.On
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        if(EVENTOS_ASISTIDOS.equals(new Long(0))) {
-            adapter = new EventoAdapter(App.get().eventsOptions());
-        }
-        else{
-            adapter = new EventoAdapter(App.get().filtrarEventosUsuario(EVENTOS_ASISTIDOS));
-        }
+        adapter = new EventoAdapter(App.get().eventsOptions());
         recyclerView.setAdapter(adapter);
 
         recyclerView.addOnItemTouchListener(
@@ -131,41 +98,6 @@ public class ListActivity extends AppCompatActivity implements NavigationView.On
                 startActivityForResult(mIntent, 100);
             }
         });
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        //no funciona, no carga el R.id.nav_header_imageView
-        /*ImageView imagen = (ImageView) findViewById(R.id.nav_header_imageView);
-        if(URL_PIC != null && !URL_PIC.equals("")) {
-            if (LOGIN.equals("facebook") || LOGIN.equals("twitter") || LOGIN.equals("google")) {
-                Picasso.get().load(URL_PIC).into(imagen);
-                //new DownloadImageTask(imagenPerfil).execute(URL_PIC);
-            }
-        }*/
-
-
-
-    }
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        toggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        toggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (toggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -180,21 +112,4 @@ public class ListActivity extends AppCompatActivity implements NavigationView.On
         adapter.stopListening();
     }
 
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getTitle().toString()){
-            case "Mis eventos":
-                Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
-                mIntent.putExtra("socialLogin", LOGIN);
-                mIntent.putExtra("username", NOMBRE_USUARIO);
-                mIntent.putExtra("imageUrl", URL_PIC);
-                mIntent.putExtra("LISTA_EVENTOS", new Long(1));
-                startActivity(mIntent);
-                Toast.makeText(this, "Clicked item one", Toast.LENGTH_SHORT).show();
-                break;
-        }
-
-        return false;
-    }
 }

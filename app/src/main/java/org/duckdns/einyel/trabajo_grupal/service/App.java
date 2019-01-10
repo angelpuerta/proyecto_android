@@ -1,32 +1,22 @@
 package org.duckdns.einyel.trabajo_grupal.service;
 
 import android.app.Application;
-import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.firebase.ui.database.ObservableSnapshotArray;
 import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 
-import org.duckdns.einyel.trabajo_grupal.ListActivity;
-import org.duckdns.einyel.trabajo_grupal.Login;
 import org.duckdns.einyel.trabajo_grupal.model.Comment;
 import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
 import org.duckdns.einyel.trabajo_grupal.model.User;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -71,26 +61,6 @@ public class App extends Application {
                     public Comment parseSnapshot(@NonNull DataSnapshot snapshot) {
                         Log.d("AUXILIAR", snapshot.toString());
                         return snapshot.getValue(Comment.class);
-                    }
-                })
-                .build();
-    }
-
-    public FirebaseRecyclerOptions<MockEvent> filtrarEventosUsuario(Long evento) {
-
-        List<Long> ids = new ArrayList<>();
-        Query query = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("events")
-                .orderByChild("id")
-                .equalTo(ids);
-        return new FirebaseRecyclerOptions.Builder<MockEvent>()
-                .setQuery(query, new SnapshotParser<MockEvent>() {
-                    @NonNull
-                    @Override
-                    public MockEvent parseSnapshot(@NonNull DataSnapshot snapshot) {
-                        Log.d("AUXILIAR", snapshot.toString());
-                        return snapshot.getValue(MockEvent.class);
                     }
                 })
                 .build();
