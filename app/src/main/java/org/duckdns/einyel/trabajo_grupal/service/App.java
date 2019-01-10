@@ -47,6 +47,26 @@ public class App extends Application {
         INSTANCE = this;
     }
 
+    public FirebaseRecyclerOptions<MockEvent> filtrarEventos(String filtro) {
+
+        Query query = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("events")
+                .orderByChild("tittle")
+                .startAt(filtro);
+
+        return new FirebaseRecyclerOptions.Builder<MockEvent>()
+                .setQuery(query, new SnapshotParser<MockEvent>() {
+                    @NonNull
+                    @Override
+                    public MockEvent parseSnapshot(@NonNull DataSnapshot snapshot) {
+                        Log.d("AUXILIAR", snapshot.toString());
+                        return snapshot.getValue(MockEvent.class);
+                    }
+                })
+                .build();
+    }
+
 
     public FirebaseRecyclerOptions<Comment> commentsOption(Long evento) {
         Query query = FirebaseDatabase.getInstance()

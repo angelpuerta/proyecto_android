@@ -82,17 +82,19 @@
         android:layout_width="wrap_content"
         android:layout_height="33dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="24dp"
         android:background="@android:color/transparent"
         android:onClick="goSignUp"
         android:text="@string/registrarse"
         android:textColor="@android:color/white"
-        android:textSize="12sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.092"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fbLogin" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/fbLogin"
@@ -134,10 +136,9 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/botonInicioSesion"
-        app:layout_constraintVertical_bias="0.09"></com.twitter.sdk.android.core.identity.TwitterLoginButton>
+        app:layout_constraintVertical_bias="0.191"></com.twitter.sdk.android.core.identity.TwitterLoginButton>
 
     <Button
         android:id="@+id/botonInicioSesion"
@@ -147,10 +148,10 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/cardview_dark_background"
+        android:background="@color/white"
         android:onClick="checkUser"
         android:text="@string/iniciar_sesion"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"

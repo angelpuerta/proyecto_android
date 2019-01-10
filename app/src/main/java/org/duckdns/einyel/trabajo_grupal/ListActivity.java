@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.FirebaseApp;
@@ -48,14 +49,18 @@ public class ListActivity extends AppCompatActivity {
     public static String NOMBRE_USUARIO = "";
     public static String LOGIN = "";
     public static String URL_PIC = "";
+    public static String BUSCAR = "";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_activity);
-
         Bundle extras = getIntent().getExtras();
+        BUSCAR = extras.getString("buscar");
+        LOGIN = extras.getString("socialLogin");
+        NOMBRE_USUARIO = extras.getString("username");
+        URL_PIC = extras.getString("imageUrl");
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         profileButton = (ImageButton) findViewById(R.id.profileButton);
@@ -63,7 +68,30 @@ public class ListActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new EventoAdapter(App.get().eventsOptions());
+        SearchView searchView = (SearchView) findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
+                mIntent.putExtra("imageUrl", URL_PIC);
+                mIntent.putExtra("username", NOMBRE_USUARIO);
+                mIntent.putExtra("socialLogin", LOGIN);
+                mIntent.putExtra("buscar", query);
+                startActivityForResult(mIntent, 100);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        if(BUSCAR == null) {
+            adapter = new EventoAdapter(App.get().eventsOptions());
+        }else {
+            adapter = new EventoAdapter(App.get().filtrarEventos(BUSCAR));
+        }
         recyclerView.setAdapter(adapter);
 
         recyclerView.addOnItemTouchListener(
@@ -84,6 +112,12 @@ public class ListActivity extends AppCompatActivity {
                     }
                 })
         );
+
+        if(URL_PIC != null && !URL_PIC.equals("")) {
+            if (LOGIN.equals("facebook") || LOGIN.equals("twitter") || LOGIN.equals("google")) {
+                Picasso.get().load(URL_PIC).into(profileButton);
+            }
+        }
 
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
