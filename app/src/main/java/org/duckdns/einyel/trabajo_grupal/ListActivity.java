@@ -33,11 +33,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import org.duckdns.einyel.trabajo_grupal.adapter.EventoAdapter;
-import org.duckdns.einyel.trabajo_grupal.adapter.EventoAdapterAsistidos;
 import org.duckdns.einyel.trabajo_grupal.listener.RecyclerTouchListener;
 import org.duckdns.einyel.trabajo_grupal.model.Comment;
 import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
-import org.duckdns.einyel.trabajo_grupal.model.User;
 import org.duckdns.einyel.trabajo_grupal.service.App;
 import org.duckdns.einyel.trabajo_grupal.service.DownloadImageTask;
 
@@ -74,7 +72,6 @@ public class ListActivity extends AppCompatActivity implements NavigationView.On
         LOGIN = extras.getString("socialLogin");
         EVENTOS_ASISTIDOS = extras.getLong("LISTA_EVENTOS");
 
-        setIds();
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
@@ -94,10 +91,11 @@ public class ListActivity extends AppCompatActivity implements NavigationView.On
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        if (EVENTOS_ASISTIDOS.equals(new Long(0))) {
+        if(EVENTOS_ASISTIDOS.equals(new Long(0))) {
             adapter = new EventoAdapter(App.get().eventsOptions());
-        } else {
-            adapter = new EventoAdapterAsistidos(App.get().eventsOptions(), assisted);
+        }
+        else{
+            adapter = new EventoAdapter(App.get().filtrarEventosUsuario(EVENTOS_ASISTIDOS));
         }
         recyclerView.setAdapter(adapter);
 
@@ -147,6 +145,7 @@ public class ListActivity extends AppCompatActivity implements NavigationView.On
         }*/
 
 
+
     }
 
     @Override
@@ -184,7 +183,7 @@ public class ListActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getTitle().toString()) {
+        switch (item.getTitle().toString()){
             case "Mis eventos":
                 Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
                 mIntent.putExtra("socialLogin", LOGIN);
@@ -198,25 +197,4 @@ public class ListActivity extends AppCompatActivity implements NavigationView.On
 
         return false;
     }
-
-    List<Long> assisted;
-
-    protected void setIds() {
-        FirebaseDatabase.getInstance().getReference("usuarios").orderByChild("nick").equalTo(NOMBRE_USUARIO.trim()).addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren())
-                            if (userSnapshot.hasChild("assisted")) {
-                                assisted = userSnapshot.child("assisted").getValue(List.class);
-                            }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-    }
 }
-

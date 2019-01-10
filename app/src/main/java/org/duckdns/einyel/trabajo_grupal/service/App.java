@@ -83,7 +83,7 @@ public class App extends Application {
                 .getReference()
                 .child("events")
                 .orderByChild("id")
-                ;
+                .equalTo(ids);
         return new FirebaseRecyclerOptions.Builder<MockEvent>()
                 .setQuery(query, new SnapshotParser<MockEvent>() {
                     @NonNull
