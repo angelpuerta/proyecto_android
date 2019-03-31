@@ -4,6 +4,117 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/valorationToolsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="232dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp">
+
+                <TextView
+                    android:id="@+id/textCheckIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:fontFamily="@font/verdana"
+                    android:text="Check-in"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textPuntuar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/verdana"
+                    android:text="Puntuar"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="245dp"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp">
+
+                <Button
+                    android:id="@+id/btnCheckIn"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/check_in_icon_black"
+                    android:onClick="checkIn" />
+
+                <Button
+                    android:id="@+id/btnPuntuar"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/star_icon_black"
+                    android:onClick="valorar" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="177dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/totalValoraciones"
+                android:layout_width="143dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/verdana"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/puntuacion_media"
+                android:layout_width="61dp"
+                android:layout_height="30dp"
+                android:fontFamily="@font/verdana"
+                android:text="9"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/textPuntuacionMedia"
+                android:layout_width="132dp"
+                android:layout_height="15dp"
+                android:fontFamily="@font/verdana"
+                android:text="@string/puntuacion_media_label"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/listaComentarios"
         android:layout_width="match_parent"
@@ -17,143 +128,12 @@
 
     <com.github.mikephil.charting.charts.HorizontalBarChart
         android:id="@+id/horizontalBarChar"
-        android:layout_width="229dp"
-        android:layout_height="93dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="73dp" />
-
-    <TextView
-        android:id="@+id/puntuacion_media"
-        android:layout_width="61dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="41dp"
-        android:layout_marginTop="98dp"
-        android:layout_marginEnd="44dp"
-        android:layout_toEndOf="@+id/horizontalBarChar"
-        android:fontFamily="@font/catamaran_semibold"
-        android:text="9"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/textPuntuacionMedia"
-        android:layout_width="132dp"
-        android:layout_height="15dp"
-        android:layout_below="@+id/puntuacion_media"
-        android:layout_alignBottom="@+id/puntuacion_media"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="6dp"
-        android:layout_marginBottom="-16dp"
-        android:layout_toEndOf="@+id/horizontalBarChar"
-        android:text="@string/puntuacion_media_label"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="10sp" />
-
-    <TextView
-        android:id="@+id/totalValoraciones"
-        android:layout_width="143dp"
-        android:layout_height="24dp"
-        android:layout_alignBottom="@+id/horizontalBarChar"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="62dp"
-        android:layout_toEndOf="@+id/horizontalBarChar"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
-    <TableLayout
-        android:id="@+id/tabla"
         android:layout_width="match_parent"
-        android:layout_height="129dp"
-        android:layout_above="@+id/horizontalBarChar"
+        android:layout_height="83dp"
+        android:layout_below="@+id/valorationToolsLayout"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="-73dp"
-        android:background="@color/white"
-        android:elevation="3dp">
-
-        <TableRow
-            android:layout_width="345dp"
-            android:layout_height="42dp">
-
-            <TextView
-                android:id="@+id/textView19"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/textView18"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Check-in"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView17"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/textView16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Puntuar"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="20dp">
-
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="60dp" />
-
-            <ImageButton
-                android:id="@+id/imageButton4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="checkIn"
-                app:srcCompat="@android:drawable/ic_menu_compass" />
-
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="15dp" />
-
-            <ImageButton
-                android:id="@+id/puntuarButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="valorar"
-                app:srcCompat="@android:drawable/btn_star_big_on" />
-
-        </TableRow>
-
-    </TableLayout>
+        android:layout_marginTop="84dp" />
 
 </RelativeLayout>

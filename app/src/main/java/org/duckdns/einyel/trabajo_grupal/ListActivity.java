@@ -1,13 +1,20 @@
 package org.duckdns.einyel.trabajo_grupal;
 
 import android.app.ActivityOptions;
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -57,18 +64,85 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_activity);
         Bundle extras = getIntent().getExtras();
-        BUSCAR = extras.getString("buscar");
-        LOGIN = extras.getString("socialLogin");
-        NOMBRE_USUARIO = extras.getString("username");
-        URL_PIC = extras.getString("imageUrl");
+        if(extras != null) {
+            BUSCAR = extras.getString("buscar");
+            LOGIN = extras.getString("socialLogin");
+            NOMBRE_USUARIO = extras.getString("username");
+            URL_PIC = extras.getString("imageUrl");
+        }
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        profileButton = (ImageButton) findViewById(R.id.profileButton);
+        //profileButton = (ImageButton) findViewById(R.id.profileButton);
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        SearchView searchView = (SearchView) findViewById(R.id.searchView);
+
+        /*SearchView searchView = (SearchView) findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
+                mIntent.putExtra("imageUrl", URL_PIC);
+                mIntent.putExtra("username", NOMBRE_USUARIO);
+                mIntent.putExtra("socialLogin", LOGIN);
+                mIntent.putExtra("buscar", query);
+                startActivityForResult(mIntent, 100);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+*/
+
+        if(BUSCAR == null) {
+            adapter = new EventoAdapter(App.get().eventsOptions());
+        }else {
+            adapter = new EventoAdapter(App.get().filtrarEventos(BUSCAR));
+        }
+
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+                        MockEvent evento = (MockEvent) adapter.getItem(position);
+                        Intent nextActivity = new Intent(getApplicationContext(), DescripcionActivity.class);
+                        nextActivity.putExtra(EVENTO, evento);
+                        //NOMBRE_USUARIO = extras.getString("username");
+                        nextActivity.putExtra("imageUrl", URL_PIC);
+                        nextActivity.putExtra("socialLogin", LOGIN);
+                        nextActivity.putExtra("username", NOMBRE_USUARIO);
+                        startActivity(nextActivity);
+                    }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                    }
+                })
+        );
+
+        if(URL_PIC != null && !URL_PIC.equals("")) {
+            if (LOGIN.equals("facebook") || LOGIN.equals("twitter") || LOGIN.equals("google")) {
+                Picasso.get().load(URL_PIC).into(profileButton);
+            }
+        }
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.list_menu, menu);
+
+        /*MenuItem searchItem = menu.findItem(R.id.app_bar_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -87,41 +161,22 @@ public class ListActivity extends AppCompatActivity {
             }
         });
 
-        if(BUSCAR == null) {
-            adapter = new EventoAdapter(App.get().eventsOptions());
-        }else {
-            adapter = new EventoAdapter(App.get().filtrarEventos(BUSCAR));
-        }
-        recyclerView.setAdapter(adapter);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(
+                new ComponentName(this, SearchableActivity.class)));
+        searchView.setIconifiedByDefault(false);*/
+        return true;
+    }
 
-        recyclerView.addOnItemTouchListener(
-                new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-                    @Override
-                    public void onClick(View view, int position) {
-                        MockEvent evento = (MockEvent) adapter.getItem(position);
-                        Intent nextActivity = new Intent(getApplicationContext(), DescripcionActivity.class);
-                        nextActivity.putExtra(EVENTO, evento);
-                        NOMBRE_USUARIO = extras.getString("username");
-                        nextActivity.putExtra("username", NOMBRE_USUARIO);
-                        startActivity(nextActivity);
-                    }
-
-                    @Override
-                    public void onLongClick(View view, int position) {
-
-                    }
-                })
-        );
-
-        if(URL_PIC != null && !URL_PIC.equals("")) {
-            if (LOGIN.equals("facebook") || LOGIN.equals("twitter") || LOGIN.equals("google")) {
-                Picasso.get().load(URL_PIC).into(profileButton);
-            }
-        }
-
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_logout:
+                //Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
+                //startActivity(aboutIntent);
+                break;
+            case R.id.item_profile:
+                Bundle extras = getIntent().getExtras();
                 LOGIN = extras.getString("socialLogin");
                 NOMBRE_USUARIO = extras.getString("username");
                 URL_PIC = extras.getString("imageUrl");
@@ -130,8 +185,9 @@ public class ListActivity extends AppCompatActivity {
                 mIntent.putExtra("username", NOMBRE_USUARIO);
                 mIntent.putExtra("socialLogin", LOGIN);
                 startActivityForResult(mIntent, 100);
-            }
-        });
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

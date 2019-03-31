@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="125dp"
     app:cardCornerRadius="4dp"
     app:cardElevation="4dp"
     app:cardUseCompatPadding="true">
@@ -14,16 +14,18 @@
 
         <TextView
             android:id="@+id/comentario"
-            android:layout_width="348dp"
-            android:layout_height="48dp"
+            android:layout_width="367dp"
+            android:layout_height="64dp"
+            android:layout_below="@+id/fecha_comentario"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="-1dp"
             android:ellipsize="end"
-            android:fontFamily="@font/delius"
+            android:fontFamily="@font/verdana"
             android:maxLines="4"
             android:text="fsdfas"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -38,6 +40,7 @@
             android:layout_marginTop="6dp"
             android:layout_marginBottom="-1dp"
             android:layout_toEndOf="@+id/usuario"
+            android:fontFamily="@font/verdana"
             android:text="TextView"
             android:textColor="@color/black"
             android:textSize="10sp" />
@@ -50,6 +53,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginStart="15dp"
             android:layout_marginTop="4dp"
+            android:fontFamily="@font/verdana"
             android:text="TextView"
             android:textSize="10sp" />
 
@@ -61,6 +65,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="15dp"
             android:layout_marginTop="5dp"
+            android:fontFamily="@font/verdana"
             android:text="TextView"
             android:textSize="12sp"
             android:textStyle="bold" />

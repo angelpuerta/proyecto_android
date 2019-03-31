@@ -7,11 +7,16 @@
     <color name="mark_yellow">#f9e400</color>
     <color name="mark_green">#43a047</color>
     <color name="black">#000000</color>
+    <color name="eighty_transparent_black">#CC000000</color>
     <color name="white">#ffffff</color>
+    <color name="semi_transparent_white">#80FFFFFF</color>
     <color name="voto1">#ff3d00</color>
     <color name="voto2">#ffc400</color>
     <color name="voto3">#ffea00</color>
     <color name="voto4">#aeea00</color>
     <color name="voto5">#00c853</color>
-    <color name="grey">#0d47a1</color>
+    <color name="grey">#696969</color>
+    <color name="cinza_edp">#B5B6B3</color>
+    <color name="vermelho_oscuro_edp">#96172E</color>
+    <color name="personal_grey">#E2E2E2</color>
 </resources>

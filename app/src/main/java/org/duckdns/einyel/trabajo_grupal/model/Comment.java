@@ -49,7 +49,7 @@ public class Comment {
     @SerializedName("rate")
     private double rate;
 
-    @SerializedName("user")
+    @SerializedName("user_icon_left")
     private String user;
 
     @Ignore

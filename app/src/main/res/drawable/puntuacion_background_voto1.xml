@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <solid android:color="@color/voto1" />
+    <solid android:color="@android:color/transparent" />
+    <stroke
+        android:width="2dp"
+        android:color="@color/voto1" />
     <padding
         android:bottom="2.5dp"
         android:left="3dp"
         android:right="3dp"
-        android:top="2.5dp" />
+        android:top="5.5dp" />
     <corners android:radius="6dp" />
 </shape>

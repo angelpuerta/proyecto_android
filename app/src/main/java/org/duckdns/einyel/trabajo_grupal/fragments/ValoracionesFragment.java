@@ -66,7 +66,7 @@ public class ValoracionesFragment extends Fragment implements ComentarioAdapter.
     private Long evento_id;
     private String username;
 
-    private AppCompatImageButton puntuar;
+    private Button puntuar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,9 +84,12 @@ public class ValoracionesFragment extends Fragment implements ComentarioAdapter.
         recyclerView.setLayoutManager(layoutManager);
 
 
-        puntuar = v.findViewById(R.id.puntuarButton);
+        puntuar = v.findViewById(R.id.btnPuntuar);
         puntuar.setEnabled(false);
-        puntuar.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+        puntuar.setBackground(getResources().getDrawable(R.drawable.star_icon_grey));
+        TextView textPuntuar = (TextView) v.findViewById(R.id.textPuntuar);
+        textPuntuar.setTextColor(getResources().getColor(R.color.grey));
+        //puntuar.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
 
         this.evento_id = descripcionActivity.getEvento().getId();
         adapter = new ComentarioAdapter(App.get().commentsOption(evento_id), this);
@@ -110,7 +113,7 @@ public class ValoracionesFragment extends Fragment implements ComentarioAdapter.
         String code = descripcionActivity.getSharedPreferences("QRs", Context.MODE_PRIVATE).getString(search, "");
 
         if (!code.equals("")) {
-            puntuar.findViewById(R.id.puntuarButton).setEnabled(true);
+            puntuar.findViewById(R.id.btnPuntuar).setEnabled(true);
             puntuar.getBackground().setColorFilter(null);
         }
     }

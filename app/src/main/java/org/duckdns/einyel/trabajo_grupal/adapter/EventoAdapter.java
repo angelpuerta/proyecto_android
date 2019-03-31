@@ -1,6 +1,9 @@
 package org.duckdns.einyel.trabajo_grupal.adapter;
 
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +17,9 @@ import com.squareup.picasso.Picasso;
 
 import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
 import org.duckdns.einyel.trabajo_grupal.R;
+import org.duckdns.einyel.trabajo_grupal.service.App;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventoAdapter extends FirebaseRecyclerAdapter<MockEvent, EventoAdapter.EventoViewHolder> {
@@ -45,7 +50,7 @@ public class EventoAdapter extends FirebaseRecyclerAdapter<MockEvent, EventoAdap
     protected void onBindViewHolder(@NonNull EventoViewHolder holder, int position, @NonNull MockEvent evento) {
         Picasso.get().setLoggingEnabled(true);
         Picasso.get().load(evento.getImgURL()).into(holder.imagen);
-        holder.nombre.setText(evento.getTittle());
+        holder.nombre.setText(evento.getTittle().toUpperCase());
         changeMarkBackground(holder, evento);
         holder.puntuacion.setText(String.format("%.1f", evento.getMark()) + "");
         holder.descripcion.setText(evento.getDescription());
@@ -76,6 +81,7 @@ public class EventoAdapter extends FirebaseRecyclerAdapter<MockEvent, EventoAdap
 
         return new EventoViewHolder(v);
     }
+
 
 
 }
