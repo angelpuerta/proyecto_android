@@ -23,8 +23,8 @@
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="297dp"
-        android:layout_height="39dp"
+        android:layout_width="358dp"
+        android:layout_height="197dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -35,7 +35,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.812" />
 
     <ImageView
         android:id="@+id/socialImage"

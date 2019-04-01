@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +25,7 @@ public class SignUp extends AppCompatActivity {
     protected EditText pw;
     protected EditText userF;
     protected EditText pwRepeat;
+    protected Spinner spinner;
 
     FirebaseDatabase database;
     DatabaseReference users;
@@ -37,6 +40,15 @@ public class SignUp extends AppCompatActivity {
         pw = findViewById(R.id.editPassword);
         userF = findViewById(R.id.editUser);
         pwRepeat = findViewById(R.id.editPasswordRepeat);
+        spinner = findViewById(R.id.spinnerSexo);
+
+        List<String> list = new ArrayList<String>();
+        list.add("Hombre");
+        list.add("Mujer");
+        list.add("Otro");
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
 
         database = FirebaseDatabase.getInstance();
         users = database.getReference("usuarios");
@@ -47,10 +59,11 @@ public class SignUp extends AppCompatActivity {
         String Spassword = pw.getText().toString();
         String Suser = userF.getText().toString();
         String SpasswordRepeat = pwRepeat.getText().toString();
-        signUp(Suser, Spassword, SpasswordRepeat);
+        String SSexo = spinner.getSelectedItem().toString();
+        signUp(Suser, Spassword, SpasswordRepeat, SSexo);
     }
 
-    public void signUp(String username, String password, String passwordRepeat){
+    public void signUp(String username, String password, String passwordRepeat, String sexo){
         users.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
@@ -64,7 +77,7 @@ public class SignUp extends AppCompatActivity {
                     if(!username.isEmpty()&&!password.isEmpty()&&!passwordRepeat.isEmpty()){
                         if (password.equals(passwordRepeat)) {
                             Long newId = id+1;
-                            final User user = new User(newId, username, password);
+                            final User user = new User(newId, username, password, sexo);
                             List<String> usernames = new ArrayList<>();
                             for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                                 if(userSnapshot.child("nick").getValue()!=null)
@@ -75,6 +88,7 @@ public class SignUp extends AppCompatActivity {
                                 Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
                                 mIntent.putExtra("socialLogin", "android");
                                 mIntent.putExtra("username", username);
+                                mIntent.putExtra("sexo", sexo);
 
                                 startActivity(mIntent);
 

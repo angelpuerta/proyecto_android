@@ -312,7 +312,8 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                         String id = userSnapshot.child("id").getValue().toString();
                         usuario = new User(Long.parseLong(id),
                                 userSnapshot.child("nick").getValue().toString(),
-                                userSnapshot.child("password").getValue().toString());
+                                userSnapshot.child("password").getValue().toString(),
+                                userSnapshot.child("sexo").getValue().toString());
                         break;
                     }
                 }
@@ -323,6 +324,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                             Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
                             mIntent.putExtra("socialLogin", "android");
                             mIntent.putExtra("username", user.getText().toString());
+                            mIntent.putExtra("sexo", usuario.getSexo());
                             startActivity(mIntent);
                             user.setText("");
                             pw.setText("");

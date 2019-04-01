@@ -13,10 +13,13 @@ public class User {
 
     private String password;
 
-    public User(Long id, String nick, String password) {
+    private String sexo;
+
+    public User(Long id, String nick, String password, String sexo) {
         this.id = id;
         this.nick = nick;
         this.password = password;
+        this.sexo = sexo;
     }
 
     public Long getId() {
@@ -40,4 +43,12 @@ public class User {
     }
 
     public void setPassword(String password) { this.password = password; }
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
+    }
 }

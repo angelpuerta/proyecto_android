@@ -7,7 +7,7 @@
     android:background="@color/colorPrimaryDark">
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/PasswordText"
+        android:id="@+id/DateText"
         android:layout_width="302dp"
         android:layout_height="55dp"
         android:layout_marginStart="8dp"
@@ -156,7 +156,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PasswordText"
+        app:layout_constraintTop_toBottomOf="@+id/DateText"
         app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

@@ -22,6 +22,7 @@ public class Perfil extends AppCompatActivity {
     public static String NOMBRE_USUARIO = "";
     public static String LOGIN = "";
     public static String URL_PIC = "";
+    public static String SEXO = "";
 
     private ImageView imgProfile;
     private TextView name;
@@ -41,6 +42,7 @@ public class Perfil extends AppCompatActivity {
             LOGIN = extras.getString("socialLogin");
             NOMBRE_USUARIO = extras.getString("username");
             URL_PIC = extras.getString("imageUrl");
+            SEXO = extras.getString("sexo");
         }
         if(URL_PIC!=null) {
             if (LOGIN.equals("facebook") || LOGIN.equals("twitter") || LOGIN.equals("google")) {
@@ -65,7 +67,7 @@ public class Perfil extends AppCompatActivity {
             new DownloadImageTask((ImageView) findViewById(R.id.socialImage))
                     .execute("https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/android-512.png");
         }
-        name.setText(NOMBRE_USUARIO);
+        name.setText("Nombre: " + NOMBRE_USUARIO + "\nSexo: " + SEXO);
 
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override

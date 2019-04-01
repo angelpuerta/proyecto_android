@@ -49,6 +49,7 @@ public class ListActivity extends AppCompatActivity {
     public static String NOMBRE_USUARIO = "";
     public static String LOGIN = "";
     public static String URL_PIC = "";
+    public static String SEXO = "";
     public static String BUSCAR = "";
 
 
@@ -60,6 +61,7 @@ public class ListActivity extends AppCompatActivity {
         BUSCAR = extras.getString("buscar");
         LOGIN = extras.getString("socialLogin");
         NOMBRE_USUARIO = extras.getString("username");
+        SEXO = extras.getString("sexo");
         URL_PIC = extras.getString("imageUrl");
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
@@ -76,6 +78,7 @@ public class ListActivity extends AppCompatActivity {
                 mIntent.putExtra("imageUrl", URL_PIC);
                 mIntent.putExtra("username", NOMBRE_USUARIO);
                 mIntent.putExtra("socialLogin", LOGIN);
+                mIntent.putExtra("sexo", SEXO);
                 mIntent.putExtra("buscar", query);
                 startActivityForResult(mIntent, 100);
                 return false;
@@ -125,10 +128,12 @@ public class ListActivity extends AppCompatActivity {
                 LOGIN = extras.getString("socialLogin");
                 NOMBRE_USUARIO = extras.getString("username");
                 URL_PIC = extras.getString("imageUrl");
+                SEXO = extras.getString("sexo");
                 Intent mIntent = new Intent(getApplicationContext(), Perfil.class);
                 mIntent.putExtra("imageUrl", URL_PIC);
                 mIntent.putExtra("username", NOMBRE_USUARIO);
                 mIntent.putExtra("socialLogin", LOGIN);
+                mIntent.putExtra("sexo", SEXO);
                 startActivityForResult(mIntent, 100);
             }
         });

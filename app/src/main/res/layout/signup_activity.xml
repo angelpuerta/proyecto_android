@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark">
 
+    <Spinner
+        android:id="@+id/spinnerSexo"
+        android:layout_width="322dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.651" />
+
     <TextView
         android:id="@+id/textView4"
         android:layout_width="126dp"
@@ -53,7 +68,7 @@
 
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/PasswordText"
+        android:id="@+id/DateText"
         android:layout_width="318dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -89,7 +104,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PasswordText"
+        app:layout_constraintTop_toBottomOf="@+id/DateText"
         app:layout_constraintVertical_bias="0.357">
 
         <android.support.design.widget.TextInputEditText
@@ -127,12 +142,13 @@
         android:layout_width="97dp"
         android:layout_height="37dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="140dp"
         android:layout_marginEnd="8dp"
         android:background="@color/white"
         android:onClick="checkUser"
         android:text="@string/registrar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PasswordTextRepeat" />
 
