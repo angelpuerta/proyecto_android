@@ -327,6 +327,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                             Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
                             mIntent.putExtra("socialLogin", "android");
                             mIntent.putExtra("username", user.getText().toString());
+                            mIntent.putExtra("filtro", "todo");
                             startActivity(mIntent);
                             user.setText("");
                             pw.setText("");

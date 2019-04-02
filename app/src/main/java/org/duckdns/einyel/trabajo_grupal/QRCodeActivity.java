@@ -1,32 +1,19 @@
 package org.duckdns.einyel.trabajo_grupal;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.UiThread;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.ActionMode;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.webkit.URLUtil;
-import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -35,14 +22,11 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import org.duckdns.einyel.trabajo_grupal.fragments.CodeNoOkFragment;
 import org.duckdns.einyel.trabajo_grupal.fragments.CodeOkFragment;
-import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
+import org.duckdns.einyel.trabajo_grupal.model.Event;
 import org.duckdns.einyel.trabajo_grupal.service.App;
-import org.duckdns.einyel.trabajo_grupal.service.FirebaseApi;
 
 import java.io.IOException;
-import java.net.URL;
 
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,7 +38,7 @@ public class QRCodeActivity extends AppCompatActivity {
     private final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
     private String token = "";
     private String tokenanterior = "";
-    private MockEvent evento;
+    private Event evento;
     private ProgressBar progressBar;
     public static final String CODE = "CODE";
 

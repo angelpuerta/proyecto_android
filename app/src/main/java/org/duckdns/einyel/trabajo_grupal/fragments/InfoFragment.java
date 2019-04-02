@@ -1,6 +1,5 @@
 package org.duckdns.einyel.trabajo_grupal.fragments;
 
-import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -21,9 +19,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.duckdns.einyel.trabajo_grupal.DescripcionActivity;
-import org.duckdns.einyel.trabajo_grupal.ListActivity;
 import org.duckdns.einyel.trabajo_grupal.R;
-import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
+import org.duckdns.einyel.trabajo_grupal.model.Event;
 
 import java.io.IOException;
 import java.util.List;
@@ -53,7 +50,7 @@ public class InfoFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private GoogleMap mapa;
-    private MockEvent evento;
+    private Event evento;
     private DescripcionActivity descripcionActivity;
     private ViewGroup container;
 
