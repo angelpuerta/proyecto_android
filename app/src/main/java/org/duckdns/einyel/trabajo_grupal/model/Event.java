@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity(tableName = "events")
-public class MockEvent implements Parcelable {
+public class Event implements Parcelable {
 
 
     @PrimaryKey(autoGenerate = true)
@@ -24,9 +24,9 @@ public class MockEvent implements Parcelable {
     public String tittle;
     public String location;
 
-    @ColumnInfo(name = "imgURL")
-    @SerializedName("imgURL")
     public String imgURL;
+    public int numberOfComments;
+    public String tags;
 
 
     @Ignore
@@ -34,14 +34,14 @@ public class MockEvent implements Parcelable {
 
 
 
-    public MockEvent() {
+    public Event() {
     }
 
-    public MockEvent(Long id) {
+    public Event(Long id) {
         this.id = id;
     }
 
-    public MockEvent(Long e_id, double mark, String description, String tittle, String location, String imgURL) {
+    public Event(Long e_id, double mark, String description, String tittle, String location, String imgURL) {
         this.id = e_id;
         this.mark = mark;
         this.description = description;
@@ -50,24 +50,33 @@ public class MockEvent implements Parcelable {
         this.imgURL = imgURL;
     }
 
-    protected MockEvent(Parcel in) {
+    public Event(Long id, double mark, String description, String tittle, String location, String imgURL, int numberOfComments, String tags, String code) {
+        this(id,mark,description,tittle, location, imgURL);
+        this.numberOfComments = numberOfComments;
+        this.tags = tags;
+
+    }
+
+    protected Event(Parcel in) {
         id = in.readLong();
         tittle = in.readString();
         description = in.readString();
         imgURL = in.readString();
         mark = in.readDouble();
         location = in.readString();
+        numberOfComments = in.readInt();
+        tags = in.readString();
     }
 
-    public static final Creator<MockEvent> CREATOR = new Creator<MockEvent>() {
+    public static final Creator<Event> CREATOR = new Creator<Event>() {
         @Override
-        public MockEvent createFromParcel(Parcel in) {
-            return new MockEvent(in);
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
         }
 
         @Override
-        public MockEvent[] newArray(int size) {
-            return new MockEvent[size];
+        public Event[] newArray(int size) {
+            return new Event[size];
         }
     };
 
@@ -136,7 +145,7 @@ public class MockEvent implements Parcelable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MockEvent mockEvent = (MockEvent) o;
+        Event mockEvent = (Event) o;
         return Objects.equals(id, mockEvent.id);
     }
 
@@ -158,6 +167,8 @@ public class MockEvent implements Parcelable {
         dest.writeString(this.imgURL);
         dest.writeDouble(this.mark);
         dest.writeString(this.location);
+        dest.writeInt(this.numberOfComments);
+        dest.writeString(this.tags);
     }
 
     public String getCode() {
@@ -166,5 +177,21 @@ public class MockEvent implements Parcelable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public int getNumberOfComments() {
+        return numberOfComments;
+    }
+
+    public void setNumberOfComments(int numberOfComments) {
+        this.numberOfComments = numberOfComments;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 }
