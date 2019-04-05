@@ -15,6 +15,10 @@ public class User {
 
     private String sexo;
 
+    private String fbId = "";
+
+    private String twUsername = "";
+
     public User(Long id, String nick, String password, String sexo) {
         this.id = id;
         this.nick = nick;
@@ -32,6 +36,22 @@ public class User {
 
     public String getNick() {
         return nick;
+    }
+
+    public String getFbId() {
+        return fbId;
+    }
+
+    public String getTwUsername() {
+        return twUsername;
+    }
+
+    public void setFbId(String fbId) {
+        this.fbId = fbId;
+    }
+
+    public void setTwUsername(String twUsername) {
+        this.twUsername = twUsername;
     }
 
     public void setNick(String nick) {

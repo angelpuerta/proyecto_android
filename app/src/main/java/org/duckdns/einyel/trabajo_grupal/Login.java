@@ -86,8 +86,11 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     protected EditText pw;
     protected EditText user;
 
+    Long id = 0L;
+
     FirebaseDatabase database;
     DatabaseReference users;
+    DatabaseReference usersSocial;
 
     //Google
     GoogleApiClient googleApi;
@@ -149,9 +152,9 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
         database = FirebaseDatabase.getInstance();
         users = database.getReference("usuarios");
+        usersSocial = database.getReference("usuariossociales");
 
         //establecimiento de los procesos de login de las redes
-        googleLoginProccess();
         facebookLoginProccess();
         twitterLoginProccess();
 
@@ -179,13 +182,41 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                     public void success(Result<com.twitter.sdk.android.core.models.User> result) {
                         user.setText("");
                         pw.setText("");
-                        com.twitter.sdk.android.core.models.User userInfo = result.data;
-                        String userUrlImage = userInfo.profileImageUrl.replace("_normal", "");
-                        Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
-                        mIntent.putExtra("username", userName);
-                        mIntent.putExtra("imageUrl", userUrlImage);
-                        mIntent.putExtra("socialLogin", "twitter");
-                        startActivity(mIntent);
+                        List<String> usernames = new ArrayList<>();
+                        usersSocial.addListenerForSingleValueEvent(new ValueEventListener() {
+                             @Override
+                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                 for(DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                                     if(userSnapshot.child("id").getValue()!=null)
+                                         id = Long.valueOf(userSnapshot.child("id").getValue().toString());
+                                 }
+                                 id = id+1;
+                                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                     if(userSnapshot.child("twUsername").getValue()!=null)
+                                         usernames.add(userSnapshot.child("twUsername").getValue().toString());
+                                 }
+
+                                 if(!usernames.contains(userName)){
+                                     User twuser = new User(id, userName, "", "Sin definir");
+                                     twuser.setTwUsername(userName);
+                                     usersSocial.child(id.toString()).setValue(twuser);
+                                 }
+                                 com.twitter.sdk.android.core.models.User userInfo = result.data;
+                                 String userUrlImage = userInfo.profileImageUrl.replace("_normal", "");
+                                 Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
+                                 mIntent.putExtra("username", userName);
+                                 mIntent.putExtra("imageUrl", userUrlImage);
+                                 mIntent.putExtra("sexo", "Sin definir");
+                                 mIntent.putExtra("socialLogin", "twitter");
+                                 startActivity(mIntent);
+                             }
+                             @Override
+                             public void onCancelled(@NonNull DatabaseError databaseError) {
+                                 //not implemented
+                             }
+                        });
+
+
                     }
 
                     @Override
@@ -207,29 +238,55 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         callbackManager = CallbackManager.Factory.create();
 
         LoginButton loginButton = (LoginButton) findViewById(R.id.fbLogin);
+        loginButton.clearPermissions();
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "email", "basic_info"));
 
-        loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                AccessToken accessToken = loginResult.getAccessToken();
-
-                GraphRequest graphRequest = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+                GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        try {
-                            user.setText("");
-                            pw.setText("");
+                        user.setText("");
+                        pw.setText("");
 
-                            Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
-                            mIntent.putExtra("imageUrl", "https://graph.facebook.com/" + object.getString("id") + "/picture?type=large");
-                            mIntent.putExtra("username", object.getString("name"));
-                            mIntent.putExtra("socialLogin", "facebook");
-                            startActivity(mIntent);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        List<String> ids = new ArrayList<>();
+                        usersSocial.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                try {
+                                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                        if (userSnapshot.child("id").getValue() != null)
+                                            id = Long.valueOf(userSnapshot.child("id").getValue().toString());
+                                    }
+                                    id = id + 1;
+                                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                        if (userSnapshot.child("fbId").getValue() != null)
+                                            ids.add(userSnapshot.child("fbId").getValue().toString());
+                                    }
+
+                                    if (!ids.contains(object.getString("id"))) {
+                                        User fbuser = new User(id, object.getString("name"), "", "Sin definir");
+                                        fbuser.setFbId(object.getString("id"));
+                                        usersSocial.child(id.toString()).setValue(fbuser);
+                                    }
+                                    Log.d("Exception", object.toString());
+                                    Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
+                                    mIntent.putExtra("imageUrl", "https://graph.facebook.com/" + object.getString("id") + "/picture?type=large");
+                                    mIntent.putExtra("username", object.getString("name"));
+                                    mIntent.putExtra("socialLogin", "facebook");
+                                    startActivity(mIntent);
+                                }
+                                catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                //not implemented
+                            }
+                        });
 
                     }
                 });
@@ -253,17 +310,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         });
 
 
-    }
-
-    protected void googleLoginProccess() {
-        signInButtonGoogle = findViewById(R.id.googleLogin);
-        signInButtonGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(intent, GOOGLE_SIGN_IN_CODE);
-            }
-        });
     }
 
     @Override
