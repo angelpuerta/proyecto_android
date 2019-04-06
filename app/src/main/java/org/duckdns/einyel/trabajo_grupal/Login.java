@@ -208,6 +208,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                                  mIntent.putExtra("imageUrl", userUrlImage);
                                  mIntent.putExtra("sexo", "Sin definir");
                                  mIntent.putExtra("socialLogin", "twitter");
+                                 mIntent.putExtra("twitterId", userName);
                                  startActivity(mIntent);
                              }
                              @Override
@@ -276,6 +277,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                                     mIntent.putExtra("imageUrl", "https://graph.facebook.com/" + object.getString("id") + "/picture?type=large");
                                     mIntent.putExtra("username", object.getString("name"));
                                     mIntent.putExtra("socialLogin", "facebook");
+                                    mIntent.putExtra("facebookId", object.getString("id"));
                                     startActivity(mIntent);
                                 }
                                 catch (JSONException e) {

@@ -46,6 +46,7 @@
             android:label="ListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".DescripcionActivity" />
+        <activity android:name=".EditPerfil" />
         <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

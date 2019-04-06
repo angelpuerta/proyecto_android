@@ -23,10 +23,13 @@ public class Perfil extends AppCompatActivity {
     public static String LOGIN = "";
     public static String URL_PIC = "";
     public static String SEXO = "";
+    public static String TWITTERID = "";
+    public static String FACEBOOKID = "";
 
     private ImageView imgProfile;
     private TextView name;
     private Button logOut;
+    private Button edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,7 @@ public class Perfil extends AppCompatActivity {
         imgProfile = (ImageView) findViewById(R.id.profileImage);
         name = (TextView) findViewById(R.id.name);
         logOut = (Button) findViewById(R.id.LogOut);
+        edit = (Button) findViewById(R.id.buttoneditprofile);
 
         Bundle extras = getIntent().getExtras();
         if(extras !=null) {
@@ -43,6 +47,12 @@ public class Perfil extends AppCompatActivity {
             NOMBRE_USUARIO = extras.getString("username");
             URL_PIC = extras.getString("imageUrl");
             SEXO = extras.getString("sexo");
+            if(LOGIN.equals("twitter")){
+                TWITTERID = extras.getString("twitterId");
+            }
+            else if (LOGIN.equals("facebook")){
+                FACEBOOKID = extras.getString("facebookId");
+            }
         }
         if(URL_PIC!=null) {
             if (LOGIN.equals("facebook") || LOGIN.equals("twitter") || LOGIN.equals("google")) {
@@ -68,6 +78,22 @@ public class Perfil extends AppCompatActivity {
                     .execute("https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/android-512.png");
         }
         name.setText("Nombre: " + NOMBRE_USUARIO + "\nSexo: " + SEXO);
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mintent = new Intent(getApplicationContext(), EditPerfil.class);
+                mintent.putExtra("socialLogin", LOGIN);
+                mintent.putExtra("username", NOMBRE_USUARIO);
+                if(LOGIN.equals("twitter")){
+                    mintent.putExtra("twitterId", TWITTERID);
+                }
+                else if (LOGIN.equals("facebook")){
+                    mintent.putExtra("facebookId", FACEBOOKID);
+                }
+                startActivity(mintent);
+            }
+        });
 
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override

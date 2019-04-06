@@ -51,6 +51,8 @@ public class ListActivity extends AppCompatActivity {
     public static String URL_PIC = "";
     public static String SEXO = "";
     public static String BUSCAR = "";
+    public static String TWITTERID = "";
+    public static String FACEBOOKID = "";
 
 
     @Override
@@ -60,6 +62,12 @@ public class ListActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         BUSCAR = extras.getString("buscar");
         LOGIN = extras.getString("socialLogin");
+        if(LOGIN.equals("twitter")){
+            TWITTERID = extras.getString("twitterId");
+        }
+        else if (LOGIN.equals("facebook")){
+            FACEBOOKID = extras.getString("facebookId");
+        }
         NOMBRE_USUARIO = extras.getString("username");
         SEXO = extras.getString("sexo");
         URL_PIC = extras.getString("imageUrl");
@@ -79,6 +87,12 @@ public class ListActivity extends AppCompatActivity {
                 mIntent.putExtra("username", NOMBRE_USUARIO);
                 mIntent.putExtra("socialLogin", LOGIN);
                 mIntent.putExtra("sexo", SEXO);
+                if(LOGIN.equals("twitter")){
+                    mIntent.putExtra("twitterId", TWITTERID);
+                }
+                else if (LOGIN.equals("facebook")){
+                    mIntent.putExtra("facebookId", FACEBOOKID);
+                }
                 mIntent.putExtra("buscar", query);
                 startActivityForResult(mIntent, 100);
                 return false;
@@ -134,6 +148,12 @@ public class ListActivity extends AppCompatActivity {
                 mIntent.putExtra("username", NOMBRE_USUARIO);
                 mIntent.putExtra("socialLogin", LOGIN);
                 mIntent.putExtra("sexo", SEXO);
+                if(LOGIN.equals("twitter")){
+                    mIntent.putExtra("twitterId", TWITTERID);
+                }
+                else if (LOGIN.equals("facebook")){
+                    mIntent.putExtra("facebookId", FACEBOOKID);
+                }
                 startActivityForResult(mIntent, 100);
             }
         });
