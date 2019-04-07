@@ -317,6 +317,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                         usuario = new User(Long.parseLong(id),
                                 userSnapshot.child("nick").getValue().toString(),
                                 userSnapshot.child("password").getValue().toString());
+                        usuario.addAssited(userSnapshot.child("assisted"));
                         break;
                     }
                 }

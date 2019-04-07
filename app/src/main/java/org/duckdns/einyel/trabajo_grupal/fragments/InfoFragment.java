@@ -3,6 +3,7 @@ package org.duckdns.einyel.trabajo_grupal.fragments;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -61,10 +62,16 @@ public class InfoFragment extends Fragment implements OnMapReadyCallback {
 
         TextView descripcion = v.findViewById(R.id.descripcionInfo);
         descripcion.setText(evento.getDescription());
-        SupportMapFragment mapFragment = (SupportMapFragment) descripcionActivity.getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
 
+        if(!Check.location(evento.getLocation())){
+            ConstraintLayout mapLayout = v.findViewById(R.id.layoutLocalizacion);
+            mapLayout.setVisibility(View.GONE);
+        }
+        else {
+            SupportMapFragment mapFragment = (SupportMapFragment) descripcionActivity.getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+        }
 
     }
 

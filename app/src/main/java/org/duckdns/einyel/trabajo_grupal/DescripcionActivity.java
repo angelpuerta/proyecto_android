@@ -34,6 +34,7 @@ import org.duckdns.einyel.trabajo_grupal.service.Check;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DescripcionActivity extends AppCompatActivity {
@@ -64,9 +65,7 @@ public class DescripcionActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         evento = b.getParcelable(ListActivity.EVENTO);
         username = b.getString("username");
-        evento.getDate();
-
-        if(!Check.location(evento.getLocation()))
+        Date d = evento.getDate();
 
 
         iniciarTabLayout();

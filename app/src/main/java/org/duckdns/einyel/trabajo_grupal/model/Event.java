@@ -33,7 +33,7 @@ public class Event implements Parcelable {
     public String contact;
     public String date;
 
-    private static SimpleDateFormat dateTimeFormater = new SimpleDateFormat("dd/MM/YYYY HH:mm");
+    private static SimpleDateFormat dateTimeFormater = new SimpleDateFormat("dd/MM/yy HH:mm");
 
 
     @Ignore
@@ -43,32 +43,6 @@ public class Event implements Parcelable {
     public Event() {
     }
 
-    public Event(Long id) {
-        this.id = id;
-    }
-
-    public Event(Long e_id, double mark, String description, String tittle, String location, String imgURL, String tags) {
-        this.id = e_id;
-        this.mark = mark;
-        this.description = description;
-        this.tittle = tittle;
-        this.location = location;
-        this.imgURL = imgURL;
-        this.tags = tags;
-    }
-
-    public Event(Long id, double mark, String description, String tittle, String location, String imgURL, int numberOfComments, String tags, String contact, String date) {
-        this.id = id;
-        this.mark = mark;
-        this.description = description;
-        this.tittle = tittle;
-        this.location = location;
-        this.imgURL = imgURL;
-        this.numberOfComments = numberOfComments;
-        this.tags = tags;
-        this.contact = contact;
-        this.date = date;
-    }
 
     protected Event(Parcel in) {
         id = in.readLong();
@@ -77,10 +51,24 @@ public class Event implements Parcelable {
         imgURL = in.readString();
         mark = in.readDouble();
         location = in.readString();
-        numberOfComments = in.readInt();
         tags = in.readString();
-        contact = in.readString();
+        numberOfComments = in.readInt();
         date = in.readString();
+        contact = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.tittle);
+        dest.writeString(this.description);
+        dest.writeString(this.imgURL);
+        dest.writeDouble(this.mark);
+        dest.writeString(this.location);
+        dest.writeString(this.tags);
+        dest.writeInt(this.numberOfComments);
+        dest.writeString(this.date);
+        dest.writeString(this.contact);
     }
 
     public static final Creator<Event> CREATOR = new Creator<Event>() {
@@ -174,19 +162,6 @@ public class Event implements Parcelable {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.id);
-        dest.writeString(this.tittle);
-        dest.writeString(this.description);
-        dest.writeString(this.imgURL);
-        dest.writeDouble(this.mark);
-        dest.writeString(this.location);
-        dest.writeString(this.tags);
-        dest.writeInt(this.numberOfComments);
-        dest.writeString(this.date);
-
-    }
 
     public String getCode() {
         return code;

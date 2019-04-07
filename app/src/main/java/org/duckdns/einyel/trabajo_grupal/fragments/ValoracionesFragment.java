@@ -40,6 +40,7 @@ import org.duckdns.einyel.trabajo_grupal.adapter.ComentarioAdapter;
 import org.duckdns.einyel.trabajo_grupal.model.Comment;
 import org.duckdns.einyel.trabajo_grupal.model.Event;
 import org.duckdns.einyel.trabajo_grupal.service.App;
+import org.duckdns.einyel.trabajo_grupal.service.Check;
 
 
 import java.text.DecimalFormat;
@@ -112,7 +113,6 @@ public class ValoracionesFragment extends Fragment implements ComentarioAdapter.
         super.onResume();
         String search = "QR/" + descripcionActivity.getUsername() + "/" + event.getId();
         String code = descripcionActivity.getSharedPreferences("QRs", Context.MODE_PRIVATE).getString(search, "");
-
         if (!code.equals("")) {
             puntuar.findViewById(R.id.btnPuntuar).setEnabled(true);
             puntuar.getBackground().setColorFilter(null);
