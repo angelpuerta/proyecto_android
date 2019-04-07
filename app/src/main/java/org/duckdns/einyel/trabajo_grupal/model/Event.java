@@ -10,7 +10,10 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity(tableName = "events")
@@ -27,11 +30,14 @@ public class Event implements Parcelable {
     public String imgURL;
     public int numberOfComments;
     public String tags;
+    public String contact;
+    public String date;
+
+    private static SimpleDateFormat dateTimeFormater = new SimpleDateFormat("dd/MM/YYYY HH:mm");
 
 
     @Ignore
     private String code;
-
 
 
     public Event() {
@@ -41,20 +47,27 @@ public class Event implements Parcelable {
         this.id = id;
     }
 
-    public Event(Long e_id, double mark, String description, String tittle, String location, String imgURL) {
+    public Event(Long e_id, double mark, String description, String tittle, String location, String imgURL, String tags) {
         this.id = e_id;
         this.mark = mark;
         this.description = description;
         this.tittle = tittle;
         this.location = location;
         this.imgURL = imgURL;
+        this.tags = tags;
     }
 
-    public Event(Long id, double mark, String description, String tittle, String location, String imgURL, int numberOfComments, String tags, String code) {
-        this(id,mark,description,tittle, location, imgURL);
+    public Event(Long id, double mark, String description, String tittle, String location, String imgURL, int numberOfComments, String tags, String contact, String date) {
+        this.id = id;
+        this.mark = mark;
+        this.description = description;
+        this.tittle = tittle;
+        this.location = location;
+        this.imgURL = imgURL;
         this.numberOfComments = numberOfComments;
         this.tags = tags;
-
+        this.contact = contact;
+        this.date = date;
     }
 
     protected Event(Parcel in) {
@@ -66,6 +79,8 @@ public class Event implements Parcelable {
         location = in.readString();
         numberOfComments = in.readInt();
         tags = in.readString();
+        contact = in.readString();
+        date = in.readString();
     }
 
     public static final Creator<Event> CREATOR = new Creator<Event>() {
@@ -131,7 +146,7 @@ public class Event implements Parcelable {
 
     @Override
     public String toString() {
-        return "MockEvent{" +
+        return "Event{" +
                 "id=" + id +
                 ", mark=" + mark +
                 ", description='" + description + '\'' +
@@ -145,8 +160,8 @@ public class Event implements Parcelable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Event mockEvent = (Event) o;
-        return Objects.equals(id, mockEvent.id);
+        Event event = (Event) o;
+        return Objects.equals(id, event.id);
     }
 
     @Override
@@ -167,8 +182,10 @@ public class Event implements Parcelable {
         dest.writeString(this.imgURL);
         dest.writeDouble(this.mark);
         dest.writeString(this.location);
-        dest.writeInt(this.numberOfComments);
         dest.writeString(this.tags);
+        dest.writeInt(this.numberOfComments);
+        dest.writeString(this.date);
+
     }
 
     public String getCode() {
@@ -193,5 +210,22 @@ public class Event implements Parcelable {
 
     public void setTags(String tags) {
         this.tags = tags;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public Date getDate(){
+        try {
+            return formatDate(this.date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static Date formatDate(String date) throws ParseException {
+        return date!= null? dateTimeFormater.parse(date) : null;
     }
 }

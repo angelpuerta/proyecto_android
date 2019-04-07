@@ -2,31 +2,25 @@ package org.duckdns.einyel.trabajo_grupal;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,7 +29,8 @@ import com.squareup.picasso.Target;
 
 import org.duckdns.einyel.trabajo_grupal.fragments.InfoFragment;
 import org.duckdns.einyel.trabajo_grupal.fragments.ValoracionesFragment;
-import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
+import org.duckdns.einyel.trabajo_grupal.model.Event;
+import org.duckdns.einyel.trabajo_grupal.service.Check;
 
 
 import java.util.ArrayList;
@@ -52,7 +47,7 @@ public class DescripcionActivity extends AppCompatActivity {
     public static String BUSCAR = "";
 
     private Bitmap bm = null;
-    MockEvent evento = null;
+    Event evento = null;
     TabAdapter tab;
 
 
@@ -69,6 +64,10 @@ public class DescripcionActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         evento = b.getParcelable(ListActivity.EVENTO);
         username = b.getString("username");
+        evento.getDate();
+
+        if(!Check.location(evento.getLocation()))
+
 
         iniciarTabLayout();
 
@@ -91,7 +90,7 @@ public class DescripcionActivity extends AppCompatActivity {
     }
 
 
-    public MockEvent getEvento() {
+    public Event getEvento() {
         return this.evento;
     }
 
@@ -124,7 +123,7 @@ public class DescripcionActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
                 mIntent.putExtra("imageUrl", URL_PIC);
-                mIntent.putExtra("username", NOMBRE_USUARIO);
+                mIntent.putExtra("username", USERNAME);
                 mIntent.putExtra("socialLogin", LOGIN);
                 mIntent.putExtra("buscar", query);
                 startActivityForResult(mIntent, 100);

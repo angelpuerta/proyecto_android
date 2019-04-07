@@ -97,7 +97,6 @@
                 android:layout_width="61dp"
                 android:layout_height="30dp"
                 android:fontFamily="@font/verdana"
-                android:text="9"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -125,15 +124,5 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="0dp" />
-
-    <com.github.mikephil.charting.charts.HorizontalBarChart
-        android:id="@+id/horizontalBarChar"
-        android:layout_width="match_parent"
-        android:layout_height="83dp"
-        android:layout_below="@+id/valorationToolsLayout"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="84dp" />
 
 </RelativeLayout>

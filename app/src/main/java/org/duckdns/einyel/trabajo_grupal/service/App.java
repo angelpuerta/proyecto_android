@@ -1,11 +1,11 @@
 package org.duckdns.einyel.trabajo_grupal.service;
 
 import android.app.Application;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.database.ObservableSnapshotArray;
 import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
@@ -13,10 +13,11 @@ import com.google.firebase.database.Query;
 
 
 import org.duckdns.einyel.trabajo_grupal.model.Comment;
-import org.duckdns.einyel.trabajo_grupal.model.MockEvent;
-import org.duckdns.einyel.trabajo_grupal.model.User;
+import org.duckdns.einyel.trabajo_grupal.model.Event;
 
-import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -47,7 +48,7 @@ public class App extends Application {
         INSTANCE = this;
     }
 
-    public FirebaseRecyclerOptions<MockEvent> filtrarEventos(String filtro) {
+    public FirebaseRecyclerOptions<Event> filtrarEventos(String filtro) {
 
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
@@ -55,16 +56,36 @@ public class App extends Application {
                 .orderByChild("tittle")
                 .startAt(filtro);
 
-        return new FirebaseRecyclerOptions.Builder<MockEvent>()
-                .setQuery(query, new SnapshotParser<MockEvent>() {
+        return new FirebaseRecyclerOptions.Builder<Event>()
+                .setQuery(query, new SnapshotParser<Event>() {
                     @NonNull
                     @Override
-                    public MockEvent parseSnapshot(@NonNull DataSnapshot snapshot) {
+                    public Event parseSnapshot(@NonNull DataSnapshot snapshot) {
                         Log.d("AUXILIAR", snapshot.toString());
-                        return snapshot.getValue(MockEvent.class);
+                        return snapshot.getValue(Event.class);
                     }
                 })
                 .build();
+    }
+
+    public FirebaseRecyclerOptions<Event> filtrarEventosPorCategoria(String filtro) {
+        Query query = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("events")
+                .orderByChild("tags")
+                .equalTo(filtro);
+
+        return new FirebaseRecyclerOptions.Builder<Event>()
+                .setQuery(query, new SnapshotParser<Event>() {
+                    @NonNull
+                    @Override
+                    public Event parseSnapshot(@NonNull DataSnapshot snapshot) {
+                        Log.d("AUXILIAR", snapshot.toString());
+                        return snapshot.getValue(Event.class);
+                    }
+                })
+                .build();
+
     }
 
 
@@ -86,38 +107,43 @@ public class App extends Application {
                 .build();
     }
 
-    public FirebaseRecyclerOptions<MockEvent> eventsOptions() {
+    public FirebaseRecyclerOptions<Event> eventsOptions() {
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("events")
                 .limitToLast(50);
-        return new FirebaseRecyclerOptions.Builder<MockEvent>()
-                .setQuery(query, new SnapshotParser<MockEvent>() {
+
+        FirebaseRecyclerOptions<Event> auxiliar = new FirebaseRecyclerOptions.Builder<Event>()
+                .setQuery(query, new SnapshotParser<Event>() {
                     @NonNull
                     @Override
-                    public MockEvent parseSnapshot(@NonNull DataSnapshot snapshot) {
+                    public Event parseSnapshot(@NonNull DataSnapshot snapshot) {
                         Log.d("AUXILIAR", snapshot.toString());
-                        return snapshot.getValue(MockEvent.class);
+                        return snapshot.getValue(Event.class);
                     }
                 })
                 .build();
+
+        ObservableSnapshotArray<Event> snapshots = auxiliar.getSnapshots();
+
+        return auxiliar;
     }
 
 
-    public FirebaseRecyclerOptions<MockEvent> eventsOptions(String filter) {
+    public FirebaseRecyclerOptions<Event> eventsOptions(String filter) {
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("events")
                 .startAt(filter)
                 .orderByChild("tittle")
                 .limitToLast(50);
-        return new FirebaseRecyclerOptions.Builder<MockEvent>()
-                .setQuery(query, new SnapshotParser<MockEvent>() {
+        return new FirebaseRecyclerOptions.Builder<Event>()
+                .setQuery(query, new SnapshotParser<Event>() {
                     @NonNull
                     @Override
-                    public MockEvent parseSnapshot(@NonNull DataSnapshot snapshot) {
+                    public Event parseSnapshot(@NonNull DataSnapshot snapshot) {
                         Log.d("AUXILIAR", snapshot.toString());
-                        return snapshot.getValue(MockEvent.class);
+                        return snapshot.getValue(Event.class);
                     }
                 })
                 .build();

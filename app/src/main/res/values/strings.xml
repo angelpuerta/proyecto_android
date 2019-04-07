@@ -47,4 +47,11 @@
     <string name="events">Eventos</string>
     <string name="askAlreadyHaveAccount">¿Ya tienes una cuenta?</string>
     <string name="msgLogin">Inicia sesión</string>
+    <string-array name="category_filters">
+        <item>Ambiental</item>
+        <item>Cultura</item>
+        <item>Educación e investigación</item>
+        <item>Social</item>
+        <item>Todo</item>
+    </string-array>
 </resources>

@@ -70,7 +70,6 @@ public class ComentarioAdapter extends FirebaseRecyclerAdapter<Comment, Comentar
 
 
         holder.nombreUsuario.setText(model.getUser() == null ? "anonymous" : model.getUser() + "");
-        changeMarkBackground(holder, model);
         holder.puntuacion.setText(model.getRate() + "");
         holder.comentario.setText(model.getComment());
         Date fecha = model.getTimestamp();
@@ -81,27 +80,9 @@ public class ComentarioAdapter extends FirebaseRecyclerAdapter<Comment, Comentar
         int day = cal.get(Calendar.DAY_OF_MONTH);
         holder.fecha.setText(day + "-" + month + "-" + year);
         holder.comentario.setTextColor(parent.getContext().getResources().getColor(R.color.black));
-        changeMarkBackground(holder, model);
     }
 
 
-    private void changeMarkBackground(CommentViewHolder holder, Comment comment) {
-
-        double calificacion = comment.getRate();
-
-        if (calificacion >= 1 && calificacion < 2)
-            holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_voto1);
-        else if (calificacion >= 2 && calificacion < 3)
-            holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_voto2);
-        else if (calificacion >= 3 && calificacion < 4)
-            holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_voto3);
-        else if (calificacion >= 4 && calificacion < 5)
-            holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_voto4);
-        else if (calificacion >= 5)
-            holder.puntuacion.setBackgroundResource(R.drawable.puntuacion_background_voto5);
-
-
-    }
 
     public interface AddCommentToWhole {
 
