@@ -77,6 +77,8 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     FirebaseDatabase database;
     DatabaseReference users;
 
+    public static final String USER = "USER";
+
     //Google
     GoogleApiClient googleApi;
     private SignInButton signInButtonGoogle;
@@ -329,6 +331,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                             mIntent.putExtra("socialLogin", "android");
                             mIntent.putExtra("username", user.getText().toString());
                             mIntent.putExtra("filtro", "todo");
+                            mIntent.putExtra(USER,usuario);
                             startActivity(mIntent);
                             user.setText("");
                             pw.setText("");

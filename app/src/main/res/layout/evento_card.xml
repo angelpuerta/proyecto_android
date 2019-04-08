@@ -10,6 +10,7 @@
     app:cardUseCompatPadding="true">
 
     <LinearLayout
+        android:id="@+id/eventContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginEnd="0dp"
@@ -43,6 +44,7 @@
                     android:textColor="@color/vermelho_oscuro_edp"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
             </LinearLayout>
 
             <TextView

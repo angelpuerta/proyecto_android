@@ -1,17 +1,20 @@
 package org.duckdns.einyel.trabajo_grupal.adapter;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.squareup.picasso.Picasso;
 
+import org.duckdns.einyel.trabajo_grupal.model.Comment;
 import org.duckdns.einyel.trabajo_grupal.model.Event;
 import org.duckdns.einyel.trabajo_grupal.R;
 
@@ -23,6 +26,7 @@ public class EventoAdapter extends FirebaseRecyclerAdapter<Event, EventoAdapter.
         public TextView nombre;
         public TextView puntuacion;
         public TextView descripcion;
+        public LinearLayout contenedor;
 
         public EventoViewHolder(View v) {
             super(v);
@@ -30,17 +34,25 @@ public class EventoAdapter extends FirebaseRecyclerAdapter<Event, EventoAdapter.
             nombre = (TextView) v.findViewById(R.id.nombre);
             puntuacion = (TextView) v.findViewById(R.id.puntuacion);
             descripcion = (TextView) v.findViewById(R.id.descripcion);
+            contenedor = (LinearLayout) v.findViewById(R.id.eventContainer);
         }
     }
 
     private ViewGroup parent;
+    private Assisted assisted;
 
-    public EventoAdapter(@NonNull FirebaseRecyclerOptions<Event> options) {
+
+    public EventoAdapter(@NonNull FirebaseRecyclerOptions<Event> options, Assisted assisted ) {
         super(options);
+        this.assisted= assisted;
     }
 
     @Override
     protected void onBindViewHolder(@NonNull EventoViewHolder holder, int position, @NonNull Event evento) {
+        if(assisted.hasAssisted(evento.getId())) {
+            holder.contenedor.setBackgroundColor(Color.GRAY);
+            holder.contenedor.getBackground().setAlpha(50);
+        }
         Picasso.get().setLoggingEnabled(true);
         Picasso.get().load(evento.getImgURL()).into(holder.imagen);
         holder.nombre.setText(evento.getTittle().toUpperCase());
@@ -75,6 +87,11 @@ public class EventoAdapter extends FirebaseRecyclerAdapter<Event, EventoAdapter.
         return new EventoViewHolder(v);
     }
 
+    public interface Assisted {
+
+        boolean hasAssisted(Long id);
+
+    }
 
 
 }

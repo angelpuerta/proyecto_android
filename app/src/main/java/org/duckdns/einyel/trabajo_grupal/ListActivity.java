@@ -21,10 +21,11 @@ import com.squareup.picasso.Picasso;
 import org.duckdns.einyel.trabajo_grupal.adapter.EventoAdapter;
 import org.duckdns.einyel.trabajo_grupal.listener.RecyclerTouchListener;
 import org.duckdns.einyel.trabajo_grupal.model.Event;
+import org.duckdns.einyel.trabajo_grupal.model.User;
 import org.duckdns.einyel.trabajo_grupal.service.App;
 
 
-public class ListActivity extends AppCompatActivity {
+public class ListActivity extends AppCompatActivity implements EventoAdapter.Assisted{
 
 
     public static final String EVENTO = "EVENTO";
@@ -38,6 +39,7 @@ public class ListActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private ImageButton profileButton;
     private int isOnCreate = 0;
+    private User usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,8 @@ public class ListActivity extends AppCompatActivity {
                 Picasso.get().load(URL_PIC).into(profileButton);
             }
         }
+
+        usuario = extras.getParcelable(Login.USER);
 
         setSpinnerCategoryFilterAdapter();
 
@@ -111,9 +115,9 @@ public class ListActivity extends AppCompatActivity {
     private void setRecyclerViewAdapter() {
         if(FILTRO != null){
             if(FILTRO.equals("todo")) {
-                adapter = new EventoAdapter(App.get().eventsOptions());
+                adapter = new EventoAdapter(App.get().eventsOptions(), this);
             }else{
-                adapter = new EventoAdapter(App.get().filtrarEventosPorCategoria(FILTRO));
+                adapter = new EventoAdapter(App.get().filtrarEventosPorCategoria(FILTRO),this);
             }
         }
 
@@ -182,4 +186,8 @@ public class ListActivity extends AppCompatActivity {
         adapter.stopListening();
     }
 
+    @Override
+    public boolean hasAssisted(Long id) {
+        return usuario.getAssisted().stream().anyMatch(x-> x.equals(id));
+    }
 }

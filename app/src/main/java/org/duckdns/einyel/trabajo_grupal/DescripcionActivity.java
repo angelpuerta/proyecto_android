@@ -65,8 +65,6 @@ public class DescripcionActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         evento = b.getParcelable(ListActivity.EVENTO);
         username = b.getString("username");
-        Date d = evento.getDate();
-
 
         iniciarTabLayout();
 

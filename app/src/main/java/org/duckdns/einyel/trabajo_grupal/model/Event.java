@@ -13,6 +13,7 @@ import com.google.gson.annotations.SerializedName;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
@@ -189,6 +190,19 @@ public class Event implements Parcelable {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String formatedDate(){
+        if(getDate()==null)
+            return "";
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(getDate());
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH)+1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int hour = cal.get(Calendar.HOUR);
+        int minutes = cal.get(Calendar.MINUTE);
+       return day + "-" + month + "-" + year +" "+ hour +":"+minutes;
     }
 
     public Date getDate(){

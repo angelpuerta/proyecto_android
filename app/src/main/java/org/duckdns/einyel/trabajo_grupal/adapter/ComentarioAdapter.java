@@ -77,7 +77,7 @@ public class ComentarioAdapter extends FirebaseRecyclerAdapter<Comment, Comentar
         cal.setTime(fecha);
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH)+1;
-        int day = cal.get(Calendar.DAY_OF_MONTH)+1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
         holder.fecha.setText(day + "-" + month + "-" + year);
         holder.comentario.setTextColor(parent.getContext().getResources().getColor(R.color.black));
     }

@@ -63,6 +63,11 @@ public class InfoFragment extends Fragment implements OnMapReadyCallback {
         TextView descripcion = v.findViewById(R.id.descripcionInfo);
         descripcion.setText(evento.getDescription());
 
+        TextView fecha = v.findViewById(R.id.fechaView);
+
+        if(evento.getDate()!=null){
+            fecha.setText(evento.formatedDate());
+        }
         if(!Check.location(evento.getLocation())){
             ConstraintLayout mapLayout = v.findViewById(R.id.layoutLocalizacion);
             mapLayout.setVisibility(View.GONE);
