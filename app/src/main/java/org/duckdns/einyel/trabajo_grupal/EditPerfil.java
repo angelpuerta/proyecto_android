@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,17 +30,21 @@ public class EditPerfil extends AppCompatActivity {
 
     EditText textNombre;
     Spinner spinnerSexo;
-    EditText textPwChange, textPwChangeRepeat, textActualPw;
+    EditText textActualPw;
     public static String socialLogin = "";
     public static String username = "";
     public static String TWITTERID = "";
     public static String FACEBOOKID = "";
+
+    public User user;
 
     Button cancel, confirm;
 
     FirebaseDatabase database;
     DatabaseReference users;
     DatabaseReference usersSociales;
+
+    public boolean taken = false;
 
 
     @Override
@@ -65,8 +70,6 @@ public class EditPerfil extends AppCompatActivity {
         confirm = (Button) findViewById(R.id.buttonConfirm);
         textNombre = (EditText) findViewById(R.id.editTextNombre);
         spinnerSexo = (Spinner) findViewById(R.id.spinnerSexoEdit);
-        textPwChange = (EditText) findViewById(R.id.textNewPwChange);
-        textPwChangeRepeat = (EditText) findViewById(R.id.textNewPwChangeRepeat);
         textActualPw = (EditText) findViewById(R.id.textPwActualChange);
 
         database = FirebaseDatabase.getInstance();
@@ -75,7 +78,6 @@ public class EditPerfil extends AppCompatActivity {
 
         if(socialLogin.equals("android")){
             users.addListenerForSingleValueEvent(new ValueEventListener() {
-                User user;
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for(DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
@@ -106,7 +108,6 @@ public class EditPerfil extends AppCompatActivity {
         }
         else {
             usersSociales.addListenerForSingleValueEvent(new ValueEventListener() {
-                User user;
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(socialLogin.equals("twitter")) {
@@ -143,6 +144,80 @@ public class EditPerfil extends AppCompatActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(socialLogin.equals("android")) {
+                    if (textActualPw.getText().toString().equals(user.getPassword())) {
+                        String usernameElegido = textNombre.getText().toString();
+                        if(!usernameElegido.equals(user.getNick())) {
+
+                            users.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                        if (userSnapshot.child("nick").getValue().equals(usernameElegido)) {
+                                            taken = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    //not implemented
+                                }
+                            });
+
+                            usersSociales.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                        if (userSnapshot.child("nick").getValue().equals(usernameElegido)) {
+                                            taken = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    //not implemented
+                                }
+                            });
+
+                            if(taken){
+                                Toast.makeText(EditPerfil.this, "Ya existe un usuario con ese nick de usuario",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                users.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                            if (userSnapshot.child("id").getValue().equals(user.getId())) {
+                                                userSnapshot.child("nick");
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        //not implemented
+                                    }
+                                });
+                            }
+
+                            taken = false;
+                        }
+                    } else {
+                        Toast.makeText(EditPerfil.this, "La contraseña actual es incorrecta",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+
+                }
 
             }
         });

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -30,6 +31,7 @@ public class Perfil extends AppCompatActivity {
     private TextView name;
     private Button logOut;
     private Button edit;
+    private Button change;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class Perfil extends AppCompatActivity {
         name = (TextView) findViewById(R.id.name);
         logOut = (Button) findViewById(R.id.LogOut);
         edit = (Button) findViewById(R.id.buttoneditprofile);
+        change = (Button) findViewById(R.id.buttonChangePw);
 
         Bundle extras = getIntent().getExtras();
         if(extras !=null) {
@@ -94,6 +97,31 @@ public class Perfil extends AppCompatActivity {
                 startActivity(mintent);
             }
         });
+
+        change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(LOGIN.equals("android")) {
+                    Intent mintent = new Intent(getApplicationContext(), ChangePw.class);
+                    mintent.putExtra("socialLogin", LOGIN);
+                    mintent.putExtra("username", NOMBRE_USUARIO);
+                    if(LOGIN.equals("twitter")){
+                        mintent.putExtra("twitterId", TWITTERID);
+                    }
+                    else if (LOGIN.equals("facebook")){
+                        mintent.putExtra("facebookId", FACEBOOKID);
+                    }
+                    startActivity(mintent);
+                }
+                else {
+                    Toast.makeText(Perfil.this, "Esta función no está disponible para " +
+                                    "inicios de sesión desde otras aplicaciones",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
 
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
