@@ -87,6 +87,7 @@ public class ListActivity extends AppCompatActivity implements EventoAdapter.Ass
                         mIntent.putExtra("username", USERNAME);
                         mIntent.putExtra("filtro", item.toLowerCase());
                         mIntent.putExtra("imageUrl", URL_PIC);
+                        mIntent.putExtra(Login.USER, usuario);
                         startActivity(mIntent);
                         finish();
                     }
