@@ -1,13 +1,19 @@
 package org.duckdns.einyel.trabajo_grupal;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -18,7 +24,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.duckdns.einyel.trabajo_grupal.model.User;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class SignUp extends AppCompatActivity {
@@ -26,6 +37,10 @@ public class SignUp extends AppCompatActivity {
     protected EditText userF;
     protected EditText pwRepeat;
     protected Spinner spinner;
+    protected TextView tvEdad;
+
+    protected Button edadButton;
+    protected DatePickerDialog.OnDateSetListener dateSetListener;
 
     FirebaseDatabase database;
     DatabaseReference users;
@@ -41,6 +56,8 @@ public class SignUp extends AppCompatActivity {
         userF = findViewById(R.id.editUser);
         pwRepeat = findViewById(R.id.editPasswordRepeat);
         spinner = findViewById(R.id.spinnerSexo);
+        edadButton = findViewById(R.id.buttonEdad);
+        tvEdad = findViewById(R.id.textViewEdad);
 
         List<String> list = new ArrayList<String>();
         list.add("Hombre");
@@ -49,6 +66,35 @@ public class SignUp extends AppCompatActivity {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
+
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Date today = new Date();
+        tvEdad.setText(df.format(today));
+
+        edadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        SignUp.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        dateSetListener,
+                        year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
+        dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                tvEdad.setText(i2+"/"+(i1+1)+"/"+i);
+            }
+        };
 
         database = FirebaseDatabase.getInstance();
         users = database.getReference("usuarios");
@@ -77,7 +123,8 @@ public class SignUp extends AppCompatActivity {
                     if(!username.isEmpty()&&!password.isEmpty()&&!passwordRepeat.isEmpty()){
                         if (password.equals(passwordRepeat)) {
                             Long newId = id+1;
-                            final User user = new User(newId, username, password, sexo);
+                            tvEdad.getText();
+                            final User user = new User(newId, username, password, sexo, tvEdad.getText().toString());
                             List<String> usernames = new ArrayList<>();
                             for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                                 if(userSnapshot.child("nick").getValue()!=null)
@@ -89,6 +136,7 @@ public class SignUp extends AppCompatActivity {
                                 mIntent.putExtra("socialLogin", "android");
                                 mIntent.putExtra("username", username);
                                 mIntent.putExtra("sexo", sexo);
+                                mIntent.putExtra("id", newId);
 
                                 startActivity(mIntent);
 

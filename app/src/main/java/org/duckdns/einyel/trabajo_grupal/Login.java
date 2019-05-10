@@ -195,20 +195,34 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                                      if(userSnapshot.child("twUsername").getValue()!=null)
                                          usernames.add(userSnapshot.child("twUsername").getValue().toString());
                                  }
-
-                                 if(!usernames.contains(userName)){
-                                     User twuser = new User(id, userName, "", "Sin definir");
-                                     twuser.setTwUsername(userName);
+                                 com.twitter.sdk.android.core.models.User userInfo = result.data;
+                                 User twuser = null;
+                                 if(!usernames.contains(userName)){ //lo crea
+                                     twuser = new User(id, userName, "", "Sin definir", "", userName, userInfo.profileImageUrl.replace("_normal", ""), "");
                                      usersSocial.child(id.toString()).setValue(twuser);
                                  }
-                                 com.twitter.sdk.android.core.models.User userInfo = result.data;
+
+                                 else { //ya existe
+                                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                         if(userSnapshot.child("twUsername").getValue().toString().equals(userName)){
+                                             twuser = new User((Long) userSnapshot.child("id").getValue(), userSnapshot.child("nick").getValue().toString(),
+                                                     userSnapshot.child("password").getValue().toString(),
+                                                     userSnapshot.child("sexo").getValue().toString(),
+                                                     userSnapshot.child("fbId").getValue().toString(),
+                                                     userSnapshot.child("twUsername").getValue().toString(),
+                                                     userSnapshot.child("pfpUrl").getValue().toString(),
+                                                     userSnapshot.child("nacimiento").getValue().toString());
+                                         }
+                                     }
+                                 }
                                  String userUrlImage = userInfo.profileImageUrl.replace("_normal", "");
                                  Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
-                                 mIntent.putExtra("username", userName);
-                                 mIntent.putExtra("imageUrl", userUrlImage);
-                                 mIntent.putExtra("sexo", "Sin definir");
+                                 mIntent.putExtra("username", twuser.getNick());
+                                 mIntent.putExtra("imageUrl", twuser.getPfpUrl());
+                                 mIntent.putExtra("sexo", twuser.getSexo());
                                  mIntent.putExtra("socialLogin", "twitter");
-                                 mIntent.putExtra("twitterId", userName);
+                                 mIntent.putExtra("twitterId", twuser.getTwUsername());
+                                 mIntent.putExtra("id", twuser.getId());
                                  startActivity(mIntent);
                              }
                              @Override
@@ -270,6 +284,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                                     if (!ids.contains(object.getString("id"))) {
                                         User fbuser = new User(id, object.getString("name"), "", "Sin definir");
                                         fbuser.setFbId(object.getString("id"));
+                                        fbuser.setPfpUrl("https://graph.facebook.com/" + object.getString("id") + "/picture?type=large");
                                         usersSocial.child(id.toString()).setValue(fbuser);
                                     }
                                     Log.d("Exception", object.toString());
@@ -278,6 +293,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                                     mIntent.putExtra("username", object.getString("name"));
                                     mIntent.putExtra("socialLogin", "facebook");
                                     mIntent.putExtra("facebookId", object.getString("id"));
+                                    mIntent.putExtra("id", id);
                                     startActivity(mIntent);
                                 }
                                 catch (JSONException e) {
@@ -373,6 +389,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                             mIntent.putExtra("socialLogin", "android");
                             mIntent.putExtra("username", user.getText().toString());
                             mIntent.putExtra("sexo", usuario.getSexo());
+                            mIntent.putExtra("id", usuario.getId());
                             startActivity(mIntent);
                             user.setText("");
                             pw.setText("");
@@ -381,7 +398,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                                     Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(Login.this, "Credenciales incorrectas",
+                        Toast.makeText(Login.this, "Credenciales incorrectas, no existe el nombre de usuario",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {

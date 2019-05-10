@@ -53,6 +53,7 @@ public class ListActivity extends AppCompatActivity {
     public static String BUSCAR = "";
     public static String TWITTERID = "";
     public static String FACEBOOKID = "";
+    public static Long ID = 0L;
 
 
     @Override
@@ -71,6 +72,7 @@ public class ListActivity extends AppCompatActivity {
         NOMBRE_USUARIO = extras.getString("username");
         SEXO = extras.getString("sexo");
         URL_PIC = extras.getString("imageUrl");
+        ID = extras.getLong("id");
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         profileButton = (ImageButton) findViewById(R.id.profileButton);
@@ -148,6 +150,7 @@ public class ListActivity extends AppCompatActivity {
                 mIntent.putExtra("username", NOMBRE_USUARIO);
                 mIntent.putExtra("socialLogin", LOGIN);
                 mIntent.putExtra("sexo", SEXO);
+                mIntent.putExtra("id", ID);
                 if(LOGIN.equals("twitter")){
                     mIntent.putExtra("twitterId", TWITTERID);
                 }
@@ -170,5 +173,4 @@ public class ListActivity extends AppCompatActivity {
         super.onStop();
         adapter.stopListening();
     }
-
 }

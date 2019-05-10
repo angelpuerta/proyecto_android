@@ -1,10 +1,12 @@
 package org.duckdns.einyel.trabajo_grupal;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -35,6 +37,7 @@ public class EditPerfil extends AppCompatActivity {
     public static String username = "";
     public static String TWITTERID = "";
     public static String FACEBOOKID = "";
+    public static Long ID = 0L;
 
     public User user;
 
@@ -58,6 +61,7 @@ public class EditPerfil extends AppCompatActivity {
         username = extras.getString("username");
         TWITTERID = extras.getString("twitterId");
         FACEBOOKID = extras.getString("facebookId");
+        ID=extras.getLong("id");
 
         List<String> list = new ArrayList<String>();
         list.add("Hombre");
@@ -76,12 +80,14 @@ public class EditPerfil extends AppCompatActivity {
         users = database.getReference("usuarios");
         usersSociales = database.getReference("usuariossociales");
 
+        Intent intent = new Intent(this, Perfil.class);
+
         if(socialLogin.equals("android")){
             users.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for(DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
-                        if(userSnapshot.child("nick").getValue().equals(username)){
+                        if(userSnapshot.child("id").getValue().equals(ID)){
                             user = new User((Long)userSnapshot.child("id").getValue(), userSnapshot.child("nick").getValue().toString(),
                                     userSnapshot.child("password").getValue().toString(), userSnapshot.child("sexo").getValue().toString());
                             break;
@@ -107,13 +113,14 @@ public class EditPerfil extends AppCompatActivity {
             });
         }
         else {
+            textActualPw.setEnabled(false);
             usersSociales.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(socialLogin.equals("twitter")) {
                         for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                             {
-                                Log.d("Exception", "DATOS: " + userSnapshot.child("twUsername").getValue() + " " + TWITTERID + " " + userSnapshot.child("twUsername").getValue().equals(TWITTERID));
+                                Log.d("Exception", "DATOS: " + TWITTERID + " " + userSnapshot.child("twUsername").getValue() + " " + TWITTERID + " " + userSnapshot.child("twUsername").getValue().equals(TWITTERID));
                                 if (userSnapshot.child("twUsername").getValue().equals(TWITTERID)) {
                                     user = new User((Long) userSnapshot.child("id").getValue(), userSnapshot.child("nick").getValue().toString(),
                                             userSnapshot.child("password").getValue().toString(), userSnapshot.child("sexo").getValue().toString());
@@ -144,6 +151,7 @@ public class EditPerfil extends AppCompatActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if(socialLogin.equals("android")) {
                     if (textActualPw.getText().toString().equals(user.getPassword())) {
                         String usernameElegido = textNombre.getText().toString();
@@ -195,8 +203,14 @@ public class EditPerfil extends AppCompatActivity {
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                                         for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                            if(userSnapshot.child("id").getValue()!=null)
                                             if (userSnapshot.child("id").getValue().equals(user.getId())) {
-                                                userSnapshot.child("nick");
+                                                setResult(112, null);
+                                                finish();
+                                                userSnapshot.getRef().child("nick").setValue(usernameElegido);
+                                                userSnapshot.getRef().child("sexo").setValue(spinnerSexo.getSelectedItem().toString());
+                                                Toast.makeText(EditPerfil.this, "Cambios realizados",
+                                                        Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     }
@@ -210,13 +224,85 @@ public class EditPerfil extends AppCompatActivity {
 
                             taken = false;
                         }
-                    } else {
+                    }
+                    else {
                         Toast.makeText(EditPerfil.this, "La contraseña actual es incorrecta",
                                 Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
+                    String usernameElegido = textNombre.getText().toString();
+                    if(!usernameElegido.equals(user.getNick())) {
 
+                        users.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                    if (userSnapshot.child("nick").getValue().equals(usernameElegido)) {
+                                        taken = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                //not implemented
+                            }
+                        });
+
+                        usersSociales.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                    if (userSnapshot.child("nick").getValue().equals(usernameElegido)) {
+                                        taken = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                //not implemented
+                            }
+                        });
+
+                        if(taken){
+                            Toast.makeText(EditPerfil.this, "Ya existe un usuario con ese nick de usuario",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            usersSociales.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                        if(userSnapshot.child("id").getValue()!=null) {
+                                            if (userSnapshot.child("id").getValue().equals(user.getId())) {
+                                                setResult(112, null);
+                                                finish();
+                                                userSnapshot.getRef().child("nick").setValue(usernameElegido);
+                                                userSnapshot.getRef().child("sexo").setValue(spinnerSexo.getSelectedItem().toString());
+                                                Toast.makeText(EditPerfil.this, "Cambios realizados",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }
+                                    //System.exit(0);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    //not implemented
+                                }
+                            });
+                        }
+
+                        taken = false;
+                    }
                 }
 
             }
