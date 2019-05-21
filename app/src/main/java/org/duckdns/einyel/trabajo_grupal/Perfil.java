@@ -196,7 +196,7 @@ public class Perfil extends AppCompatActivity {
                     else if (LOGIN.equals("facebook")){
                         mintent.putExtra("facebookId", FACEBOOKID);
                     }
-                    startActivity(mintent);
+                    startActivityForResult(mintent, 111);
                 }
                 else {
                     Toast.makeText(Perfil.this, "Esta función no está disponible para " +
