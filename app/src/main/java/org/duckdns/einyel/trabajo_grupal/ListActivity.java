@@ -32,8 +32,12 @@ public class ListActivity extends AppCompatActivity implements EventoAdapter.Ass
     public static String USERNAME = "";
     public static String LOGIN = "";
     public static String URL_PIC = "";
+    public static String SEXO = "";
     public static String BUSCAR = "";
+    public static String TWITTERID = "";
+    public static String FACEBOOKID = "";
     public static String FILTRO = "";
+    public static Long ID = 0L;
     private RecyclerView recyclerView;
     private FirebaseRecyclerAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -49,8 +53,16 @@ public class ListActivity extends AppCompatActivity implements EventoAdapter.Ass
         if (extras != null) {
             BUSCAR = extras.getString("buscar");
             LOGIN = extras.getString("socialLogin");
+            if(LOGIN.equals("twitter")){
+                TWITTERID = extras.getString("twitterId");
+            }
+            else if (LOGIN.equals("facebook")){
+                FACEBOOKID = extras.getString("facebookId");
+            }
             USERNAME = extras.getString("username");
+            SEXO = extras.getString("sexo");
             URL_PIC = extras.getString("imageUrl");
+            ID = extras.getLong("id");
             FILTRO = extras.getString("filtro");
         }
 
@@ -62,11 +74,11 @@ public class ListActivity extends AppCompatActivity implements EventoAdapter.Ass
 
         setRecyclerViewAdapter();
 
-        if (URL_PIC != null && !URL_PIC.equals("")) {
-            if (LOGIN.equals("facebook") || LOGIN.equals("twitter") || LOGIN.equals("google")) {
-                Picasso.get().load(URL_PIC).into(profileButton);
-            }
-        }
+        //if (URL_PIC != null && !URL_PIC.equals("")) {
+        //    if (LOGIN.equals("facebook") || LOGIN.equals("twitter") || LOGIN.equals("google")) {
+        //       Picasso.get().load(URL_PIC).into(profileButton);
+        //    }
+        //}
 
         usuario = extras.getParcelable(Login.USER);
 
@@ -165,10 +177,19 @@ public class ListActivity extends AppCompatActivity implements EventoAdapter.Ass
                 LOGIN = extras.getString("socialLogin");
                 USERNAME = extras.getString("username");
                 URL_PIC = extras.getString("imageUrl");
+                SEXO = extras.getString("sexo");
                 Intent mIntent = new Intent(getApplicationContext(), Perfil.class);
                 mIntent.putExtra("imageUrl", URL_PIC);
                 mIntent.putExtra("username", USERNAME);
                 mIntent.putExtra("socialLogin", LOGIN);
+                mIntent.putExtra("sexo", SEXO);
+                mIntent.putExtra("id", ID);
+                if(LOGIN.equals("twitter")){
+                    mIntent.putExtra("twitterId", TWITTERID);
+                }
+                else if (LOGIN.equals("facebook")){
+                    mIntent.putExtra("facebookId", FACEBOOKID);
+                }
                 startActivityForResult(mIntent, 100);
                 break;
         }
