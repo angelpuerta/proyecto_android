@@ -20,6 +20,7 @@ import com.squareup.picasso.Picasso;
 
 import org.duckdns.einyel.trabajo_grupal.model.User;
 import org.duckdns.einyel.trabajo_grupal.service.DownloadImageTask;
+import org.duckdns.einyel.trabajo_grupal.service.UserHolder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -64,13 +65,13 @@ public class Perfil extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras !=null) {
             System.out.println("Extras: " + extras.getString("socialLogin") + " " + extras.getString("username"));
-            LOGIN = extras.getString("socialLogin");
-            NOMBRE_USUARIO = extras.getString("username");
-            URL_PIC = extras.getString("imageUrl");
-            SEXO = extras.getString("sexo");
-            ID = extras.getLong("id");
-            TWITTERID = extras.getString("twitterId");
-            FACEBOOKID = extras.getString("facebookId");
+            LOGIN = UserHolder.getSocialLogin();
+            NOMBRE_USUARIO = UserHolder.getUser().getNick();
+            URL_PIC = UserHolder.getUser().getPfpUrl();
+            SEXO = UserHolder.getUser().getSexo();
+            ID = UserHolder.getUser().getId();
+            TWITTERID = UserHolder.getUser().getTwUsername();
+            FACEBOOKID = UserHolder.getUser().getFbId();
         }
         if(LOGIN.equals("android")){
             users.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -122,11 +123,12 @@ public class Perfil extends AppCompatActivity {
                             break;
                         }
                     }
+                    Log.d("Exception aaaaa:", usuario.getPfpUrl());
                     if(LOGIN.equals("twitter")){
                         new DownloadImageTask((ImageView) findViewById(R.id.socialImage))
                                 .execute("https://vignette.wikia.nocookie.net/es.starwars/images/9/92/Twitter_Icon.png");
                     }
-                    else if(LOGIN.equals("facebook")){
+                    else if(UserHolder.getSocialLogin().equals("facebook")){
                         new DownloadImageTask((ImageView) findViewById(R.id.socialImage))
                                 .execute("https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Facebook_logo_%28square%29.png/600px-Facebook_logo_%28square%29.png");
                     }
@@ -191,7 +193,7 @@ public class Perfil extends AppCompatActivity {
                     if(LOGIN.equals("twitter")){
                         mintent.putExtra("twitterId", TWITTERID);
                     }
-                    else if (LOGIN.equals("facebook")){
+                    else if (UserHolder.getSocialLogin().equals("facebook")){
                         mintent.putExtra("facebookId", FACEBOOKID);
                     }
                     startActivityForResult(mintent, 111);

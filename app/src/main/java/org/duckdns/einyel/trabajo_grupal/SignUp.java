@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.duckdns.einyel.trabajo_grupal.model.User;
+import org.duckdns.einyel.trabajo_grupal.service.UserHolder;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -138,7 +139,9 @@ public class SignUp extends AppCompatActivity {
                                 mIntent.putExtra("sexo", sexo);
                                 mIntent.putExtra("id", newId);
                                 mIntent.putExtra("filtro", "todo");
-
+                                mIntent.putExtra(Login.USER, user);
+                                UserHolder.setUser(user);
+                                UserHolder.setSocialLogin("android");
                                 startActivity(mIntent);
 
                                 pw.setText("");

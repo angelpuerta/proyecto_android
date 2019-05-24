@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.duckdns.einyel.trabajo_grupal.model.User;
 import org.duckdns.einyel.trabajo_grupal.service.DownloadImageTask;
+import org.duckdns.einyel.trabajo_grupal.service.UserHolder;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -151,32 +152,36 @@ public class EditPerfil extends AppCompatActivity {
         }
         else {
             textActualPw.setEnabled(false);
+            textActualPw.setText("No necesaria");
             usersSociales.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(socialLogin.equals("twitter")) {
-                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                            {
-                                Log.d("Exception", "DATOS: " + TWITTERID + " " + userSnapshot.child("twUsername").getValue() + " " + TWITTERID + " " + userSnapshot.child("twUsername").getValue().equals(TWITTERID));
-                                if (userSnapshot.child("twUsername").getValue().equals(TWITTERID)) {
-                                    user = new User((Long) userSnapshot.child("id").getValue(), userSnapshot.child("nick").getValue().toString(),
-                                            userSnapshot.child("password").getValue().toString(), userSnapshot.child("sexo").getValue().toString());
-                                    user.setNacimiento(userSnapshot.child("nacimiento").getValue().toString());
-                                    break;
-                                }
+
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        {
+                            Log.d("Exception", "DATOS: " + TWITTERID + " " + userSnapshot.child("twUsername").getValue() + " " + TWITTERID + " " + userSnapshot.child("twUsername").getValue().equals(TWITTERID));
+                            if ((userSnapshot.child("twUsername").getValue().equals(TWITTERID) && TWITTERID!="")||
+                                    (userSnapshot.child("fbId").getValue().equals(FACEBOOKID) && FACEBOOKID!="")) {
+                                user = new User((Long) userSnapshot.child("id").getValue(), userSnapshot.child("nick").getValue().toString(),
+                                        userSnapshot.child("password").getValue().toString(), userSnapshot.child("sexo").getValue().toString());
+                                user.setNacimiento(userSnapshot.child("nacimiento").getValue().toString());
+                                user.setFbId(FACEBOOKID);
+                                user.setTwUsername(TWITTERID);
+                                break;
                             }
                         }
-
-                        textNombre.setText(user.getNick());
-                        tvEdad.setText(user.getNacimiento());
-                        spinnerSexo.setAdapter(dataAdapter);
-                        if(user.getSexo().equals("Otro"))
-                            spinnerSexo.setSelection(dataAdapter.getPosition("Otro"));
-                        else if(user.getSexo().equals("Mujer"))
-                            spinnerSexo.setSelection(dataAdapter.getPosition("Mujer"));
-                        else
-                            spinnerSexo.setSelection(dataAdapter.getPosition("Hombre"));
                     }
+
+                    textNombre.setText(user.getNick());
+                    tvEdad.setText(user.getNacimiento());
+                    spinnerSexo.setAdapter(dataAdapter);
+                    if(user.getSexo().equals("Otro"))
+                        spinnerSexo.setSelection(dataAdapter.getPosition("Otro"));
+                    else if(user.getSexo().equals("Mujer"))
+                        spinnerSexo.setSelection(dataAdapter.getPosition("Mujer"));
+                    else
+                        spinnerSexo.setSelection(dataAdapter.getPosition("Hombre"));
+
                 }
 
                 @Override
@@ -246,8 +251,11 @@ public class EditPerfil extends AppCompatActivity {
                                                     setResult(112, null);
                                                     finish();
                                                     userSnapshot.getRef().child("nick").setValue(usernameElegido);
+                                                    UserHolder.getUser().setNick(usernameElegido);
                                                     userSnapshot.getRef().child("sexo").setValue(spinnerSexo.getSelectedItem().toString());
+                                                    UserHolder.getUser().setSexo(spinnerSexo.getSelectedItem().toString());
                                                     userSnapshot.getRef().child("nacimiento").setValue(tvEdad.getText());
+                                                    UserHolder.getUser().setNacimiento(tvEdad.getText().toString());
                                                     Toast.makeText(EditPerfil.this, "Cambios realizados",
                                                             Toast.LENGTH_SHORT).show();
                                                 }
@@ -324,8 +332,11 @@ public class EditPerfil extends AppCompatActivity {
                                                 setResult(112, null);
                                                 finish();
                                                 userSnapshot.getRef().child("nick").setValue(usernameElegido);
+                                                UserHolder.getUser().setNick(usernameElegido);
                                                 userSnapshot.getRef().child("sexo").setValue(spinnerSexo.getSelectedItem().toString());
+                                                UserHolder.getUser().setSexo(spinnerSexo.getSelectedItem().toString());
                                                 userSnapshot.getRef().child("nacimiento").setValue(tvEdad.getText());
+                                                UserHolder.getUser().setNacimiento(tvEdad.getText().toString());
                                                 Toast.makeText(EditPerfil.this, "Cambios realizados",
                                                         Toast.LENGTH_SHORT).show();
                                             }
