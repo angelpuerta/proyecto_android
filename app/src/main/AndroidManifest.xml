@@ -60,6 +60,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Perfil"/>
+        <activity android:name=".EditPerfil" />
+        <activity android:name=".ChangePw" />
         <activity
             android:name=".QRCodeActivity"
             android:label=""
