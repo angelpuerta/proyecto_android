@@ -40,7 +40,6 @@ public class EditPerfil extends AppCompatActivity {
     Spinner spinnerSexo;
     EditText textActualPw;
     Button changeEdad;
-    protected TextView tvEdad;
     public static String socialLogin = "";
     public static String username = "";
     public static String TWITTERID = "";
@@ -86,7 +85,6 @@ public class EditPerfil extends AppCompatActivity {
         spinnerSexo = (Spinner) findViewById(R.id.spinnerSexoEdit);
         textActualPw = (EditText) findViewById(R.id.textPwActualChange);
         changeEdad = (Button) findViewById(R.id.buttonChangeEdad);
-        tvEdad = (TextView)  findViewById(R.id.tvEditEdad);
 
         database = FirebaseDatabase.getInstance();
         users = database.getReference("usuarios");
@@ -113,7 +111,7 @@ public class EditPerfil extends AppCompatActivity {
         dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                tvEdad.setText(i2+"/"+(i1+1)+"/"+i);
+                changeEdad.setText(i2+"/"+(i1+1)+"/"+i);
             }
         };
 
@@ -141,7 +139,7 @@ public class EditPerfil extends AppCompatActivity {
                         spinnerSexo.setSelection(dataAdapter.getPosition("Mujer"));
                     else
                         spinnerSexo.setSelection(dataAdapter.getPosition("Otro"));
-                    tvEdad.setText(user.getNacimiento());
+                    changeEdad.setText(user.getNacimiento());
                 }
 
                 @Override
@@ -173,7 +171,7 @@ public class EditPerfil extends AppCompatActivity {
                     }
 
                     textNombre.setText(user.getNick());
-                    tvEdad.setText(user.getNacimiento());
+                    changeEdad.setText(user.getNacimiento());
                     spinnerSexo.setAdapter(dataAdapter);
                     if(user.getSexo().equals("Otro"))
                         spinnerSexo.setSelection(dataAdapter.getPosition("Otro"));
@@ -254,8 +252,8 @@ public class EditPerfil extends AppCompatActivity {
                                                     UserHolder.getUser().setNick(usernameElegido);
                                                     userSnapshot.getRef().child("sexo").setValue(spinnerSexo.getSelectedItem().toString());
                                                     UserHolder.getUser().setSexo(spinnerSexo.getSelectedItem().toString());
-                                                    userSnapshot.getRef().child("nacimiento").setValue(tvEdad.getText());
-                                                    UserHolder.getUser().setNacimiento(tvEdad.getText().toString());
+                                                    userSnapshot.getRef().child("nacimiento").setValue(changeEdad.getText());
+                                                    UserHolder.getUser().setNacimiento(changeEdad.getText().toString());
                                                     Toast.makeText(EditPerfil.this, "Cambios realizados",
                                                             Toast.LENGTH_SHORT).show();
                                                 }
@@ -335,8 +333,8 @@ public class EditPerfil extends AppCompatActivity {
                                                 UserHolder.getUser().setNick(usernameElegido);
                                                 userSnapshot.getRef().child("sexo").setValue(spinnerSexo.getSelectedItem().toString());
                                                 UserHolder.getUser().setSexo(spinnerSexo.getSelectedItem().toString());
-                                                userSnapshot.getRef().child("nacimiento").setValue(tvEdad.getText());
-                                                UserHolder.getUser().setNacimiento(tvEdad.getText().toString());
+                                                userSnapshot.getRef().child("nacimiento").setValue(changeEdad.getText());
+                                                UserHolder.getUser().setNacimiento(changeEdad.getText().toString());
                                                 Toast.makeText(EditPerfil.this, "Cambios realizados",
                                                         Toast.LENGTH_SHORT).show();
                                             }

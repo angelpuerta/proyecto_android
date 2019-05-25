@@ -62,7 +62,7 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/button_edit_profile"
         android:fontFamily="@font/verdana"
-        android:text="Editar Perfil"
+        android:text="Editar perfil"
         android:textAllCaps="false"
         android:textColor="@color/vermelho_oscuro_edp"
         android:textSize="12sp"
