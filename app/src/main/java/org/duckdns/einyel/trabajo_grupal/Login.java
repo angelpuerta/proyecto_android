@@ -1,13 +1,16 @@
 package org.duckdns.einyel.trabajo_grupal;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -76,6 +79,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     DatabaseReference usersSocial;
 
     public static final String USER = "USER";
+    private final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
 
     //Twitter
     TwitterLoginButton loginButtonTwitter;
@@ -131,6 +135,22 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         twitterLoginProccess();
 
         //printKeyHash();
+        requestCameraPermission();
+    }
+
+    private void requestCameraPermission(){
+        if (ActivityCompat.checkSelfPermission(Login.this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // verificamos la version de ANdroid que sea al menos la M para mostrar
+                // el dialog de la solicitud de la camara
+                if (shouldShowRequestPermissionRationale(
+                        Manifest.permission.CAMERA)) ;
+                requestPermissions(new String[]{Manifest.permission.CAMERA},
+                        MY_PERMISSIONS_REQUEST_CAMERA);
+            }
+        }
     }
 
     public void goFacebookLogin(View view) {
