@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -34,11 +35,12 @@ import java.util.Date;
 import java.util.List;
 
 public class SignUp extends AppCompatActivity {
+
     protected EditText pw;
     protected EditText userF;
     protected EditText pwRepeat;
     protected Spinner spinner;
-    protected TextView tvEdad;
+    String edad;
 
     protected Button edadButton;
     protected DatePickerDialog.OnDateSetListener dateSetListener;
@@ -58,7 +60,6 @@ public class SignUp extends AppCompatActivity {
         pwRepeat = findViewById(R.id.repassword);
         spinner = findViewById(R.id.spinnerSexo);
         edadButton = findViewById(R.id.buttonEdad);
-        tvEdad = findViewById(R.id.textViewEdad);
 
         List<String> list = new ArrayList<String>();
         list.add("Hombre");
@@ -70,7 +71,7 @@ public class SignUp extends AppCompatActivity {
 
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Date today = new Date();
-        tvEdad.setText(df.format(today));
+        edadButton.setText(df.format(today));
 
         edadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,12 +94,23 @@ public class SignUp extends AppCompatActivity {
         dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                tvEdad.setText(i2+"/"+(i1+1)+"/"+i);
+                edad = i2+"/"+(i1+1)+"/"+i;
+                edadButton.setText(edad);
             }
         };
 
         database = FirebaseDatabase.getInstance();
         users = database.getReference("usuarios");
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
     }
 
@@ -124,8 +136,7 @@ public class SignUp extends AppCompatActivity {
                     if(!username.isEmpty()&&!password.isEmpty()&&!passwordRepeat.isEmpty()){
                         if (password.equals(passwordRepeat)) {
                             Long newId = id+1;
-                            tvEdad.getText();
-                            final User user = new User(newId, username, password, sexo, tvEdad.getText().toString());
+                            final User user = new User(newId, username, password, sexo, edad);
                             List<String> usernames = new ArrayList<>();
                             for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                                 if(userSnapshot.child("nick").getValue()!=null)

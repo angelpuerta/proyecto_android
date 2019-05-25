@@ -8,8 +8,10 @@
     <color name="mark_green">#43a047</color>
     <color name="black">#000000</color>
     <color name="eighty_transparent_black">#CC000000</color>
+    <color name="semi_transparent_black">#80000000</color>
     <color name="white">#ffffff</color>
     <color name="semi_transparent_white">#80FFFFFF</color>
+    <color name="eighty_transparent_white">#CCFFFFFF</color>
     <color name="voto1">#ff3d00</color>
     <color name="voto2">#ffc400</color>
     <color name="voto3">#ffea00</color>

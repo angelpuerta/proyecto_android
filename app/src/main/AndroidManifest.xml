@@ -67,7 +67,7 @@
             android:label=""
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity android:name=".SignUp"
-            android:label="@string/registro"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
