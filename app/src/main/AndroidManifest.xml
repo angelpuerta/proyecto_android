@@ -59,7 +59,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Perfil"/>
+        <activity android:name=".Perfil"
+            android:label="Perfil"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".EditPerfil" />
         <activity android:name=".ChangePw" />
         <activity

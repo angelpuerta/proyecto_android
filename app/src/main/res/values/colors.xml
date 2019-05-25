@@ -21,4 +21,5 @@
     <color name="cinza_edp">#B5B6B3</color>
     <color name="vermelho_oscuro_edp">#96172E</color>
     <color name="personal_grey">#E2E2E2</color>
+    <color name="transparent">#00E2E2E2</color>
 </resources>
