@@ -3,6 +3,7 @@ package org.duckdns.einyel.trabajo_grupal;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -60,6 +61,8 @@ public class SignUp extends AppCompatActivity {
         pwRepeat = findViewById(R.id.repassword);
         spinner = findViewById(R.id.spinnerSexo);
         edadButton = findViewById(R.id.buttonEdad);
+        Button button = (Button) findViewById(R.id.login);
+        button.setPaintFlags(button.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         List<String> list = new ArrayList<String>();
         list.add("Hombre");

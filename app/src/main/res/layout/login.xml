@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@drawable/bulb_background"
+    android:background="@drawable/bulb_background_login"
     android:gravity="center">
 
     <ImageView
@@ -47,11 +47,11 @@
     <EditText
         android:id="@+id/password"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_height="51dp"
         android:layout_above="@+id/btnLogin"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="34dp"
+        android:layout_marginStart="35dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="36dp"
         android:layout_marginBottom="15dp"
@@ -63,50 +63,11 @@
         android:fontFamily="@font/verdana"
         android:foregroundGravity="center"
         android:hint="@string/Password"
+        android:inputType="textPassword"
         android:paddingLeft="10dp"
         android:textColor="@color/black"
         android:textColorHint="@color/black"
-        android:textSize="14sp"
-        android:inputType="textPassword"/>
-
-    <!--<com.facebook.login.widget.LoginButton
-        xmlns:fb_icon="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/fbLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="54dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="208dp"
-        fb_icon:login_text=""
-        fb_icon:logout_text=""
-        fb_icon:background="@drawable/facebook_icon"
-        android:background="@drawable/facebook_icon"
-        />-->
-
-    <!--<com.google.android.gms.common.SignInButton
-        android:id="@+id/googleLogin"
-        android:layout_width="317dp"
-        android:layout_height="48dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="88dp" />-->
-
-    <!--<com.twitter.sdk.android.core.identity.TwitterLoginButton
-        android:id="@+id/twLogin"
-        android:layout_width="310dp"
-        android:layout_height="40dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="53dp"
-        android:layout_marginBottom="152dp"></com.twitter.sdk.android.core.identity.TwitterLoginButton>-->
+        android:textSize="14sp" />
 
     <Button
         android:id="@+id/btnLogin"
@@ -131,13 +92,13 @@
     <LinearLayout
         android:id="@+id/socialLogin"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="65dp"
         android:layout_above="@+id/registro"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
-        android:layout_marginBottom="69dp"
+        android:layout_marginBottom="61dp"
         android:gravity="center">
 
         <com.facebook.login.widget.LoginButton
@@ -152,20 +113,19 @@
             android:layout_height="40dp"
             android:visibility="gone"></com.twitter.sdk.android.core.identity.TwitterLoginButton>
 
-        <com.google.android.gms.common.SignInButton
+        <!--<com.google.android.gms.common.SignInButton
             android:id="@+id/googleLogin"
             android:layout_width="317dp"
             android:layout_height="48dp"
-            android:visibility="gone" />
+            android:visibility="gone" />-->
 
         <Button
             android:id="@+id/fb"
-            android:layout_width="60dp"
+            android:layout_width="65dp"
             android:layout_height="match_parent"
+            android:layout_marginRight="15dp"
             android:background="@drawable/fb_icon"
             android:onClick="goFacebookLogin"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
             android:textAllCaps="false"
             android:textColor="#ffffff"
             android:textSize="14sp"
@@ -173,20 +133,17 @@
 
         <Button
             android:id="@+id/tw"
-            android:layout_width="60dp"
+            android:layout_width="65dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="15dp"
             android:background="@drawable/twitter_icono"
             android:onClick="goTwitterLogin"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
             android:textAllCaps="false"
             android:textColor="#ffffff"
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <Button
+        <!--<Button
             android:id="@+id/google"
             android:layout_width="60dp"
             android:layout_height="match_parent"
@@ -197,7 +154,7 @@
             android:textAllCaps="false"
             android:textColor="#ffffff"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textStyle="bold" />-->
     </LinearLayout>
 
     <LinearLayout
