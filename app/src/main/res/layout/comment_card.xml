@@ -67,6 +67,7 @@
             android:layout_marginTop="5dp"
             android:fontFamily="@font/verdana"
             android:text="TextView"
+            android:textColor="@color/black"
             android:textSize="12sp"
             android:textStyle="bold" />
     </RelativeLayout>

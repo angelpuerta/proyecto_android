@@ -1,5 +1,6 @@
 package org.duckdns.einyel.trabajo_grupal;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -23,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -66,6 +68,7 @@ public class DescripcionActivity extends AppCompatActivity {
         evento = b.getParcelable(ListActivity.EVENTO);
         username = b.getString("username");
 
+
         iniciarTabLayout();
 
     }
@@ -93,10 +96,17 @@ public class DescripcionActivity extends AppCompatActivity {
 
 
     public void valorar(View view) {
-        Intent nextActivity = new Intent(getApplicationContext(), RankingActivity.class);
-        nextActivity.putExtra(EVENTO, evento.getId());
-        nextActivity.putExtra("username", getUsername());
-        startActivity(nextActivity);
+        String search = "QR/" + getUsername() + "/" + getEvento().getId();
+        String code = getSharedPreferences("QRs", Context.MODE_PRIVATE).getString(search, "");
+        if (code.equals("")) {
+            Toast.makeText(getApplicationContext(), "Es necesario realizar el check-in antes de valorar un evento", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Intent nextActivity = new Intent(getApplicationContext(), RankingActivity.class);
+            nextActivity.putExtra(EVENTO, evento.getId());
+            nextActivity.putExtra("username", getUsername());
+            startActivity(nextActivity);
+        }
 
     }
 
@@ -111,32 +121,6 @@ public class DescripcionActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.description_menu, menu);
-
-
-        /*MenuItem searchItem = menu.findItem(R.id.app_bar_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Intent mIntent = new Intent(getApplicationContext(), ListActivity.class);
-                mIntent.putExtra("imageUrl", URL_PIC);
-                mIntent.putExtra("username", USERNAME);
-                mIntent.putExtra("socialLogin", LOGIN);
-                mIntent.putExtra("buscar", query);
-                startActivityForResult(mIntent, 100);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(
-                new ComponentName(this, SearchableActivity.class)));
-        searchView.setIconifiedByDefault(false);*/
         return true;
     }
 
@@ -166,8 +150,6 @@ public class DescripcionActivity extends AppCompatActivity {
 
         Picasso.get().load(evento.getImgURL()).into((ImageView) findViewById(R.id.imageViewDescripcion));
         setTitle(evento.getTittle());
-        //TextView titulo = findViewById(R.id.tituloDescripcion);
-        //titulo.setText(evento.getTittle());
 
         cargarBitmap();
 
@@ -250,13 +232,6 @@ public class DescripcionActivity extends AppCompatActivity {
         int shadowColor = (selectedColor == R.color.black) ?
                 R.color.white :
                 R.color.black;
-
-        //TextView titulo = (TextView) findViewById(R.id.tituloDescripcion);
-        //titulo.setTextColor(getResources().getColor(selectedColor));
-        //titulo.setShadowLayer(2, 3, 3, getResources().getColor(shadowColor));
-        //titulo.setBackgroundColor(dominantColor);
-        //titulo.getBackground().setAlpha(190);
-
 
         for (int i = 0; i < tl.getTabCount(); i++) {
 

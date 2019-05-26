@@ -70,7 +70,7 @@ public class ComentarioAdapter extends FirebaseRecyclerAdapter<Comment, Comentar
 
 
         holder.nombreUsuario.setText(model.getUser() == null ? "anonymous" : model.getUser() + "");
-        holder.puntuacion.setText(model.getRate() + "");
+        holder.puntuacion.setText(setRateTextView(model.getRate()));
         holder.comentario.setText(model.getComment());
         Date fecha = model.getTimestamp();
         Calendar cal = Calendar.getInstance();
@@ -80,6 +80,24 @@ public class ComentarioAdapter extends FirebaseRecyclerAdapter<Comment, Comentar
         int day = cal.get(Calendar.DAY_OF_MONTH);
         holder.fecha.setText(day + "-" + month + "-" + year);
         holder.comentario.setTextColor(parent.getContext().getResources().getColor(R.color.black));
+    }
+
+    private String setRateTextView(double rate){
+        int truncRate = (int) rate;
+        switch (truncRate){
+            case 1:
+                return "★";
+            case 2:
+                return "★★";
+            case 3:
+                return "★★★";
+            case 4:
+                return "★★★★";
+            case 5:
+                return "★★★★★";
+            default:
+                return "";
+        }
     }
 
 

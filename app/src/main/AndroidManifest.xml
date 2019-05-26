@@ -71,7 +71,7 @@
         <activity
             android:name=".QRCodeActivity"
             android:label=""
-            android:theme="@style/Theme.AppCompat.Dialog" />
+            android:theme="@style/customDialogTheme" />
         <activity android:name=".SignUp"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"/>
