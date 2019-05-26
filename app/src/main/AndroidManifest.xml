@@ -63,8 +63,11 @@
             android:label="Perfil"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".EditPerfil"
-            android:label="Editar perfil"/>
-        <activity android:name=".ChangePw" />
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ChangePw"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".QRCodeActivity"
             android:label=""
