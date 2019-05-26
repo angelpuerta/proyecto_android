@@ -41,7 +41,7 @@
         <activity
             android:name=".RankingActivity"
             android:label=""
-            android:theme="@style/Theme.AppCompat.Dialog" />
+            android:theme="@style/customDialogTheme" />
         <activity
             android:name=".ListActivity"
             android:label="@string/events" />
