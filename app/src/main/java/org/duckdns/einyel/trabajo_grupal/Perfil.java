@@ -63,6 +63,7 @@ public class Perfil extends AppCompatActivity {
         tvGenderProfile = (TextView) findViewById(R.id.tvGenderProfile);
         tvBirthdateProfile = (TextView) findViewById(R.id.tvBirthdateProfile);
         edit = (Button) findViewById(R.id.buttoneditprofile);
+        logOut = (Button) findViewById(R.id.LogOut);
         change = (Button) findViewById(R.id.buttonChangePw);
         change.setPaintFlags(change.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
@@ -185,16 +186,26 @@ public class Perfil extends AppCompatActivity {
         });
 
 
-        /*logOut.setOnClickListener(new View.OnClickListener() {
+        logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finishAffinity();
                 Intent mIntent = new Intent(getApplicationContext(), Login.class);
                 startActivity(mIntent);
             }
-        });*/
+        });
 
         setProfileImage();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     private void setProfileImage(){

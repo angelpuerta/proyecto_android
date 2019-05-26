@@ -143,10 +143,6 @@ public class DescripcionActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.item_logout:
-                //Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
-                //startActivity(aboutIntent);
-                return true;
             case R.id.item_profile:
                 Bundle extras = getIntent().getExtras();
                 LOGIN = extras.getString("socialLogin");
