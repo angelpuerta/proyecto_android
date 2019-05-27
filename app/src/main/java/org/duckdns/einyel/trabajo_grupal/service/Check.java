@@ -13,10 +13,10 @@ public class Check {
         if(location == null || location.isEmpty())
             return false;
         String[] loc = location.split(",");
+        if(loc.length!=2 || (loc[0].equals("0") && loc[1].equals("0")))
+            return false;
         String numeric_pattern = "-?\\d+(\\.\\d+)?";
-        boolean uno = loc[0].matches(numeric_pattern);
-        boolean dos = loc[1].matches(numeric_pattern);
-        return loc.length == 2 && loc[0].trim().matches(numeric_pattern) && loc[1].trim().matches(numeric_pattern);
+        return loc[0].trim().matches(numeric_pattern) && loc[1].trim().matches(numeric_pattern);
     }
 
     public static boolean code(String code){

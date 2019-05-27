@@ -28,3 +28,7 @@ img:hover {
 .form-group{
 	padding : 10px
 }
+
+#datetimepicker1{
+  width: 15%;
+}
