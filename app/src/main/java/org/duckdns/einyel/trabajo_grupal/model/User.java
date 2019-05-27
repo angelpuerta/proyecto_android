@@ -7,8 +7,9 @@ import android.os.Parcelable;
 
 import com.google.firebase.database.DataSnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Entity(tableName = "users")
@@ -21,13 +22,45 @@ public class User implements Parcelable {
 
     private String password;
 
+    private String sexo;
+
+    private String fbId = "";
+
+    private String twUsername = "";
+
+    private String pfpUrl = "";
+
+    private String nacimiento = "";
+
     private List<Long> assisted;
 
-    public User(Long id, String nick, String password) {
+    public User(Long id, String nick, String password, String sexo) {
         this.id = id;
         this.nick = nick;
         this.password = password;
-        this.assisted = new ArrayList<>();
+        this.sexo = sexo;
+        assisted = new ArrayList<>();
+    }
+
+    public User(Long id, String nick, String password, String sexo, String fecha) {
+        this.id = id;
+        this.nick = nick;
+        this.password = password;
+        this.sexo = sexo;
+        this.nacimiento = fecha;
+        assisted = new ArrayList<>();
+    }
+
+    public User(Long id, String nick, String password, String sexo, String fbId, String twUsername, String pfpUrl, String fecha) {
+        this.id = id;
+        this.nick = nick;
+        this.password = password;
+        this.sexo = sexo;
+        this.fbId = fbId;
+        this.twUsername = twUsername;
+        this.pfpUrl = pfpUrl;
+        this.nacimiento = fecha;
+        assisted = new ArrayList<>();
     }
 
     protected User(Parcel in) {
@@ -72,6 +105,14 @@ public class User implements Parcelable {
         }
     };
 
+    public String getNacimiento() {
+        return nacimiento;
+    }
+
+    public void setNacimiento(String nacimiento) {
+        this.nacimiento = nacimiento;
+    }
+
     public Long getId() {
         return id;
     }
@@ -84,6 +125,30 @@ public class User implements Parcelable {
         return nick;
     }
 
+    public String getFbId() {
+        return fbId;
+    }
+
+    public String getTwUsername() {
+        return twUsername;
+    }
+
+    public String getPfpUrl() {
+        return pfpUrl;
+    }
+
+    public void setPfpUrl(String pfpUrl) {
+        this.pfpUrl = pfpUrl;
+    }
+
+    public void setFbId(String fbId) {
+        this.fbId = fbId;
+    }
+
+    public void setTwUsername(String twUsername) {
+        this.twUsername = twUsername;
+    }
+
     public void setNick(String nick) {
         this.nick = nick;
     }
@@ -93,6 +158,14 @@ public class User implements Parcelable {
     }
 
     public void setPassword(String password) { this.password = password; }
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
+    }
 
     public List<Long> getAssisted() {
         return new ArrayList<>(assisted);
@@ -107,6 +180,4 @@ public class User implements Parcelable {
             assisted.add(Long.parseLong(event.getValue().toString()));
         }
     }
-
-
 }

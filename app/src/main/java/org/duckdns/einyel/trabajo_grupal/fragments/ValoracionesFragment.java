@@ -2,6 +2,7 @@ package org.duckdns.einyel.trabajo_grupal.fragments;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -62,6 +63,7 @@ public class ValoracionesFragment extends Fragment implements ComentarioAdapter.
     private String username;
 
     private Button puntuar;
+    private Button checkIn;
     private Date actualDate;
 
     private TextView puntuacionMedia;
@@ -87,11 +89,8 @@ public class ValoracionesFragment extends Fragment implements ComentarioAdapter.
 
 
         puntuar = v.findViewById(R.id.btnPuntuar);
-        puntuar.setEnabled(false);
-        puntuar.setBackground(getResources().getDrawable(R.drawable.star_icon_grey));
-        TextView textPuntuar = (TextView) v.findViewById(R.id.textPuntuar);
-        textPuntuar.setTextColor(getResources().getColor(R.color.grey));
-        //puntuar.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+        puntuar.setEnabled(true);
+        checkIn = v.findViewById(R.id.btnCheckIn);
 
         this.event = descripcionActivity.getEvento();
         adapter = new ComentarioAdapter(App.get().commentsOption(event.getId()), this);
@@ -114,8 +113,9 @@ public class ValoracionesFragment extends Fragment implements ComentarioAdapter.
         String search = "QR/" + descripcionActivity.getUsername() + "/" + event.getId();
         String code = descripcionActivity.getSharedPreferences("QRs", Context.MODE_PRIVATE).getString(search, "");
         if (!code.equals("")) {
-            puntuar.findViewById(R.id.btnPuntuar).setEnabled(true);
+            puntuar.setEnabled(true);
             puntuar.getBackground().setColorFilter(null);
+
         }
     }
 

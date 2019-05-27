@@ -12,36 +12,34 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="232dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="50dp"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingLeft="20dp">
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btnCheckIn"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/check_in_icon_black"
+                    android:gravity="center"
+                    android:onClick="checkIn" />
 
                 <TextView
                     android:id="@+id/textCheckIn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
                     android:fontFamily="@font/verdana"
                     android:text="Check-in"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/textPuntuar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:fontFamily="@font/verdana"
-                    android:text="Puntuar"
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
@@ -49,27 +47,29 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="245dp"
-                android:layout_height="60dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingBottom="10dp">
-
-                <Button
-                    android:id="@+id/btnCheckIn"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/check_in_icon_black"
-                    android:onClick="checkIn" />
+                android:orientation="vertical">
 
                 <Button
                     android:id="@+id/btnPuntuar"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
                     android:background="@drawable/star_icon_black"
                     android:onClick="valorar" />
+
+                <TextView
+                    android:id="@+id/textPuntuar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/verdana"
+                    android:text="Puntuar"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
