@@ -115,9 +115,10 @@ public class InfoFragment extends Fragment implements OnMapReadyCallback {
             String direccionCompleta = "";
 
             Address direccion = direcciones.get(0);
-            direccionCompleta += direccion.getThoroughfare() + " " + direccion.getSubThoroughfare() + "\n";
-            direccionCompleta += direccion.getLocality() + " (" + direccion.getSubAdminArea() + ")\n";
-            direccionCompleta += direccion.getPostalCode();
+            direccionCompleta += checkNull(direccion.getThoroughfare()) + " " + checkNull(direccion.getSubThoroughfare()) + "\n";
+            direccionCompleta += checkNull(direccion.getLocality());
+            direccionCompleta += direccion.getLocality()==null?direccion.getSubAdminArea()+"\n" :" (" + direccion.getSubAdminArea()  + ")"  + "\n";
+            direccionCompleta += checkNull(direccion.getPostalCode());
 
             TextView calle = v.findViewById(R.id.calleInfo);
             calle.setText(direccionCompleta);
@@ -125,6 +126,10 @@ public class InfoFragment extends Fragment implements OnMapReadyCallback {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String checkNull(String string){
+        return string!=null?string:"";
     }
 
 

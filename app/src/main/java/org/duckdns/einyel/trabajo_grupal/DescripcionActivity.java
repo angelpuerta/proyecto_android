@@ -149,7 +149,7 @@ public class DescripcionActivity extends AppCompatActivity {
     private void iniciarTabLayout() {
 
         Picasso.get().load(evento.getImgURL()).into((ImageView) findViewById(R.id.imageViewDescripcion));
-        setTitle(evento.getTittle());
+        setTitle(evento.getTittle().toUpperCase());
 
         cargarBitmap();
 
