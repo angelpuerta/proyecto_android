@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    crossorigin="anonymous" type="text/css">
+  <script type="text/javascript" src="/qr/consulta/bower_components/qrcode.js/qrcode.min.js"></script>
+
+</head>
+
+<body>
+  <div class="center">
+    <div id="qrcode"></div>
+  </div>
+</body>
+
+<style>
+  .center{
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin:auto;
+  margin-top: 12em;
+ }
+</style>
+
+<script type="text/javascript">
+  var qrcode = new QRCode(document.getElementById("qrcode"), {
+    text: "{{{code}}}",
+    width: 256,
+    height: 256,
+    colorDark: "#000000",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+</script>
+
+
+</html>

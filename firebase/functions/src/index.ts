@@ -3,7 +3,6 @@ import * as admin from 'firebase-admin';
 
 import * as express from 'express';
 import * as engines from "consolidate";
-import * as mime from 'mime-types';
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -19,7 +18,7 @@ const app = express();
 app.engine('hbs', engines.handlebars);
 app.set('views', ['./views/consulta', './views/formulario']);
 app.set('view engine', 'hbs');
-app.use(express.static( './public'));
+app.use(express.static('./public'));
 
 
 app.use(function (req, res, next) {
@@ -162,7 +161,33 @@ app.post('/addComment/', (req, res) => {
 
 });
 
-app.get('/event/:id', (req, res) => {
+app.get('/events/', (req, res) => {
+
+    var events = [];
+
+    return admin.database().ref('/events/').once("value")
+        .then(snapshot => {
+            snapshot.forEach((x) => {
+                events.push({ 'id': x.val().id, 'tittle': x.val().tittle.toUpperCase() });
+                return false;
+            });
+            console.log(events);
+            res.render('events', { events });
+        })
+});
+
+app.get('/events/:id/qr', (req, res) => {
+
+    const id = req.params.id;
+    res.setHeader("Content-Type", "text/html");
+
+    return admin.database().ref('/events/' + id).child('code').once("value").then((snapshot) => {
+        const code = snapshot.val();
+        res.render('qr', { code});
+    })
+});
+
+app.get('/events/:id', (req, res) => {
 
     const id = req.params.id;
     res.setHeader("Content-Type", "text/html");
@@ -172,7 +197,7 @@ app.get('/event/:id', (req, res) => {
 
 app.get('/addEvent', (req, res) => {
     res.setHeader("Content-Type", "text/html");
-    
+
     res.render('formulario');
 });
 

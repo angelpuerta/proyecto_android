@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    crossorigin="anonymous" type="text/css">
+</head>
+
+<body>
+  <h1>Eventos:</h1>
+  <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical"> {{#each events}}
+    <a href="https://us-central1-proyecto-moviles-86dc4.cloudfunctions.net/qr/events/{{this.id}}" class="nav-link" data-toggle="pill"="tab" aria-controls="v-pills-profile" aria-selected="false">
+      {{this.tittle}} </a>
+    {{/each}}
+  </div>
+</body>
+
+
+</html>
