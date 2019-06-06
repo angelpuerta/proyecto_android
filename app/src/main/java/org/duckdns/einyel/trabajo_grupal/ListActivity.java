@@ -77,12 +77,6 @@ public class ListActivity extends AppCompatActivity implements EventoAdapter.Ass
 
         setRecyclerViewAdapter();
 
-        //if (URL_PIC != null && !URL_PIC.equals("")) {
-        //    if (LOGIN.equals("facebook") || LOGIN.equals("twitter") || LOGIN.equals("google")) {
-        //       Picasso.get().load(URL_PIC).into(profileButton);
-        //    }
-        //}
-
 
         setSpinnerCategoryFilterAdapter();
 
@@ -141,7 +135,7 @@ public class ListActivity extends AppCompatActivity implements EventoAdapter.Ass
         }
 
         if(BUSCAR != null){
-            adapter = new EventoAdapter(App.get().filtrarEventos(BUSCAR),ListActivity.this);
+            adapter = new EventoAdapter(App.get().filtrarEventos(BUSCAR),this);
         }
 
         filtrarEventos();

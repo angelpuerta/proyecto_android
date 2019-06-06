@@ -54,7 +54,9 @@ public class App extends Application {
                 .getReference()
                 .child("events")
                 .orderByChild("tittle")
-                .startAt(filtro);
+                .startAt(filtro)
+                .endAt(filtro+"\uf8ff")
+                ;
 
         return new FirebaseRecyclerOptions.Builder<Event>()
                 .setQuery(query, new SnapshotParser<Event>() {
