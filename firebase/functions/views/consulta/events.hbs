@@ -11,8 +11,12 @@
 <body>
   <h1>Eventos:</h1>
   <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical"> {{#each events}}
+    <div>
     <a href="https://us-central1-proyecto-moviles-86dc4.cloudfunctions.net/qr/events/{{this.id}}" class="nav-link" data-toggle="pill"="tab" aria-controls="v-pills-profile" aria-selected="false">
       {{this.tittle}} </a>
+      <a href="https://us-central1-proyecto-moviles-86dc4.cloudfunctions.net/qr/events/{{this.id}}/qr" class="nav-link" data-toggle="pill"="tab" aria-controls="v-pills-profile" aria-selected="false">
+      QR </a>
+      </div>
     {{/each}}
   </div>
 </body>

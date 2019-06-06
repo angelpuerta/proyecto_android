@@ -66,6 +66,7 @@ public class ListActivity extends AppCompatActivity implements EventoAdapter.Ass
             URL_PIC = extras.getString("imageUrl");
             ID = extras.getLong("id");
             FILTRO = extras.getString("filtro");
+            usuario = extras.getParcelable(Login.USER);
         }
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
@@ -82,7 +83,6 @@ public class ListActivity extends AppCompatActivity implements EventoAdapter.Ass
         //    }
         //}
 
-        usuario = extras.getParcelable(Login.USER);
 
         setSpinnerCategoryFilterAdapter();
 
