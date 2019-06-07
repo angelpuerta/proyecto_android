@@ -3,13 +3,8 @@ import * as admin from 'firebase-admin';
 
 import * as express from 'express';
 import * as engines from "consolidate";
+import * as url from 'url';
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
 
 admin.initializeApp();
 const app = express();
@@ -168,13 +163,20 @@ app.get('/events/', (req, res) => {
     return admin.database().ref('/events/').once("value")
         .then(snapshot => {
             snapshot.forEach((x) => {
-                events.push({ 'id': x.val().id, 'tittle': x.val().tittle.toUpperCase() });
+                events.push({ 'url': getUrl(req)+"/"+x.val().id, 'tittle': x.val().tittle.toUpperCase() });
                 return false;
             });
-            console.log(events);
-            res.render('events', { events });
+            res.render('events', { 'events': events});
         })
 });
+
+function getUrl(req) {
+    return url.format({
+        protocol: req.protocol,
+        host: req.get('host'),
+        pathname: "qr"+req.originalUrl,
+    });
+}
 
 app.get('/events/:id/qr', (req, res) => {
 
@@ -183,7 +185,7 @@ app.get('/events/:id/qr', (req, res) => {
 
     return admin.database().ref('/events/' + id).child('code').once("value").then((snapshot) => {
         const code = snapshot.val();
-        res.render('qr', { code});
+        res.render('qr', { code });
     })
 });
 
@@ -255,21 +257,3 @@ exports.countComment = functions.database.ref('/comments/{eventid}/{commentid}')
         });
 
     });
-
-/*
-const admin = require('firebase-admin');
-
-const express = require('express');
-
-const app = express();
-
-admin.initializeApp();
-
-
-
-
-
-
-
-
-*/

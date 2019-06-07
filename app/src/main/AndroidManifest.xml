@@ -41,12 +41,15 @@
         <activity
             android:name=".RankingActivity"
             android:label=""
+            android:screenOrientation="portrait"
             android:theme="@style/customDialogTheme" />
         <activity
             android:name=".ListActivity"
+            android:screenOrientation="portrait"
             android:label="@string/events" />
         <activity android:name=".DescripcionActivity"
             android:label="Descripción evento"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask"
             android:parentActivityName=".ListActivity">
             <meta-data
@@ -54,6 +57,7 @@
                 android:value="org.duckdns.einyel.trabajo_grupal.ListActivity"/>
         </activity>
         <activity android:name=".Login"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,12 +66,15 @@
         </activity>
         <activity android:name=".Perfil"
             android:label="Perfil"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".EditPerfil"
             android:label=""
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ChangePw"
             android:label=""
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".QRCodeActivity"
@@ -75,6 +82,7 @@
             android:theme="@style/customDialogTheme" />
         <activity android:name=".SignUp"
             android:label=""
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

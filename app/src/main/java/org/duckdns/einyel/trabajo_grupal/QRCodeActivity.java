@@ -14,6 +14,7 @@ import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -43,6 +44,7 @@ public class QRCodeActivity extends AppCompatActivity {
     public static final String CODE = "CODE";
 
     private String username;
+    private QRCodeActivity thisActivity = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +150,7 @@ public class QRCodeActivity extends AppCompatActivity {
                                     dialogo.show(fragmentManager, "fragmentoOk");
                                     addToSharedPrefference(token);
                                     finish();
+                                    Toast.makeText(thisActivity, getString(R.string.EventCheckIn),Toast.LENGTH_LONG).show();
                                 } else {
                                     failureWindow();
                                 }

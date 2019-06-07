@@ -54,4 +54,5 @@
         <item>Social</item>
         <item>Todo</item>
     </string-array>
+    <string name="EventCheckIn">Se ha realizado el check-in, ya puede valorar el evento.</string>
 </resources>
