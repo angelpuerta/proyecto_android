@@ -166,7 +166,8 @@ app.get('/events/', (req, res) => {
                 events.push({ 'url': getUrl(req)+"/"+x.val().id, 'tittle': x.val().tittle.toUpperCase() });
                 return false;
             });
-            res.render('events', { 'events': events});
+            console.log(hostUrl(req));
+            res.render('events', { 'events': events, 'hostUrl':hostUrl(req)});
         })
 });
 
@@ -175,6 +176,14 @@ function getUrl(req) {
         protocol: req.protocol,
         host: req.get('host'),
         pathname: "qr"+req.originalUrl,
+    });
+}
+
+function hostUrl(req){
+    return url.format({
+        protocol: req.protocol,
+        host: req.get('host'),
+        pathname: "qr"
     });
 }
 

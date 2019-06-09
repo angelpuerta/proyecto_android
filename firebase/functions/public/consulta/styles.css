@@ -45,3 +45,20 @@ img:hover {
 .c3-title{
   font-size: x-large;
 }
+
+#tittle{
+	margin-left: .5em;
+	margin-top: .25em;
+}
+
+#description{
+	margin: .5em .5em .5em .5em;
+}
+
+#puntuacionChart .c3-axis tspan{
+  visibility: hidden;
+}
+
+#genderChart .c3-axis tspan{
+  visibility: hidden;
+}

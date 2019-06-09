@@ -9,22 +9,34 @@
 </head>
 
 <body>
-  <h1>Eventos:</h1>
+  <h1 id="title" style="margin-left: .5em; margin-top: .25em;">Eventos:</h1>
   <table class="table table-striped">
-  <tbody>
-  {{#each events}}
-    <tr>
-	<td>
-    <a href="{{this.url}}" class="nav-link" data-toggle="pill"="tab" aria-controls="v-pills-profile" aria-selected="false">
-      {{this.tittle}} </a>
-    </td>
-	<td>
-	  <a href="{{this.url}}/qr" class="nav-link" data-toggle="pill"="tab" aria-controls="v-pills-profile" aria-selected="false">
-      QR </a>
-	  </td>
+    <tbody>
+      <tr class="light">
+        <td>
+          <a href="{{this.hostUrl}}/addEvent" class="nav-link" data-toggle="pill"="tab" aria-controls="v-pills-profile"
+            aria-selected="false">+ AÑADIR EVENTO</a>
+        <td>
+        <td>
+          <a href="{{this.hostUrl}}/addEvent" class="btn btn-default" data-toggle="pill"="tab" aria-controls="v-pills-profile"
+            aria-selected="false"> <span class="glyphicon glyphicon-plus"> </span></a>
+        <td>
       </tr>
-    {{/each}}
-	</tbody>
+      {{#each events}}
+      <tr>
+        <td>
+          <a href="{{this.url}}" class="nav-link" data-toggle="pill"="tab" aria-controls="v-pills-profile"
+            aria-selected="false">
+            {{this.tittle}} </a>
+        </td>
+        <td>
+          <a href="{{this.url}}/qr" class="nav-link" data-toggle="pill"="tab" aria-controls="v-pills-profile"
+            aria-selected="false">
+            QR </a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
   </table>
 </body>
 
