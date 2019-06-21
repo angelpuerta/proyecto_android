@@ -163,7 +163,7 @@ function generateAssistanceChart(assistance) {
 }
 
 function getComments() {
-  return firebase.database().ref('/comments/' + eventId).orderByChild('mark').once('value').then((snapshot) => processComents(snapshot));
+  return firebase.database().ref('/comments/' + eventId).orderByChild('rate').once('value').then((snapshot) => processComents(snapshot));
 }
 
 function getEvent() {
@@ -181,8 +181,8 @@ function processComents(snapshot) {
   snapshot.forEach(element => {
     element = element.val();
     mark = Math.round(element.rate);
-    !marks[categories[mark]] ? marks[categories[mark]] = 1 : marks[categories[mark]]++;
-    timestamp = element.timestamp.day + "-" + (element.timestamp.month + 1) + "-" + (element.timestamp.year + 1900) + " " + element.timestamp.hours;
+    !marks[categories[mark-1]] ? marks[categories[mark-1]] = 1 : marks[categories[mark-1]]++;
+    timestamp = element.timestamp.date + "-" + (element.timestamp.month + 1) + "-" + (element.timestamp.year + 1900) + " " + element.timestamp.hours;
     !timestamps[timestamp] ? timestamps[timestamp] = 1 : timestamps[timestamp]++;
   });
   return { 'marks': marks, 'time': timestamps };
